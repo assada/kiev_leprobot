@@ -4,12 +4,12 @@ const TelegramBot = require('node-telegram-bot-api');
 
 const MessageStore = require("./modules/StoreMessage");
 
-const sequelize = new Sequelize(env.parsed.MYSQL_DATABASE, env.parsed.MYSQL_USER, env.parsed.MYSQL_PASSWORD, {
-  host: env.parsed.MYSQL_HOST,
+const sequelize = new Sequelize(process.env.MYSQL_DATABASE, process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
+  host: process.env.MYSQL_HOST,
   dialect: 'mysql',
 });
 
-const bot = new TelegramBot(env.parsed.TOKEN, {polling: true});
+const bot = new TelegramBot(process.env.TOKEN, {polling: true});
 
 const Message = require("./models/Message")(sequelize);
 
