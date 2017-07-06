@@ -6,7 +6,8 @@ module.exports = class Message {
     constructor(sequelize) {
         this.model = sequelize.define('message', {
             id: {
-                type: s.INTEGER
+                type: s.INTEGER,
+                primaryKey: true
             },
             chat: {
                 type: s.INTEGER
