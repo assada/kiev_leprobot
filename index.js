@@ -26,6 +26,4 @@ bot.on('message', (msg) => {
   (new UserStore(UserModel)).store(msg);
 
   console.log(msg.from);
-
-  bot.sendMessage(chatId, 'Received your message');
 });
