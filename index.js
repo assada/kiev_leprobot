@@ -11,13 +11,14 @@ const sequelize = new Sequelize(process.env.MYSQL_DATABASE, process.env.MYSQL_US
 
 const bot = new TelegramBot(process.env.TOKEN, {polling: true});
 
-const Message = require("./models/Message")(sequelize);
+const Message = require("./models/Message");
+const MessageModel = new Message(sequelize);
 
 
 bot.on('message', (msg) => {
   const chatId = msg.chat.id;
 
-  MessageStore.store(msg);
+  (new MessageStore(MessageModel)).store(msg);
 
   bot.sendMessage(chatId, 'Received your message');
 });
