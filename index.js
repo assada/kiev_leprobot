@@ -1,5 +1,4 @@
-import Sequelize from "sequelize";
-
+const Sequelize = require("sequelize");
 const env = require('dotenv').config();
 const TelegramBot = require('node-telegram-bot-api');
 
