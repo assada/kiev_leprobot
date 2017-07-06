@@ -7,7 +7,7 @@ module.exports = class StoreMessage {
 
     store(msg) {
 
-        this.Message.sync({force: true}).then(() => {
+        this.Message.sync().then(() => {
             // Table created
             return this.Message.create({
                 message: msg.message_id,
