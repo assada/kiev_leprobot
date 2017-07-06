@@ -7,7 +7,7 @@ module.exports = class Message {
         this.model = sequelize.define('message', {
             id: {
                 type: s.INTEGER,
-                primaryKey: true
+                primaryKey: true, autoIncrement: true
             },
             message: {
                 type: s.INTEGER
