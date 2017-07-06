@@ -10,8 +10,7 @@ module.exports = class Message {
                 primaryKey: true
             },
             message: {
-                type: s.INTEGER,
-                primaryKey: true
+                type: s.INTEGER
             },
             chat: {
                 type: s.INTEGER
