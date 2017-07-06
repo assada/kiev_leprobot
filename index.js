@@ -20,5 +20,7 @@ bot.on('message', (msg) => {
 
   (new MessageStore(MessageModel)).store(msg);
 
+  console.log(msg.from);
+
   bot.sendMessage(chatId, 'Received your message');
 });
