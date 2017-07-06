@@ -1,19 +1,21 @@
 'use strict';
 
+const s = require("sequelize");
+
 module.exports = class Message {
     constructor(sequelize) {
         this.model = sequelize.define('message', {
             id: {
-                type: sequelize.INTEGER
+                type: s.INTEGER
             },
             chat: {
-                type: sequelize.INTEGER
+                type: s.INTEGER
             },
             body: {
-                type: sequelize.STRING
+                type: s.STRING
             },
             user: {
-                type: sequelize.INTEGER
+                type: s.INTEGER
             }
         });
     }
