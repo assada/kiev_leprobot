@@ -30,6 +30,15 @@ const catP = [
     ":3"
 ];
 
+const options = {
+    maxLength: 140,
+    minWords: 4,
+    minScore: 4,
+    checker: sentence => {
+        return sentence.endsWith('.'); // I want my tweets to end with a dot.
+    }
+};
+
 bot.on('message', (msg) => {
     (new MessageStore(MessageModel)).store(msg);
     (new UserStore(UserModel)).store(msg);
@@ -42,7 +51,7 @@ bot.on('message', (msg) => {
         Messages.forEach(function (item) {
             m.push(item.body)
         });
-        const markov = new Markov(m);
+        const markov = new Markov(m, options);
         console.log('-------------');
         markov.buildCorpusSync();
         const result = markov.generateSentenceSync();
