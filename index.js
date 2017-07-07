@@ -52,7 +52,7 @@ bot.on('message', (msg) => {
             console.log('_____________');
             console.log(res);
             console.log('_____________');
-            if (Random.bool(0.5)) {
+            if (Random.bool(0.2)) {
                 console.log('CHANCE!');
                 if (res !== false && res.length > 0) {
                     bot.sendMessage(msg.chat.id, res, {
