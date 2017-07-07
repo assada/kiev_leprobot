@@ -71,6 +71,8 @@ bot.on('message', (msg) => {
                         };
                     }
                     bot.sendMessage(msg.chat.id, res, options);
+                }else {
+                    console.log('=(');
                 }
             }
         });
