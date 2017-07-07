@@ -44,7 +44,7 @@ bot.on('message', (msg) => {
     (new UserStore(UserModel)).store(msg);
 
     if (Random.bool(30)) {
-        bot.sendMessage(msg.chat.id, (new MessageGenerator(MessageModel)).get(), {
+        bot.sendMessage(msg.chat.id, (new MessageGenerator(MessageModel, msg)).get(), {
             reply_to_message_id: msg.message_id
         });
     }
