@@ -1,5 +1,7 @@
 const MarkovGen = require('markov-generator');
 
+const regex = /\W+/g;
+
 module.exports = class MessageGenerator {
     constructor(MessageModel, msg) {
         this.MessageModel = MessageModel;
@@ -16,7 +18,7 @@ module.exports = class MessageGenerator {
             return item.length > 3;
         });
         words = words.map(function (x) {
-            return x.replace(/[\W_]+/g, ' ');
+            return x.replace(regex, '');
         });
 
         console.log(words);
