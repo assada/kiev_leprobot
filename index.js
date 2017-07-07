@@ -47,7 +47,7 @@ bot.on('message', (msg) => {
     console.log(m);
 
     if (Random.bool(3)) {
-        if (m.length > 0) {
+        if (m !== false && m.length > 0) {
             bot.sendMessage(msg.chat.id, m, {
                 reply_to_message_id: msg.message_id
             });
