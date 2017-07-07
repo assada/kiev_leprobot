@@ -34,6 +34,7 @@ module.exports = class MessageGenerator {
                 Messages.forEach(function (item) {
                     m.push(item.body)
                 });
+                console.log(m);
 
                 if (m.length > 1) {
                     let markov = new MarkovGen({
