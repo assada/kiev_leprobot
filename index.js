@@ -46,7 +46,10 @@ bot.on('message', (msg) => {
     (new UserStore(UserModel)).store(msg);
 
     let m = (new MessageGenerator(MessageModel, msg)).get().then(function (res) {
+        console.log('_____________');
         console.log(res);
+        console.log('_____________');
+
 
         if (Random.bool(3)) {
             console.log('CHANCE!');
