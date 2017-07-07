@@ -43,10 +43,15 @@ bot.on('message', (msg) => {
     (new MessageStore(MessageModel)).store(msg);
     (new UserStore(UserModel)).store(msg);
 
-    if (Random.bool(30)) {
-        bot.sendMessage(msg.chat.id, (new MessageGenerator(MessageModel, msg)).get(), {
-            reply_to_message_id: msg.message_id
-        });
+    let m = (new MessageGenerator(MessageModel, msg)).get();
+    console.log(m);
+
+    if (Random.bool(3)) {
+        if (m.length > 0) {
+            bot.sendMessage(msg.chat.id, m, {
+                reply_to_message_id: msg.message_id
+            });
+        }
     }
 });
 
