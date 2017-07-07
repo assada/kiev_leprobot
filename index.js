@@ -5,6 +5,8 @@ const TelegramBot = require('node-telegram-bot-api');
 const MessageStore = require("./modules/StoreMessage");
 const UserStore = require("./modules/UserStore");
 
+const Markov = require('markov-strings');
+
 const sequelize = new Sequelize(process.env.MYSQL_DATABASE, process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
     host: process.env.MYSQL_HOST,
     dialect: 'mysql',
@@ -37,12 +39,14 @@ bot.on('message', (msg) => {
     var m = [];
 
     Message.findAll({where: {body: {$like: '%топ%'}}, limit: 10, attributes: ['body']}).then(Messages => {
-        console.log(Messages);
         Messages.forEach(function (item) {
             m.push(item.body)
         });
+        const markov = new Markov(m);
         console.log('-------------');
-        console.log(m);
+        markov.buildCorpusSync();
+        const result = markov.generateSentenceSync();
+        console.log(result);
         console.log('-------------');
     });
 
