@@ -55,12 +55,14 @@ bot.on('message', (msg) => {
     if (typeof msg.text !== 'undefined' && msg.text.length > 1 && msg.text.charAt(0) !== '/') {
 
         let mention = new RegExp(names.join("|")).test(msg.text);
-        console.log(mention);
+        let ra = r.bool(0.1);
+        console.log('Mention: ' + mention);
+        console.log('Random: '+ra);
 
         (new MessageStore(MessageModel)).store(msg, names);
         (new MessageGenerator(MessageModel, msg)).get(names).then(function (res) {
             console.log(res);
-            if (r.bool(0.1) || mention) {
+            if (ra || mention) {
                 if (res !== false && res.length > 0) {
                     let options = {};
                     if(mention) {
