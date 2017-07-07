@@ -53,7 +53,7 @@ bot.on('message', (msg) => {
 
         if (Random.bool(3)) {
             console.log('CHANCE!');
-            if (m !== false && m.length > 0) {
+            if (res !== false && res.length > 0) {
                 bot.sendMessage(msg.chat.id, res, {
                     reply_to_message_id: msg.message_id
                 });
