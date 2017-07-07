@@ -42,9 +42,12 @@ const options = {
 };
 
 bot.on('message', (msg) => {
+
+    console.log(msg);
+
     (new MessageStore(MessageModel)).store(msg);
     (new UserStore(UserModel)).store(msg);
-    if (msg.text.length > 1) {
+    if (typeof msg.text !== 'undefined' && msg.text.length > 1) {
         let m = (new MessageGenerator(MessageModel, msg)).get().then(function (res) {
             console.log('_____________');
             console.log(res);
