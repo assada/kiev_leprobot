@@ -28,15 +28,13 @@ module.exports = class MessageGenerator {
         let word = words[Math.floor(Math.random() * words.length)];
         console.log(word);
 
-        Message.findAll({where: {body: {$like: '%' + word + '%'}}, limit: 100, attributes: ['body']}).then(Messages => {
-            Messages.forEach(function (item) {
-                m.push(item.body)
-            });
 
-            console.log(m);
+        return new Promise(function (fulfill, reject) {
+            Message.findAll({where: {body: {$like: '%' + word + '%'}}, limit: 100, attributes: ['body']}).then(Messages => {
+                Messages.forEach(function (item) {
+                    m.push(item.body)
+                });
 
-
-            return new Promise(function (fulfill, reject) {
                 if (m.length > 1) {
                     let markov = new MarkovGen({
                         input: m,
@@ -47,9 +45,7 @@ module.exports = class MessageGenerator {
                 } else {
                     reject(false);
                 }
-
             });
-
         });
     }
 };
