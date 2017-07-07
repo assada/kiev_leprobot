@@ -1,3 +1,5 @@
+const Promise = require('promise');
+
 const MarkovGen = require('markov-generator');
 
 const regex = /[^a-zA-Zа-яА-я]+/g;
@@ -33,20 +35,21 @@ module.exports = class MessageGenerator {
 
             console.log(m);
 
-            if (m.length > 1) {
-                let markov = new MarkovGen({
-                    input: m,
-                    minLength: 4
-                });
 
-                let str = markov.makeChain(4);
+            return new Promise(function (fulfill, reject) {
+                if (m.length > 1) {
+                    let markov = new MarkovGen({
+                        input: m,
+                        minLength: 4
+                    });
+                    let str = markov.makeChain(4);
+                    fulfill(str);
+                } else {
+                    reject(false);
+                }
 
-                console.log(str);
+            });
 
-                return str;
-            }
-
-            return false;
         });
     }
 };

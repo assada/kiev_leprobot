@@ -3,6 +3,8 @@ const env = require('dotenv').config();
 const Random = require("random-js");
 const TelegramBot = require('node-telegram-bot-api');
 
+const Promise = require('promise');
+
 const MessageStore = require("./modules/StoreMessage");
 const UserStore = require("./modules/UserStore");
 const MessageGenerator = require("./modules/MessageGenerator");
@@ -43,16 +45,18 @@ bot.on('message', (msg) => {
     (new MessageStore(MessageModel)).store(msg);
     (new UserStore(UserModel)).store(msg);
 
-    let m = (new MessageGenerator(MessageModel, msg)).get();
-    console.log(m);
+    let m = (new MessageGenerator(MessageModel, msg)).get().done(function (res) {
+        console.log(res);
 
-    if (Random.bool(3)) {
-        if (m !== false && m.length > 0) {
-            bot.sendMessage(msg.chat.id, m, {
-                reply_to_message_id: msg.message_id
-            });
+        if (Random.bool(3)) {
+            console.log('CHANCE!');
+            if (m !== false && m.length > 0) {
+                bot.sendMessage(msg.chat.id, res, {
+                    reply_to_message_id: msg.message_id
+                });
+            }
         }
-    }
+    });
 });
 
 
