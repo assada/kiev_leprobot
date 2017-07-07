@@ -34,6 +34,8 @@ bot.on('message', (msg) => {
     console.log(msg.from);
 });
 
+
+
 bot.onText(/\/boobs/, (msg, match) => {
     const request = require('request');
     let r = request.get('http://api.oboobs.ru/boobs/0/1/random', function (err, res, body) {

@@ -20,6 +20,11 @@ module.exports = class UserStore {
                     last_name: typeof msg.from.last_name !== 'undefined' ? emojiStrip(msg.from.last_name) : '',
                     username: typeof msg.from.username !== 'undefined' ? emojiStrip(msg.from.username) : ''
                 }
+            }).spread((user, created) => {
+                console.log(user.get({
+                    plain: true
+                }));
+                console.log(created)
             });
         });
 
