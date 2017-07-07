@@ -71,9 +71,11 @@ bot.on('message', (msg) => {
                         };
                     }
                     bot.sendMessage(msg.chat.id, res, options);
-                }else {
+                } else {
                     console.log('=(');
                 }
+            } else {
+                console.log('=(((( '+ (ra || mention));
             }
         });
     }
