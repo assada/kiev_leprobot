@@ -40,11 +40,12 @@ bot.on('message', (msg) => {
         console.log(Messages);
         Messages.forEach(function (item) {
             m.push(item.body)
-        })
+        });
+        console.log('-------------');
+        console.log(m);
+        console.log('-------------');
     });
-    console.log('-------------');
-    console.log(m);
-    console.log('-------------');
+
 });
 
 
