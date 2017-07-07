@@ -47,7 +47,7 @@ bot.on('message', (msg) => {
 
     var m = [];
 
-    Message.findAll({where: {body: {$like: '%unfortunately%'}}, limit: 10, attributes: ['body']}).then(Messages => {
+    Message.findAll({where: {body: {$like: '%топ%'}}, limit: 10, attributes: ['body']}).then(Messages => {
         Messages.forEach(function (item) {
             m.push(item.body)
         });
