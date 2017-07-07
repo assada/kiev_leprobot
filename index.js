@@ -32,28 +32,15 @@ const catP = [
     ":3"
 ];
 
-const options = {
-    maxLength: 140,
-    minWords: 2,
-    minScore: 1,
-    checker: sentence => {
-        return sentence.endsWith('.'); // I want my tweets to end with a dot.
-    }
-};
-
 bot.on('message', (msg) => {
 
     console.log(msg);
 
-    (new MessageStore(MessageModel)).store(msg);
     (new UserStore(UserModel)).store(msg);
-    if (typeof msg.text !== 'undefined' && msg.text.length > 1) {
-        let m = (new MessageGenerator(MessageModel, msg)).get().then(function (res) {
-            console.log('_____________');
-            console.log(res);
-            console.log('_____________');
+    if (typeof msg.text !== 'undefined' && msg.text.length > 1 && msg.text.charAt(0) !== '/') {
+        (new MessageStore(MessageModel)).store(msg);
+        (new MessageGenerator(MessageModel, msg)).get().then(function (res) {
             if (Random.bool(0.2)) {
-                console.log('CHANCE!');
                 if (res !== false && res.length > 0) {
                     bot.sendMessage(msg.chat.id, res, {
                         reply_to_message_id: msg.message_id

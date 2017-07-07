@@ -2,6 +2,8 @@
 
 const emojiStrip = require('emoji-strip');
 
+const regex = /\@[0-9a-zA-Z_]*/g;
+
 module.exports = class StoreMessage {
     constructor(Message) {
         this.Message = Message.getModel();
@@ -11,11 +13,10 @@ module.exports = class StoreMessage {
 
 
         this.Message.sync().then(() => {
-            // Table created
             return this.Message.create({
                 message: msg.message_id,
                 chat: msg.chat.id,
-                body: typeof msg.text !== 'undefined' ? emojiStrip(msg.text) : null,
+                body: typeof msg.text !== 'undefined' ? emojiStrip(msg.text.replace(regex, '')) : null,
                 user: msg.from.id
             });
         });
