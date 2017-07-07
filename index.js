@@ -54,7 +54,7 @@ bot.on('message', (msg) => {
     (new UserStore(UserModel)).store(msg);
     if (typeof msg.text !== 'undefined' && msg.text.length > 1 && msg.text.charAt(0) !== '/') {
         (new MessageStore(MessageModel)).store(msg, names);
-        (new MessageGenerator(MessageModel, msg)).get().then(function (res) {
+        (new MessageGenerator(MessageModel, msg)).get(names).then(function (res) {
             console.log(res);
             let mention = new RegExp(names.join("|")).test(msg.text);
             console.log(mention);
