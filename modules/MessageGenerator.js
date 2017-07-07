@@ -1,6 +1,6 @@
 const MarkovGen = require('markov-generator');
 
-const regex = /\W+/g;
+const regex = /[^a-zA-Zа-яА-я]+/g;
 
 module.exports = class MessageGenerator {
     constructor(MessageModel, msg) {
@@ -30,7 +30,6 @@ module.exports = class MessageGenerator {
             Messages.forEach(function (item) {
                 m.push(item.body)
             });
-            console.log(m);
             let markov = new MarkovGen({
                 input: m,
                 minLength: 4
