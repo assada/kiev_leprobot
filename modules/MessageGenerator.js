@@ -39,7 +39,11 @@ module.exports = class MessageGenerator {
                     minLength: 4
                 });
 
-                return markov.makeChain(4);
+                let str = markov.makeChain(4);
+
+                console.log(str);
+
+                return str;
             }
 
             return false;
