@@ -15,9 +15,10 @@ module.exports = class UserStore {
                     user: msg.from.id,
                 },
                 defaults: {
-                    first_name: emojiStrip(msg.from.first_name),
-                    last_name: emojiStrip(msg.from.last_name),
-                    username: emojiStrip(msg.from.username)
+                    //TODO: Fuck this checks
+                    first_name: typeof msg.from.first_name !== 'undefined' ? emojiStrip(msg.from.first_name) : '',
+                    last_name: typeof msg.from.last_name !== 'undefined' ? emojiStrip(msg.from.last_name) : '',
+                    username: typeof msg.from.username !== 'undefined' ? emojiStrip(msg.from.username) : ''
                 }
             });
         });
