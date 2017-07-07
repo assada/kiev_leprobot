@@ -41,9 +41,11 @@ module.exports = class MessageGenerator {
                         minLength: 4
                     });
                     let str = markov.makeChain(4);
+                    console.log('Result: '+ str);
                     fulfill(str);
                 } else {
                     reject(false);
+                    console.log('Мало данных');
                 }
             });
         });
