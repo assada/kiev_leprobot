@@ -1,8 +1,9 @@
 const MarkovGen = require('markov-generator');
 
 module.exports = class MessageGenerator {
-    constructor(MessageModel) {
+    constructor(MessageModel, msg) {
         this.MessageModel = MessageModel;
+        this.msg = msg;
     }
 
     get() {
@@ -10,7 +11,7 @@ module.exports = class MessageGenerator {
 
         let m = [];
 
-        let words = msg.split(' ');
+        let words = this.msg.split(' ');
         words = words.filter(function (item) {
             return item.length > 3;
         });
