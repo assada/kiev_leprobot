@@ -53,10 +53,11 @@ bot.on('message', (msg) => {
 
     (new UserStore(UserModel)).store(msg);
     if (typeof msg.text !== 'undefined' && msg.text.length > 1 && msg.text.charAt(0) !== '/') {
-        (new MessageStore(MessageModel)).store(msg);
+        (new MessageStore(MessageModel)).store(msg, names);
         (new MessageGenerator(MessageModel, msg)).get().then(function (res) {
             console.log(res);
             let mention = new RegExp(names.join("|")).test(msg.text);
+            console.log(mention);
             if (r.bool(0.1) || mention) {
                 if (res !== false && res.length > 0) {
                     let options = {};

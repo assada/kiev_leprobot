@@ -9,14 +9,14 @@ module.exports = class StoreMessage {
         this.Message = Message.getModel();
     }
 
-    store(msg) {
+    store(msg, skip) {
 
 
         this.Message.sync().then(() => {
             return this.Message.create({
                 message: msg.message_id,
                 chat: msg.chat.id,
-                body: typeof msg.text !== 'undefined' ? emojiStrip(msg.text.replace(regex, '')) : null,
+                body: typeof msg.text !== 'undefined' ? emojiStrip(msg.text.replace(regex, '').replace(new RegExp(skip.join("|")),'').trim()) : null,
                 user: msg.from.id
             });
         });
