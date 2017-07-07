@@ -32,6 +32,19 @@ const catP = [
     ":3"
 ];
 
+const names = [
+    "антон",
+    "Антон",
+    "антоха",
+    "Антоха",
+    "Тох ",
+    "тох ",
+    "тоха ",
+    "Тоха ",
+    "антонио",
+    "Антонио",
+];
+
 bot.on('message', (msg) => {
 
     console.log(msg);
@@ -43,7 +56,7 @@ bot.on('message', (msg) => {
         (new MessageStore(MessageModel)).store(msg);
         (new MessageGenerator(MessageModel, msg)).get().then(function (res) {
             console.log(res);
-            if (r.bool(0.05)) {
+            if (r.bool(0.1) || new RegExp(names.join("|")).test(msg.text)) {
                 if (res !== false && res.length > 0) {
                     bot.sendMessage(msg.chat.id, res, {
                         reply_to_message_id: msg.message_id
