@@ -18,7 +18,7 @@ module.exports = class MessageGenerator {
             return item.length > 3;
         });
         words = words.map(function (x) {
-            return x.replace(regex, '');
+            return x.replace(/\W/g, '');
         });
 
         console.log(words);
@@ -28,7 +28,7 @@ module.exports = class MessageGenerator {
 
         Message.findAll({where: {body: {$like: '%' + word + '%'}}, limit: 100, attributes: ['body']}).then(Messages => {
             Messages.forEach(function (item) {
-                m.push(item.body)
+              m.push(item.body);
             });
             console.log(m);
             let markov = new MarkovGen({
