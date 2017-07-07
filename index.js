@@ -44,22 +44,22 @@ const options = {
 bot.on('message', (msg) => {
     (new MessageStore(MessageModel)).store(msg);
     (new UserStore(UserModel)).store(msg);
-
-    let m = (new MessageGenerator(MessageModel, msg)).get().then(function (res) {
-        console.log('_____________');
-        console.log(res);
-        console.log('_____________');
-
-
-        if (Random.bool(3)) {
-            console.log('CHANCE!');
-            if (res !== false && res.length > 0) {
-                bot.sendMessage(msg.chat.id, res, {
-                    reply_to_message_id: msg.message_id
-                });
+    if (msg.text.length > 1) {
+        let m = (new MessageGenerator(MessageModel, msg)).get().then(function (res) {
+            console.log('_____________');
+            console.log(res);
+            console.log('_____________');
+            if (Random.bool(3)) {
+                console.log('CHANCE!');
+                if (res !== false && res.length > 0) {
+                    bot.sendMessage(msg.chat.id, res, {
+                        reply_to_message_id: msg.message_id
+                    });
+                }
             }
-        }
-    });
+        });
+    }
+
 });
 
 
