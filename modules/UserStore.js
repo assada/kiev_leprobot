@@ -22,9 +22,7 @@ module.exports = class UserStore {
                 }
             }).spread((user, created) => {
                 if (!created) {
-                    // let u = user.get();
-                    user.updatedAt = new Date();
-                    user.save();
+                    this.User.update({createdAt: new Date()}, {where: {user: msg.from.id}});
                 }
             });
         });
