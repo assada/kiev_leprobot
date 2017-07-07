@@ -36,12 +36,14 @@ bot.on('message', (msg) => {
 
     console.log(msg);
 
+    let r = new Random(Random.engines.mt19937().seed('fsdfbk'+Math.random()));
+
     (new UserStore(UserModel)).store(msg);
     if (typeof msg.text !== 'undefined' && msg.text.length > 1 && msg.text.charAt(0) !== '/') {
         (new MessageStore(MessageModel)).store(msg);
         (new MessageGenerator(MessageModel, msg)).get().then(function (res) {
             console.log(res);
-            if (Random.bool(0.05)) {
+            if (r.bool(0.05)) {
                 if (res !== false && res.length > 0) {
                     bot.sendMessage(msg.chat.id, res, {
                         reply_to_message_id: msg.message_id
