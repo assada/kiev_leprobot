@@ -15,7 +15,7 @@ module.exports = class MessageGenerator {
 
         let m = [];
 
-        let words = text.split(' ');
+        let words = this.msg.text.split(' ');
         words = words.filter(function (item) {
             return item.length > 3;
         });
