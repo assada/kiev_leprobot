@@ -5,7 +5,7 @@ const TelegramBot = require('node-telegram-bot-api');
 const MessageStore = require("./modules/StoreMessage");
 const UserStore = require("./modules/UserStore");
 
-const Markov = require('markov-strings');
+const MarkovGen = require('markov-generator');
 
 const sequelize = new Sequelize(process.env.MYSQL_DATABASE, process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
     host: process.env.MYSQL_HOST,
@@ -52,11 +52,14 @@ bot.on('message', (msg) => {
             m.push(item.body)
         });
         console.log(m);
-        const markov = new Markov(m, options);
+        let markov = new MarkovGen({
+            input: m,
+            minLength: 4
+        });
+
+        let sentence = markov.makeChain(4);
         console.log('-------------');
-        markov.buildCorpusSync();
-        const result = markov.generateSentenceSync();
-        console.log(result);
+        console.log(sentence);
         console.log('-------------');
     });
 
