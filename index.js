@@ -56,11 +56,16 @@ bot.on('message', (msg) => {
         (new MessageStore(MessageModel)).store(msg);
         (new MessageGenerator(MessageModel, msg)).get().then(function (res) {
             console.log(res);
-            if (r.bool(0.1) || new RegExp(names.join("|")).test(msg.text)) {
+            let mention = new RegExp(names.join("|")).test(msg.text);
+            if (r.bool(0.1) || mention) {
                 if (res !== false && res.length > 0) {
-                    bot.sendMessage(msg.chat.id, res, {
-                        reply_to_message_id: msg.message_id
-                    });
+                    let options = {};
+                    if(mention) {
+                        options = {
+                            reply_to_message_id: msg.message_id
+                        };
+                    }
+                    bot.sendMessage(msg.chat.id, res, options);
                 }
             }
         });
