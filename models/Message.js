@@ -7,20 +7,20 @@ module.exports = class Message {
         this.model = sequelize.define('message', {
             id: {
                 type: s.INTEGER,
-                primaryKey: true, 
+                primaryKey: true,
                 autoIncrement: true
             },
             message: {
-                type: s.INTEGER
+                type: s.BIGINT(100)
             },
             chat: {
                 type: s.INTEGER
             },
             body: {
-                type: s.STRING
+                type: s.TEXT('middle')
             },
             user: {
-                type: s.INTEGER
+                type: s.BIGINT(100)
             }
         });
     }

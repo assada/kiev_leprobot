@@ -1,7 +1,9 @@
 'use strict';
 
+const emojiStrip = require('emoji-strip');
+
 module.exports = class StoreMessage {
-    constructor(Message){
+    constructor(Message) {
         this.Message = Message.getModel();
     }
 
@@ -11,8 +13,8 @@ module.exports = class StoreMessage {
             // Table created
             return this.Message.create({
                 message: msg.message_id,
-                chat:  msg.chat.id,
-                body: msg.text,
+                chat: msg.chat.id,
+                body: emojiStrip(msg.text),
                 user: msg.from.id
             });
         });

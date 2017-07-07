@@ -7,11 +7,11 @@ module.exports = class User {
         this.model = sequelize.define('user', {
             id: {
                 type: s.INTEGER,
-                primaryKey: true, 
+                primaryKey: true,
                 autoIncrement: true
             },
             user: {
-                type: s.INTEGER
+                type: s.BIGINT(100)
             },
             first_name: {
                 type: s.STRING,
