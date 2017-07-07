@@ -77,6 +77,8 @@ bot.on('message', (msg) => {
             } else {
                 console.log('=(((( '+ (ra || mention));
             }
+        }).resolve(function (res) {
+            console.log(res);
         });
     }
 
