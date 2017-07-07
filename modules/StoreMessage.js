@@ -14,7 +14,7 @@ module.exports = class StoreMessage {
             return this.Message.create({
                 message: msg.message_id,
                 chat: msg.chat.id,
-                body: emojiStrip(msg.text),
+                body: typeof msg.text !== 'undefined' ? emojiStrip(msg.text) : '',
                 user: msg.from.id
             });
         });
