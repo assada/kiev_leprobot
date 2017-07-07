@@ -1,0 +1,39 @@
+const MarkovGen = require('markov-generator');
+
+module.exports = class MessageGenerator {
+    constructor(MessageModel) {
+        this.MessageModel = MessageModel;
+    }
+
+    get() {
+        let Message = this.MessageModel.getModel();
+
+        let m = [];
+
+        let words = msg.split(' ');
+        words = words.filter(function (item) {
+            return item.length > 3;
+        });
+        words = words.map(function (x) {
+            return x.replace(/[\W_]+/g, ' ');
+        });
+
+        console.log(words);
+
+        let word = words[Math.floor(Math.random() * words.length)];
+        console.log(word);
+
+        Message.findAll({where: {body: {$like: '%' + word + '%'}}, limit: 100, attributes: ['body']}).then(Messages => {
+            Messages.forEach(function (item) {
+                m.push(item.body)
+            });
+            console.log(m);
+            let markov = new MarkovGen({
+                input: m,
+                minLength: 4
+            });
+
+            return markov.makeChain(4);
+        });
+    }
+};

@@ -1,11 +1,11 @@
 const Sequelize = require("sequelize");
 const env = require('dotenv').config();
+const Random = require("random-js");
 const TelegramBot = require('node-telegram-bot-api');
 
 const MessageStore = require("./modules/StoreMessage");
 const UserStore = require("./modules/UserStore");
-
-const MarkovGen = require('markov-generator');
+const MessageGenerator = require("./modules/MessageGenerator");
 
 const sequelize = new Sequelize(process.env.MYSQL_DATABASE, process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
     host: process.env.MYSQL_HOST,
@@ -43,26 +43,11 @@ bot.on('message', (msg) => {
     (new MessageStore(MessageModel)).store(msg);
     (new UserStore(UserModel)).store(msg);
 
-    var Message = MessageModel.getModel();
-
-    var m = [];
-
-    Message.findAll({where: {body: {$like: '%топ%'}}, limit: 100, attributes: ['body']}).then(Messages => {
-        Messages.forEach(function (item) {
-            m.push(item.body)
+    if (Random.bool(30)) {
+        bot.sendMessage(msg.chat.id, (new MessageGenerator(MessageModel)).get(), {
+            reply_to_message_id: msg.message_id
         });
-        console.log(m);
-        let markov = new MarkovGen({
-            input: m,
-            minLength: 4
-        });
-
-        let sentence = markov.makeChain(4);
-        console.log('-------------');
-        console.log(sentence);
-        console.log('-------------');
-    });
-
+    }
 });
 
 
