@@ -30,12 +30,17 @@ module.exports = class MessageGenerator {
             Messages.forEach(function (item) {
                 m.push(item.body)
             });
-            let markov = new MarkovGen({
-                input: m,
-                minLength: 4
-            });
 
-            return markov.makeChain(4);
+            if (m.length > 1) {
+                let markov = new MarkovGen({
+                    input: m,
+                    minLength: 4
+                });
+
+                return markov.makeChain(4);
+            }
+
+            return false;
         });
     }
 };
