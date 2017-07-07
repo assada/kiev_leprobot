@@ -34,9 +34,17 @@ bot.on('message', (msg) => {
 
     var Message = MessageModel.getModel();
 
+    var m = [];
+
     Message.findAll({where: {body: {$like: '%топ%'}}, limit: 10, attributes: ['body']}).then(Messages => {
         console.log(Messages);
-    })
+        Messages.forEach(function (item) {
+            m.push(item.body)
+        })
+    });
+    console.log('-------------');
+    console.log(m);
+    console.log('-------------');
 });
 
 
