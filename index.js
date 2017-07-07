@@ -31,9 +31,13 @@ const catP = [
 bot.on('message', (msg) => {
     (new MessageStore(MessageModel)).store(msg);
     (new UserStore(UserModel)).store(msg);
-    console.log(msg.from);
-});
 
+    var Message = MessageModel.getModel();
+
+    Message.findAll({where: {body: {$like: '%топ%'}}, limit: 10, attributes: ['body']}).then(Messages => {
+        console.log(Messages);
+    })
+});
 
 
 bot.onText(/\/boobs/, (msg, match) => {
