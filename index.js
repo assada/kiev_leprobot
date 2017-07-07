@@ -51,6 +51,7 @@ bot.on('message', (msg) => {
         Messages.forEach(function (item) {
             m.push(item.body)
         });
+        console.log(m);
         const markov = new Markov(m, options);
         console.log('-------------');
         markov.buildCorpusSync();
