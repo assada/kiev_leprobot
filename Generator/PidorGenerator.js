@@ -10,6 +10,7 @@ module.exports = class PidorGenerator {
         let users = this.UserRepository.getActiveUser().then(users => {
             console.log(users)
         }); //TODO: Promise
-        console.log(users);
+        let user = users[Math.floor(Math.random() * users.length)];
+        console.log(user.fist_name);
     }
 };
