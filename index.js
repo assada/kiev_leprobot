@@ -146,7 +146,13 @@ bot.onText(/\/new_pidor/, (msg, match) => {
     }
     bot.sendChatAction(msg.chat.id, 'typing');
     PidorGenerator.get(msg).then(function (res) {
-        UserModel.getModel().findOne({user: res.user}).then(function (user) {
+        UserModel.getModel().findOne({where: {user: res.user}}).then(function (user) {
+            let message = '';
+            if(res.status === 'old') {
+                message = 'Пидор дня - *' + user.first_name + ' ' + user.last_name + '*';
+            }else if(res.status === 'new') {
+                message = 'Поздравляю! Ты, @' + user.username + ' (' + user.first_name + ' ' + user.last_name + '),- пидор дня!'
+            }
             bot.sendMessage(msg.chat.id, user.username, {
                 parse_mode: 'Markdown'
             });
