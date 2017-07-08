@@ -2,22 +2,16 @@
 
 const s = require("sequelize");
 
-module.exports = class Message {
+module.exports = class Pidor {
     constructor(sequelize) {
-        this.model = sequelize.define('message', {
+        this.model = sequelize.define('pidor', {
             id: {
                 type: s.INTEGER,
                 primaryKey: true,
                 autoIncrement: true
             },
-            message: {
-                type: s.BIGINT(100)
-            },
             chat: {
-                type: s.INTEGER
-            },
-            body: {
-                type: s.TEXT('middle')
+                type: s.BIGINT(100)
             },
             user: {
                 type: s.BIGINT(100)
