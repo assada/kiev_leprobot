@@ -26,13 +26,11 @@ module.exports = class PidorRepository {
     }
 
     get(chat) {
-        const Sequelize = require("sequelize");
-
         return this.Pidor.findAll({
-            include: [{
+            /*include: [{
                 model: User,
                 where: {user: Sequelize.col('pidor.user')}
-            }],
+            }],*/
             where: {
                 chat: chat
             },
