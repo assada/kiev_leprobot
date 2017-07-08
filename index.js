@@ -52,7 +52,7 @@ bot.on('message', (msg) => {
     (new UserStore(UserModel)).store(msg);
     if (typeof msg.text !== 'undefined' && msg.text.length > 1 && msg.text.charAt(0) !== '/') {
         let mention = new RegExp(names.join("|")).test(msg.text);
-        let ra = r.bool(0.1);
+        let ra = r.bool(0.3);
         console.log('Mention: ' + mention);
         console.log('Random: ' + ra);
         (new MessageStore(MessageModel)).store(msg, names);
