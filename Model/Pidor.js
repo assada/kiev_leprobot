@@ -2,8 +2,6 @@
 
 const s = require("sequelize");
 
-const User = require("../Model/User");
-
 module.exports = class Pidor {
     constructor(sequelize) {
         this.model = sequelize.define('pidor', {
@@ -19,11 +17,9 @@ module.exports = class Pidor {
                 type: s.BIGINT(100)
             }
         });
-
-        this.model.belongsTo(new User(sequelize));
     }
 
     getModel() {
         return this.model;
     }
-}
+};
