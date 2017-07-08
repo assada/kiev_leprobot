@@ -5,7 +5,7 @@ const TelegramBot = require('node-telegram-bot-api');
 const request = require('request');
 const db = new Sequelize(process.env.MYSQL_DATABASE, process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
     host: process.env.MYSQL_HOST,
-    dialect: 'mysql', logging: false
+    dialect: 'mysql', logging: true
 });
 const bot = new TelegramBot(process.env.TOKEN, {polling: true});
 const randomizer = new Random(Random.engines.mt19937().seed('fsdfbk' + Math.random()));
