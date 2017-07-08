@@ -146,7 +146,7 @@ bot.onText(/\/new_pidor/, (msg, match) => {
     }
     bot.sendChatAction(msg.chat.id, 'typing');
     PidorGenerator.get(msg).then(function (res) {
-        //console.log(res);
+        console.log(res);
         /*bot.sendMessage(msg.chat.id, res.username, {
             parse_mode: 'Markdown'
         });*/

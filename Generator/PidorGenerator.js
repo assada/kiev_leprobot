@@ -14,22 +14,15 @@ module.exports = class PidorGenerator {
         let ucr = this.UserChatRepository;
         return new Promise(function (fulfill, reject) {
             pr.get(chat).then(function (res) {
-
                 console.log(res);
                 if (res.length > 0) {
-                    console.log(res);
-                    reject('Rej 1');
-                    //fulfill(res[0].dataValues);
+                    fulfill(res[0].dataValues.user);
                 } else {
                     ucr.getActiveUser(chat).then(users => {
-                        console.log('-----------')
-                        console.log(users);
-                        console.log('-----------')
                         if (users.length > 0) {
                             let user = users[Math.floor(Math.random() * users.length)];
-                            console.log(user);
                             pr.store(msg, user.dataValues.user);
-                            fulfill(user.dataValues);
+                            fulfill(user.dataValues.user);
                         } else {
                             reject('Rej 2');
                         }
