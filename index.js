@@ -111,8 +111,8 @@ bot.onText(/\/top/, (msg, match) => {
     }
     bot.sendChatAction(msg.chat.id, 'typing');
 
-    let now= new Date().toISOString();
-    let yesterday = new Date(new Date().getTime() - (24 * 60 * 60 * 1000)).toISOString();
+    let now= new Date().toISOString().slice(0, 19).replace('T', ' ');
+    let yesterday = new Date(new Date().getTime() - (24 * 60 * 60 * 1000)).toISOString().slice(0, 19).replace('T', ' ');
     console.log(now, yesterday)
 
     let sql = 'SELECT count(m.id) c, m.user, u.first_name, u.last_name from messages m LEFT JOIN users u ON m.user = u.user WHERE m.chat = '+msg.chat.id+'  between \''+yesterday+'\' AND \''+now+'\' GROUP by m.user, u.first_name, u.last_name ORDER BY c DESC LIMIT 5';
