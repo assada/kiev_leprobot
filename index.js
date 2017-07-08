@@ -25,7 +25,8 @@ const UserRepository = require("./Repository/UserRepository");
 const PidorRepository = require("./Repository/PidorRepository");
 
 //Modules
-const MessageGenerator = require("./modules/MessageGenerator");
+const MessageGenerator = require("./Generator/MessageGenerator");
+const PidorGenerator = require("./Generator/PidorGenerator");
 
 //Strings
 const catP = [
@@ -128,6 +129,5 @@ bot.onText(/\/top/, (msg, match) => {
 
 bot.onText(/\/new_pidor/, (msg, match) => {
     bot.sendChatAction(msg.chat.id, 'typing');
-
-
+    (new PidorGenerator).get();
 });

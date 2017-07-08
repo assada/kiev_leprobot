@@ -14,7 +14,6 @@ module.exports = class UserRepository {
      */
     store(user) {
         this.User.sync().then(() => {
-            // Table created
             return this.User.findOrCreate({
                 where: {
                     user: user.id,
@@ -33,5 +32,18 @@ module.exports = class UserRepository {
         });
 
         return true;
+    }
+
+
+    getActiveUser() {
+        let now= new Date().toISOString().slice(0, 19).replace('T', ' ');
+        let yesterday = new Date(new Date().getTime() - (24 * 60 * 60 * 1000)).toISOString().slice(0, 19).replace('T', ' ');
+        this.User.sync().then(() => {
+            return this.User.findAll({
+                where: {
+                    updatedAt: {$between: [yesterday, now]},
+                },
+            });
+        });
     }
 }
