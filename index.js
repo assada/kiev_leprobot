@@ -150,5 +150,7 @@ bot.onText(/\/new_pidor/, (msg, match) => {
         bot.sendMessage(msg.chat.id, res.username, {
             parse_mode: 'Markdown'
         });
+    }).catch(function (rej) {
+        console.log(rej)
     });
 });

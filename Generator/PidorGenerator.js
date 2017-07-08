@@ -14,7 +14,7 @@ module.exports = class PidorGenerator {
             this.PidorRepository.get(chat).then(function (res) {
                 if (res.length > 0) {
                     console.log(res);
-                    reject(false);
+                    reject('Rej 1');
                     //fulfill(res[0].dataValues);
                 } else {
                     this.UserChatRepository.getActiveUser(chat).then(users => {
@@ -24,7 +24,7 @@ module.exports = class PidorGenerator {
                             this.PidorRepository.store(msg, user.dataValues.id);
                             fulfill(user.dataValues);
                         } else {
-                            reject(false);
+                            reject('Rej 2');
                         }
 
                     });
