@@ -21,12 +21,10 @@ module.exports = class UserChatRepository {
                 where: {
                     user: user.id,
                     chat: chat.id
-                },
-                defaults: {
-                    createdAt: new Date()
                 }
             }).spread((user, created) => {
                 if (!created) {
+                    console.log('Try to update');
                     this.UserChat.update({updatedAt: new Date()}, {where: {user: user.id, chat: chat.id}});
                 }
             });
