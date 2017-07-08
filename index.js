@@ -30,7 +30,8 @@ const PidorRepository = new PRepository(PidorModel);
 
 //Generators
 const MessageGenerator = require("./Generator/MessageGenerator");
-const PidorGenerator = require("./Generator/PidorGenerator");
+const PGenerator = require("./Generator/PidorGenerator");
+const PidorGenerator = new PGenerator(PidorRepository, UserRepository);
 
 
 
@@ -135,5 +136,5 @@ bot.onText(/\/top/, (msg, match) => {
 
 bot.onText(/\/new_pidor/, (msg, match) => {
     bot.sendChatAction(msg.chat.id, 'typing');
-    PidorRepository.get(msg);
+    PidorGenerator.get(msg);
 });
