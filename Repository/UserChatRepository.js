@@ -20,7 +20,8 @@ module.exports = class UserChatRepository {
             return this.UserChat.findOrCreate({
                 where: {
                     user: user.id,
-                    chat: chat.id
+                    chat: chat.id,
+                    createdAt: new Date()
                 }
             }).spread((user, created) => {
                 if (!created) {
