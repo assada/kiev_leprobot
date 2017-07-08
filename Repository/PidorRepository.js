@@ -26,18 +26,20 @@ module.exports = class PidorRepository {
     }
 
     get(chat) {
-        return this.Pidor.findAll({
-            /*include: [{
-                model: User,
-                where: {user: Sequelize.col('pidor.user')}
-            }],*/
-            where: {
-                chat: chat
-            },
-            order: [
-                ['id', 'DESC']
-            ],
-            limit: 1
+        this.Pidor.sync().then(() => {
+            return this.Pidor.findAll({
+                /*include: [{
+                 model: User,
+                 where: {user: Sequelize.col('pidor.user')}
+                 }],*/
+                where: {
+                    chat: chat
+                },
+                order: [
+                    ['id', 'DESC']
+                ],
+                limit: 1
+            });
         });
     }
 };
