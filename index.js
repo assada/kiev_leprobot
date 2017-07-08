@@ -129,5 +129,5 @@ bot.onText(/\/top/, (msg, match) => {
 
 bot.onText(/\/new_pidor/, (msg, match) => {
     bot.sendChatAction(msg.chat.id, 'typing');
-    (new PidorGenerator(PidorRepository, UserRepository, msg)).get();
+    (new PidorGenerator(PidorRepository, new UserRepository, msg)).get();
 });

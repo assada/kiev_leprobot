@@ -3,8 +3,8 @@
 module.exports = class PidorGenerator {
     constructor(PidorRepository, UserRepository, msg) {
         this.msg = msg;
-        this.PidorRepository = PidorRepository;
-        this.UserRepository = UserRepository;
+        this.PidorRepository = new PidorRepository;
+        this.UserRepository = new UserRepository;
     }
 
     get() {
