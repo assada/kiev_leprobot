@@ -29,7 +29,7 @@ const MessageRepository = new MRepository(MessageModel);
 const URepository = require("./Repository/UserRepository");
 const UserRepository = new URepository(UserModel);
 const PRepository = require("./Repository/PidorRepository");
-const PidorRepository = new PRepository(PidorModel, UserModel);
+const PidorRepository = new PRepository(PidorModel, User);
 const UCRepository = require("./Repository/UserChatRepository");
 const UserChatRepository = new UCRepository(UserChatModel);
 
