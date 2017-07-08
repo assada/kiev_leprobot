@@ -118,6 +118,8 @@ bot.onText(/\/top/, (msg, match) => {
         results.forEach(function (item) {
             result += '*'+item.first_name + (item.last_name !== '' && item.last_name !== null ? ' ' + item.last_name : '') + '* - _' + item.c + '_\n';
         });
-        bot.sendMessage(msg.chat.id, result);
+        bot.sendMessage(msg.chat.id, result, {
+            parse_mode: 'Markdown'
+        });
     })
 });
