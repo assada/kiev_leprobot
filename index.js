@@ -49,7 +49,7 @@ bot.on('message', (msg) => {
 
     console.log(msg);
 
-    let r = new Random(Random.engines.mt19937().seed('fsdfbk'+Math.random()));
+    let r = new Random(Random.engines.mt19937().seed('fsdfbk' + Math.random()));
 
     (new UserStore(UserModel)).store(msg);
     if (typeof msg.text !== 'undefined' && msg.text.length > 1 && msg.text.charAt(0) !== '/') {
@@ -57,15 +57,18 @@ bot.on('message', (msg) => {
         let mention = new RegExp(names.join("|")).test(msg.text);
         let ra = r.bool(0.1);
         console.log('Mention: ' + mention);
-        console.log('Random: '+ra);
+        console.log('Random: ' + ra);
 
         (new MessageStore(MessageModel)).store(msg, names);
-        (new MessageGenerator(MessageModel, msg)).get(names).then(function (res) {
-            console.log(res);
-            if (ra || mention) {
+        if (ra || mention) {
+
+            bot.sendChatAction(msg.chat.id, 'typing');
+
+            (new MessageGenerator(MessageModel, msg)).get(names).then(function (res) {
+                console.log(res);
                 if (res !== false && res.length > 0) {
                     let options = {};
-                    if(mention) {
+                    if (mention) {
                         options = {
                             reply_to_message_id: msg.message_id
                         };
@@ -74,16 +77,16 @@ bot.on('message', (msg) => {
                 } else {
                     console.log('=(');
                 }
-            } else {
-                console.log('=(((( '+ (ra || mention));
-            }
-        });
+
+            });
+        }
     }
 
 });
 
 
 bot.onText(/\/boobs/, (msg, match) => {
+    bot.sendChatAction(msg.chat.id, 'upload_photo');
     const request = require('request');
     let r = request.get('http://api.oboobs.ru/boobs/0/1/random', function (err, res, body) {
         var json = JSON.parse(body);
@@ -97,6 +100,7 @@ bot.onText(/\/boobs/, (msg, match) => {
 });
 
 bot.onText(/\/cat/, (msg, match) => {
+    bot.sendChatAction(msg.chat.id, 'upload_photo');
     var request = require('request');
     var r = request.get('http://thecatapi.com/api/images/get?format=src', function (err, res, body) {
         const photo = request(this.uri.href);
