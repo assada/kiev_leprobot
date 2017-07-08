@@ -22,6 +22,9 @@ module.exports = class PidorGenerator {
                     //fulfill(res[0].dataValues);
                 } else {
                     ucr.getActiveUser(chat).then(users => {
+                        console.log('-----------')
+                        console.log(users);
+                        console.log('-----------')
                         if (users.length > 0) {
                             let user = users[Math.floor(Math.random() * users.length)];
                             console.log(user);
