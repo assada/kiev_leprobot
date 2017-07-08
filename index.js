@@ -153,7 +153,7 @@ bot.onText(/\/new_pidor/, (msg, match) => {
             }else if(res.status === 'new') {
                 message = 'Поздравляю! Ты, @' + user.username + ' (' + user.first_name + ' ' + user.last_name + '),- пидор дня!'
             }
-            bot.sendMessage(msg.chat.id, user.username, {
+            bot.sendMessage(msg.chat.id, message, {
                 parse_mode: 'Markdown'
             });
         });
