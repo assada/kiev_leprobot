@@ -124,6 +124,9 @@ bot.onText(/\/top/, (msg, match) => {
         results.forEach(function (item) {
             result += item.first_name + (item.last_name !== '' && item.last_name !== null ? ' ' + item.last_name : '') + ' - *' + item.c + '*\n';
         });
+        if(results.length < 1) {
+            result = 'Все молчали =('
+        }
         bot.sendMessage(msg.chat.id, result, {
             parse_mode: 'Markdown'
         });
