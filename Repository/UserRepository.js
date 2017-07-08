@@ -38,12 +38,10 @@ module.exports = class UserRepository {
     getActiveUser() {
         let now= new Date().toISOString().slice(0, 19).replace('T', ' ');
         let yesterday = new Date(new Date().getTime() - (24 * 60 * 60 * 1000)).toISOString().slice(0, 19).replace('T', ' ');
-        this.User.sync().then(() => {
-            return this.User.findAll({
-                where: {
-                    updatedAt: {$between: [yesterday, now]},
-                },
-            });
+        return this.User.findAll({
+            where: {
+                updatedAt: {$between: [yesterday, now]},
+            },
         });
     }
 }
