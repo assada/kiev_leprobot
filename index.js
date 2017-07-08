@@ -111,12 +111,16 @@ bot.onText(/\/top/, (msg, match) => {
     }
     bot.sendChatAction(msg.chat.id, 'typing');
 
-    let sql = 'SELECT count(m.id) c, m.user, u.first_name, u.last_name from messages m LEFT JOIN users u ON m.user = u.user WHERE m.chat = '+msg.chat.id+' GROUP by m.user, u.first_name, u.last_name ORDER BY c DESC LIMIT 5';
+    let now= new Date().toISOString();
+    let yesterday = new Date(new Date().getTime() - (24 * 60 * 60 * 1000)).toISOString();
+    console.log(now, yesterday)
+
+    let sql = 'SELECT count(m.id) c, m.user, u.first_name, u.last_name from messages m LEFT JOIN users u ON m.user = u.user WHERE m.chat = '+msg.chat.id+'  between \''+now+'\' AND \''+yesterday+'\' GROUP by m.user, u.first_name, u.last_name ORDER BY c DESC LIMIT 5';
 
     sequelize.query(sql).spread((results, metadata) => {
         let result = '*Топ 5 флудерастов:* \n\n';
         results.forEach(function (item) {
-            result += '*'+item.first_name + (item.last_name !== '' && item.last_name !== null ? ' ' + item.last_name : '') + '* - _' + item.c + '_\n';
+            result += item.first_name + (item.last_name !== '' && item.last_name !== null ? ' ' + item.last_name : '') + ' - *' + item.c + '*\n';
         });
         bot.sendMessage(msg.chat.id, result, {
             parse_mode: 'Markdown'
