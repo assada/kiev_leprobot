@@ -3,19 +3,32 @@
 const Promise = require('promise');
 
 module.exports = class PidorGenerator {
-    constructor(PidorRepository, UserRepository) {
+    constructor(PidorRepository, UserChatRepository) {
         this.PidorRepository = PidorRepository;
-        this.UserRepository = UserRepository;
+        this.UserChatRepository = UserChatRepository;
     }
 
     get(msg) {
         const chat = msg.chat.id;
         return new Promise(function (fulfill, reject) {
-            this.UserRepository.getActiveUser().then(users => {
-                let user = users[Math.floor(Math.random() * users.length)];
-                console.log(user.dataValues.username);
-                PidorRepository.store(msg, user.dataValues.id);
-                fulfill(user.dataValues);
+            this.PidorRepository.get(chat).then(function (res) {
+                if (res.length > 0) {
+                    console.log(res);
+                    reject(false);
+                    //fulfill(res[0].dataValues);
+                } else {
+                    this.UserChatRepository.getActiveUser(chat).then(users => {
+                        if (users.length > 0) {
+                            let user = users[Math.floor(Math.random() * users.length)];
+                            console.log(user);
+                            this.PidorRepository.store(msg, user.dataValues.id);
+                            fulfill(user.dataValues);
+                        } else {
+                            reject(false);
+                        }
+
+                    });
+                }
             });
         });
     }

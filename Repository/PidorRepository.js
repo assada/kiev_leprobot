@@ -1,13 +1,15 @@
 'use strict';
 
 module.exports = class PidorRepository {
-    constructor(Pidor) {
+    constructor(Pidor, UserModel) {
         this.Pidor = Pidor.getModel();
+        this.UserModel = UserModel;
     }
 
     /**
      * Store pidor
      * @param msg
+     * @param user
      * @returns {boolean}
      */
     store(msg, user) {
@@ -19,5 +21,21 @@ module.exports = class PidorRepository {
         });
 
         return true;
+    }
+
+    get(chat) {
+        return this.Pidor.findAll({
+            include: [{
+                model: this.UserModel,
+                where: {user: 'pidor.user'}
+            }],
+            where: {
+                chat: chat
+            },
+            order: [
+                ['id', 'DESC']
+            ],
+            limit: 1
+        });
     }
 };
