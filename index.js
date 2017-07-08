@@ -135,6 +135,14 @@ bot.onText(/\/top/, (msg, match) => {
 });
 
 bot.onText(/\/new_pidor/, (msg, match) => {
+    if(msg.chat.id > 0) {
+        bot.sendMessage(msg.chat.id, "Не-не. Только в чатиках топчик работает");
+        return false;
+    }
     bot.sendChatAction(msg.chat.id, 'typing');
-    PidorGenerator.get(msg);
+    PidorGenerator.get(msg).then(function (res) {
+        bot.sendMessage(msg.chat.id, res, {
+            parse_mode: 'Markdown'
+        });
+    });
 });

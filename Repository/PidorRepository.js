@@ -10,12 +10,11 @@ module.exports = class PidorRepository {
      * @param msg
      * @returns {boolean}
      */
-    store(msg) {
+    store(msg, user) {
         this.Pidor.sync().then(() => {
             return this.Pidor.create({
-                message: msg.message_id,
                 chat: msg.chat.id,
-                user: msg.from.id
+                user: user
             });
         });
 
