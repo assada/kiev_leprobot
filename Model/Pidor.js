@@ -20,7 +20,7 @@ module.exports = class Pidor {
             }
         });
 
-        this.model.belongsTo(new User);
+        this.model.belongsTo(new User(sequelize));
     }
 
     getModel() {
