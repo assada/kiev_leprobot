@@ -14,7 +14,8 @@ module.exports = class PidorGenerator {
         let ucr = this.UserChatRepository;
         return new Promise(function (fulfill, reject) {
             pr.get(chat).then(function (res) {
-                console.log('PR DONE');
+
+                console.log(res);
                 if (res.length > 0) {
                     console.log(res);
                     reject('Rej 1');
