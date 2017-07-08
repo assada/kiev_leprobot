@@ -20,13 +20,19 @@ const Pidor = require("./Model/Pidor");
 const PidorModel = new Pidor(db);
 
 //Repository
-const MessageRepository = require("./Repository/MessageRepository");
-const UserRepository = require("./Repository/UserRepository");
-const PidorRepository = require("./Repository/PidorRepository");
+const MRepository = require("./Repository/MessageRepository");
+const MessageRepository = new MRepository(MessageModel);
+const URepository = require("./Repository/UserRepository");
+const UserRepository = new URepository(UserModel);
+const PRepository = require("./Repository/PidorRepository");
+const PidorRepository = new PRepository(PidorModel);
 
-//Modules
+
+//Generators
 const MessageGenerator = require("./Generator/MessageGenerator");
 const PidorGenerator = require("./Generator/PidorGenerator");
+
+
 
 //Strings
 const catP = [
@@ -53,11 +59,11 @@ const names = [
 bot.on('message', (msg) => {
     let randomizer = new Random(Random.engines.mt19937().seed('fsdfbk' + Math.random()));
 
-    (new UserRepository(UserModel)).store(msg.from);
+    (UserRepository).store(msg.from);
     if (typeof msg.text !== 'undefined' && msg.text.length > 1 && msg.text.charAt(0) !== '/') {
         let mention = new RegExp(names.join("|")).test(msg.text);
         let chance = randomizer.bool(0.3);
-        (new MessageRepository(MessageModel)).store(msg, names);
+        MessageRepository.store(msg, names);
         if (chance || mention) {
             bot.sendChatAction(msg.chat.id, 'typing');
 
@@ -129,5 +135,5 @@ bot.onText(/\/top/, (msg, match) => {
 
 bot.onText(/\/new_pidor/, (msg, match) => {
     bot.sendChatAction(msg.chat.id, 'typing');
-    (new PidorGenerator(PidorRepository, new UserRepository, msg)).get();
+    PidorRepository.get(msg);
 });
