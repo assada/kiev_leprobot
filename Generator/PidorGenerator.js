@@ -25,7 +25,7 @@ module.exports = class PidorGenerator {
                         if (users.length > 0) {
                             let user = users[Math.floor(Math.random() * users.length)];
                             console.log(user);
-                            pr.store(msg, user.dataValues.id);
+                            pr.store(msg, user.dataValues.user);
                             fulfill(user.dataValues);
                         } else {
                             reject('Rej 2');
