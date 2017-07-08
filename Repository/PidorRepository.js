@@ -1,5 +1,7 @@
 'use strict';
 
+const User = require("../Model/User");
+
 module.exports = class PidorRepository {
     constructor(Pidor, UserModel) {
         this.Pidor = Pidor.getModel();
@@ -28,7 +30,7 @@ module.exports = class PidorRepository {
 
         return this.Pidor.findAll({
             include: [{
-                model: this.UserModel,
+                model: User,
                 where: {user: Sequelize.col('pidor.user')}
             }],
             where: {
