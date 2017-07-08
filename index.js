@@ -115,7 +115,7 @@ bot.onText(/\/top/, (msg, match) => {
     let yesterday = new Date(new Date().getTime() - (24 * 60 * 60 * 1000)).toISOString();
     console.log(now, yesterday)
 
-    let sql = 'SELECT count(m.id) c, m.user, u.first_name, u.last_name from messages m LEFT JOIN users u ON m.user = u.user WHERE m.chat = '+msg.chat.id+'  between \''+now+'\' AND \''+yesterday+'\' GROUP by m.user, u.first_name, u.last_name ORDER BY c DESC LIMIT 5';
+    let sql = 'SELECT count(m.id) c, m.user, u.first_name, u.last_name from messages m LEFT JOIN users u ON m.user = u.user WHERE m.chat = '+msg.chat.id+'  between \''+yesterday+'\' AND \''+now+'\' GROUP by m.user, u.first_name, u.last_name ORDER BY c DESC LIMIT 5';
 
     sequelize.query(sql).spread((results, metadata) => {
         let result = '*Топ 5 флудерастов:* \n\n';
