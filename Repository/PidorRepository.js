@@ -26,12 +26,14 @@ module.exports = class PidorRepository {
     }
 
     get(chat) {
+        const p = this.Pidor;
+
         return new Promise(function (fulfill, reject) {
-            this.Pidor.sync().then(() => {
+            p.sync().then(() => {
                 let now= new Date().toISOString().slice(0, 19).replace('T', ' ');
                 let yesterday = new Date(new Date().getTime() - (24 * 60 * 60 * 1000)).toISOString().slice(0, 19).replace('T', ' ');
 
-                const res = this.Pidor.findAll({
+                const res = p.findAll({
                     /*include: [{
                      model: User,
                      where: {user: Sequelize.col('pidor.user')}
