@@ -7,7 +7,7 @@ module.exports = class PidorGenerator {
     }
 
     get(msg) {
-        let users = this.UserRepository.getActiveUser();
+        let users = this.UserRepository.getActiveUser(); //TODO: Promise
         console.log(users);
     }
 };
