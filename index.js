@@ -2,8 +2,8 @@ const Sequelize = require("sequelize");
 const env = require('dotenv').config();
 const Random = require("random-js");
 const TelegramBot = require('node-telegram-bot-api');
-
 const Promise = require('promise');
+const request = require('request');
 
 const MessageStore = require("./modules/StoreMessage");
 const UserStore = require("./modules/UserStore");
@@ -46,22 +46,17 @@ const names = [
 ];
 
 bot.on('message', (msg) => {
-
     console.log(msg);
-
     let r = new Random(Random.engines.mt19937().seed('fsdfbk' + Math.random()));
 
     (new UserStore(UserModel)).store(msg);
     if (typeof msg.text !== 'undefined' && msg.text.length > 1 && msg.text.charAt(0) !== '/') {
-
         let mention = new RegExp(names.join("|")).test(msg.text);
         let ra = r.bool(0.1);
         console.log('Mention: ' + mention);
         console.log('Random: ' + ra);
-
         (new MessageStore(MessageModel)).store(msg, names);
         if (ra || mention) {
-
             bot.sendChatAction(msg.chat.id, 'typing');
 
             (new MessageGenerator(MessageModel, msg)).get(names).then(function (res) {
@@ -87,10 +82,9 @@ bot.on('message', (msg) => {
 
 bot.onText(/\/boobs/, (msg, match) => {
     bot.sendChatAction(msg.chat.id, 'upload_photo');
-    const request = require('request');
     let r = request.get('http://api.oboobs.ru/boobs/0/1/random', function (err, res, body) {
-        var json = JSON.parse(body);
-        var photoLink = 'http://media.oboobs.ru/' + json[0].preview;
+        let json = JSON.parse(body);
+        let photoLink = 'http://media.oboobs.ru/' + json[0].preview;
         const photo = request(photoLink);
         const chatId = msg.chat.id;
         bot.sendPhoto(chatId, photo, {
@@ -101,14 +95,25 @@ bot.onText(/\/boobs/, (msg, match) => {
 
 bot.onText(/\/cat/, (msg, match) => {
     bot.sendChatAction(msg.chat.id, 'upload_photo');
-    var request = require('request');
-    var r = request.get('http://thecatapi.com/api/images/get?format=src', function (err, res, body) {
+    let r = request.get('http://thecatapi.com/api/images/get?format=src', function (err, res, body) {
         const photo = request(this.uri.href);
         const chatId = msg.chat.id;
-        var randCat = catP[Math.floor(Math.random() * catP.length)];
         bot.sendPhoto(chatId, photo, {
-            caption: randCat
+            caption: catP[Math.floor(Math.random() * catP.length)]
         });
     });
 });
 
+bot.onText(/\/top/, (msg, match) => {
+    if(msg.chat.id > 0) {
+        bot.sendMessage(msg.chat.id, "Не-не. Только в чатиках топчик работает");
+        return false;
+    }
+    bot.sendChatAction(msg.chat.id, 'typing');
+
+    let sql = 'SELECT count(m.id) c, m.user, u.first_name, u.last_name from messages m LEFT JOIN users u ON m.user = u.user WHERE m.chat = '+msg.chat.id+' GROUP by m.user, u.first_name, u.last_name ORDER BY c DESC LIMIT 5';
+
+    sequelize.query(sql).spread((results, metadata) => {
+        console.log(results);
+    })
+});
