@@ -24,10 +24,12 @@ module.exports = class PidorRepository {
     }
 
     get(chat) {
+        const Sequelize = require("sequelize");
+
         return this.Pidor.findAll({
             include: [{
                 model: this.UserModel,
-                where: {user: 'pidor.user'}
+                where: {user: Sequelize.col('pidor.user')}
             }],
             where: {
                 chat: chat
