@@ -7,7 +7,7 @@ function imageSearch(query) {
     let URL = 'http://images.google.com/search?tbm=isch&q='+encodeURIComponent(query);
 
     return new Promise(function (fulfill, reject) {
-        parser.parseImageUrls(searchTerm, function (urls) {
+        parser.parseImageUrls(query, function (urls) {
             // console.log(urls); // [ { url: "https://upload.wikimedia.org/wikipedia/en/f/f4/Supermarioworld.jpg", caption: "foo" }, { url: "http ...
             let url = urls[Math.floor(Math.random() * urls.length)].url;
             console.log(url);
