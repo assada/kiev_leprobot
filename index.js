@@ -75,7 +75,7 @@ bot.on('message', (msg) => {
         let mention = new RegExp(names.join("|")).test(msg.text);
         let chance = randomizer.bool(0.1);
         MessageRepository.store(msg, names);
-        if ((chance || mention) || msg.chat.id !== -1001048609359) {
+        if ((chance || mention) && msg.chat.id !== -1001048609359) {
             bot.sendChatAction(msg.chat.id, 'typing');
             (new MessageGenerator(MessageModel, msg)).get(names).then(function (res) {
                 console.log(res);
