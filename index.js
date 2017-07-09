@@ -187,13 +187,17 @@ bot.onText(/\/new_pidor_top/, (msg, match) => {
 http.createServer(function (req, response) {
     console.log(req.connection.remoteAddress);
     console.log(req.url);
+    if(req.url.indexOf('favicon') > -1) {
+        response.writeHead(404, {'Content-Type': 'text/plain'});
+        response.end();
+        return false;
+    }
     response.writeHead(200, {'Content-Type': 'text/plain'});
     UserChatRepository.getChats().then(function(chats) {
         chats.forEach(function (chat) {
             getPidor(chat.chat)
         })
     });
-    response.end('Done');
 }).listen(9615);
 
 function getPidor(chat) {
