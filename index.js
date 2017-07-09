@@ -192,6 +192,7 @@ http.createServer(function (req, response) {
             getPidor(chat.chat)
         })
     });
+    response.end('Done');
 }).listen(9615);
 
 function getPidor(chat) {
