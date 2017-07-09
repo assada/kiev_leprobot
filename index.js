@@ -169,7 +169,7 @@ bot.onText(/\/new_pidor_top/, (msg, match) => {
     }
     bot.sendChatAction(msg.chat.id, 'typing');
 
-    sequelize.query('SELECT count(p.id) c, p.user, u.first_name, u.last_name, u.username FROM pidors p LEFT JOIN users u ON p.user = u.user WHERE p.chat = '+msg.chat.id+' GROUP BY p.user, u.first_name, u.last_name, u.username').spread((results, metadata) => {
+    db.query('SELECT count(p.id) c, p.user, u.first_name, u.last_name, u.username FROM pidors p LEFT JOIN users u ON p.user = u.user WHERE p.chat = '+msg.chat.id+' GROUP BY p.user, u.first_name, u.last_name, u.username').spread((results, metadata) => {
         console.log(results);
     })
 });
