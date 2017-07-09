@@ -188,11 +188,11 @@ http.createServer(function (req, response) {
     console.log(req.connection.remoteAddress);
     console.log(req.url);
     if(req.url.indexOf('favicon') > -1 || req.connection.remoteAddress.indexOf('127.0.0.1')) {
-        response.writeHead(404, {'Content-Type': 'text/plain'});
+        response.writeHead(404, {'Content-Type': 'text/html; charset=utf-8'});
         response.end('Ну ты и пидор...');
         return false;
     }
-    response.writeHead(200, {'Content-Type': 'text/plain'});
+    response.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
     UserChatRepository.getChats().then(function(chats) {
         chats.forEach(function (chat) {
             getPidor(chat.chat)
