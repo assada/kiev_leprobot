@@ -208,7 +208,8 @@ bot.onText(/\/new_pidor_top/, (msg, match) => {
 http.createServer(function (req, res) {
     res.writeHead(200, {'Content-Type': 'text/plain'});
     UserChatRepository.getChats().then(function(chats) {
-        chats.forEach(function (chat) {
+        console.log(chats);
+        /*chats.forEach(function (chat) {
             PidorGenerator.get(chat).then(function (res) {
                 UserModel.getModel().findOne({where: {user: res.user}}).then(function (user) {
                     let message = '';
@@ -232,6 +233,6 @@ http.createServer(function (req, res) {
             }).catch(function (rej) {
                 console.log(rej)
             });
-        })
+        })*/
     });
 }).listen(9615);
