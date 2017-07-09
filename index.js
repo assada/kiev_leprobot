@@ -3,6 +3,7 @@ const env = require('dotenv').config();
 const Random = require("random-js");
 const TelegramBot = require('node-telegram-bot-api');
 const request = require('request');
+const emojiStrip = require('emoji-strip');
 const db = new Sequelize(process.env.MYSQL_DATABASE, process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
     host: process.env.MYSQL_HOST,
     dialect: 'mysql', logging: false
@@ -67,9 +68,9 @@ bot.on('message', (msg) => {
     if (msg.chat.id < 0) {
         UserChatRepository.store(msg.from, msg.chat);
     }
-    if (typeof msg.text !== 'undefined' && msg.text.length > 1 && msg.text.charAt(0) !== '/') {
+    if (typeof msg.text !== 'undefined' && emojiStrip(msg.text).length > 1 && msg.text.charAt(0) !== '/') {
         let mention = new RegExp(names.join("|")).test(msg.text);
-        let chance = randomizer.bool(0.3);
+        let chance = randomizer.bool(0.2);
         MessageRepository.store(msg, names);
         if (chance || mention) {
             bot.sendChatAction(msg.chat.id, 'typing');
