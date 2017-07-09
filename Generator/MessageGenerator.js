@@ -30,7 +30,7 @@ module.exports = class MessageGenerator {
 
 
         return new Promise(function (fulfill, reject) {
-            Message.findAll({where: {body: {$like: '%' + word + '%'}}, limit: 100, attributes: ['body']}).then(Messages => {
+            Message.findAll({where: {body: {$like: '%' + word + '%'}}, limit: 100, order: ['RAND()'], attributes: ['body']}).then(Messages => {
                 Messages.forEach(function (item) {
                     m.push(item.body)
                 });
