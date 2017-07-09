@@ -218,7 +218,7 @@ http.createServer(function (req, res) {
                         message = 'Пидор дня - *' + user.first_name + ' ' + user.last_name + '*';
                     } else if (res.status === 'new') {
                         setTimeout(function () {
-                            bot.sendMessage(msg.chat.id, '_Вызываю бога пидоров..._', {
+                            bot.sendMessage(chat.chat, '_Вызываю бога пидоров..._', {
                                 parse_mode: 'Markdown'
                             });
                         }, 1000);
@@ -226,7 +226,7 @@ http.createServer(function (req, res) {
                     }
                     setTimeout(function () {
                         res.ent(message);
-                        bot.sendMessage(msg.chat.id, message, {
+                        bot.sendMessage(chat.chat, message, {
                             parse_mode: 'Markdown'
                         });
                     }, 2000);
