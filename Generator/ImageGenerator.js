@@ -1,6 +1,6 @@
 const rp = require('request-promise');
 const cheerio = require('cheerio');
-const Promise = require('Promise');
+const Promise = require('promise');
 
 function imageSearch(query) {
     let URL = 'http://images.google.com/search?tbm=isch&q='+encodeURIComponent(query);
