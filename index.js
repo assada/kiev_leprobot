@@ -4,6 +4,7 @@ const Random = require("random-js");
 const TelegramBot = require('node-telegram-bot-api');
 const request = require('request');
 const emojiStrip = require('emoji-strip');
+const http = require('http');
 const db = new Sequelize(process.env.MYSQL_DATABASE, process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
     host: process.env.MYSQL_HOST,
     dialect: 'mysql', logging: false
@@ -91,7 +92,6 @@ bot.on('message', (msg) => {
         }
     }
 });
-
 
 bot.onText(/\/boobs/, (msg, match) => {
     bot.sendChatAction(msg.chat.id, 'upload_photo');
@@ -204,3 +204,8 @@ bot.onText(/\/new_pidor_top/, (msg, match) => {
         }, 1500);
     })
 });
+
+http.createServer(function (req, res) {
+    res.writeHead(200, {'Content-Type': 'text/plain'});
+    res.end('Hello Wolrd!');
+}).listen(9615);
