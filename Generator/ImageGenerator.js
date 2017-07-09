@@ -12,6 +12,7 @@ function imageSearch(query) {
                 let imgNodes = $('#ires td a img');
                 let urls = [];
                 imgNodes.map(function(imgNodeIdx) {
+                    console.log(imgNode);
                     let imgNode = imgNodes[imgNodeIdx];
                     urls.push(imgNode.attribs['src']);
                 });
