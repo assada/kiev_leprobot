@@ -212,7 +212,7 @@ http.createServer(function (req, res) {
         chats.forEach(function (chat) {
             PidorGenerator.get(chat.chat).then(function (res) {
                 console.log(res);
-                /*UserModel.getModel().findOne({where: {user: res.user}}).then(function (user) {
+                UserModel.getModel().findOne({where: {user: res.user}}).then(function (user) {
                     let message = '';
                     if (res.status === 'old') {
                         message = 'Пидор дня - *' + user.first_name + ' ' + user.last_name + '*';
@@ -230,7 +230,7 @@ http.createServer(function (req, res) {
                             parse_mode: 'Markdown'
                         });
                     }, 2000);
-                });*/
+                });
             }).catch(function (rej) {
                 console.log(rej)
             });
