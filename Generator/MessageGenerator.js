@@ -2,6 +2,8 @@ const Promise = require('promise');
 
 const MarkovGen = require('markov-generator');
 const Sequelize = require("sequelize");
+const winston = require('winston');
+winston.add(winston.transports.File, { filename: 'markov.log' });
 
 const regex = /[^a-zA-Zа-яА-я]+/g;
 
@@ -12,6 +14,8 @@ module.exports = class MessageGenerator {
     }
 
     get(names) {
+        let debug = {msg: this.msg};
+
         let Message = this.MessageModel.getModel();
 
         let m = [];
@@ -24,23 +28,23 @@ module.exports = class MessageGenerator {
             return x.replace(regex, '');
         });
 
-        console.log(words);
+        debug.parsedWords = words;
 
-        let word = words[Math.floor(Math.random() * words.length)];
-        console.log(word);
+        // let word = words[Math.floor(Math.random() * words.length)];
         let constr = [];
 
         words.forEach(function(word) {
             constr.push({$like: '%' + word + '%'})
         });
 
+        debug.query = constr;
 
         return new Promise(function (fulfill, reject) {
             Message.findAll({where: {body: {$or: constr}}, limit: 100, order: Sequelize.literal('RAND()'), attributes: ['body']}).then(Messages => {
                 Messages.forEach(function (item) {
                     m.push(item.body)
                 });
-                console.log(m);
+                debug.messages = m;
 
                 if (m.length > 1) {
                     let markov = new MarkovGen({
@@ -48,12 +52,14 @@ module.exports = class MessageGenerator {
                         minLength: 4
                     });
                     let str = markov.makeChain(4);
-                    console.log('Result: '+ str);
+                    debug.result = str;
                     fulfill(str);
                 } else {
                     reject(false);
+                    debug.result = false;
                     console.log('Мало данных');
                 }
+                winston.logg('debug', debug);
             });
         });
     }
