@@ -73,7 +73,7 @@ bot.on('message', (msg) => {
     console.log(msg.chat.id);
     if (typeof msg.text !== 'undefined' && emojiStrip(msg.text).length > 1 && msg.text.charAt(0) !== '/') {
         let mention = new RegExp(names.join("|")).test(msg.text);
-        let chance = randomizer.bool(0.2);
+        let chance = randomizer.bool(0.1);
         MessageRepository.store(msg, names);
         if ((chance || mention) || msg.chat.id !== -1001048609359) {
             bot.sendChatAction(msg.chat.id, 'typing');
