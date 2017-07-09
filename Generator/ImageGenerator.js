@@ -12,8 +12,8 @@ function imageSearch(query) {
                 let imgNodes = $('#ires td a img');
                 let urls = [];
                 imgNodes.map(function(imgNodeIdx) {
-                    console.log(imgNode);
                     let imgNode = imgNodes[imgNodeIdx];
+                    console.log(imgNode);
                     urls.push(imgNode.attribs['src']);
                 });
                 fulfill(urls[Math.floor(Math.random() * urls.length)]);
