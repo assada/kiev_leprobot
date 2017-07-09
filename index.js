@@ -39,6 +39,7 @@ const UserChatRepository = new UCRepository(UserChatModel);
 //Generators
 const MessageGenerator = require("./Generator/MessageGenerator");
 const PGenerator = require("./Generator/PidorGenerator");
+const ImageGenerator = require("./Generator/ImageGenerator");
 const PidorGenerator = new PGenerator(PidorRepository, UserChatRepository);
 
 
@@ -153,6 +154,21 @@ bot.onText(/\/new_pidor/, (msg, match) => {
     }
     bot.sendChatAction(msg.chat.id, 'typing');
     getPidor(msg.chat.id);
+});
+
+bot.onText(/\/img (.+)/, (msg, match) => {
+    bot.sendChatAction(msg.chat.id, 'upload_photo');
+    setTimeout(function () {
+        ImageGenerator.imageSearch(match[1] || 'Трактор').then(function (url) {
+            request.get(url, function (err, res, body) {
+                const photo = request(this.uri.href);
+                const chatId = msg.chat.id;
+                bot.sendPhoto(chatId, photo, {
+                    reply_to_message_id: msg.message_id
+                });
+            });
+        });
+    }, 500);
 });
 
 bot.onText(/\/new_pidor_top/, (msg, match) => {

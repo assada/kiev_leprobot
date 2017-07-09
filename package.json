@@ -9,6 +9,7 @@
   "author": "Assada <assada.ua@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
     "dotenv": "^4.0.0",
     "emoji-strip": "^1.0.1",
     "install": "^0.10.1",
@@ -21,6 +22,7 @@
     "promise": "^8.0.0",
     "random-js": "^1.0.8",
     "request": "^2.81.0",
+    "request-promise": "^4.2.1",
     "sequelize": "^4.2.1",
     "winston": "^2.3.1"
   }
