@@ -186,6 +186,7 @@ bot.onText(/\/new_pidor_top/, (msg, match) => {
 
 http.createServer(function (req, response) {
     console.log(req.connection.remoteAddress);
+    console.log(req.url);
     response.writeHead(200, {'Content-Type': 'text/plain'});
     UserChatRepository.getChats().then(function(chats) {
         chats.forEach(function (chat) {
