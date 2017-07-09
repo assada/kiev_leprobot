@@ -9,6 +9,7 @@ function imageSearch(query) {
         rp(URL)
             .then(function(html) {
                 let $ = cheerio.load(html);
+                console.log(html);
                 let imgNodes = $('#ires td a img');
                 let aNodes = $('#ires td a');
                 let urls = [];
