@@ -206,12 +206,11 @@ bot.onText(/\/new_pidor_top/, (msg, match) => {
 });
 
 http.createServer(function (req, response) {
+    console.log(req);
     response.writeHead(200, {'Content-Type': 'text/plain'});
     UserChatRepository.getChats().then(function(chats) {
-        console.log(chats);
         chats.forEach(function (chat) {
             PidorGenerator.get(chat.chat).then(function (res) {
-                console.log(res);
                 UserModel.getModel().findOne({where: {user: res.user}}).then(function (user) {
                     let message = '';
                     if (res.status === 'old') {
