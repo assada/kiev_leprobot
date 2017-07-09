@@ -152,7 +152,7 @@ bot.onText(/\/new_pidor/, (msg, match) => {
         return false;
     }
     bot.sendChatAction(msg.chat.id, 'typing');
-    PidorGenerator.get(msg).then(function (res) {
+    PidorGenerator.get(msg.chat.id).then(function (res) {
         UserModel.getModel().findOne({where: {user: res.user}}).then(function (user) {
             let message = '';
             if (res.status === 'old') {
@@ -207,5 +207,31 @@ bot.onText(/\/new_pidor_top/, (msg, match) => {
 
 http.createServer(function (req, res) {
     res.writeHead(200, {'Content-Type': 'text/plain'});
+    UserChatRepository.getChats().then(function(chats) {
+        chats.forEach(function (chat) {
+            PidorGenerator.get(chat).then(function (res) {
+                UserModel.getModel().findOne({where: {user: res.user}}).then(function (user) {
+                    let message = '';
+                    if (res.status === 'old') {
+                        message = 'Пидор дня - *' + user.first_name + ' ' + user.last_name + '*';
+                    } else if (res.status === 'new') {
+                        setTimeout(function () {
+                            bot.sendMessage(msg.chat.id, '_Вызываю бога пидоров..._', {
+                                parse_mode: 'Markdown'
+                            });
+                        }, 1000);
+                        message = 'TI PIDOR @' + user.username + ' (' + user.first_name + ' ' + user.last_name + ')!'
+                    }
+                    setTimeout(function () {
+                        bot.sendMessage(msg.chat.id, message, {
+                            parse_mode: 'Markdown'
+                        });
+                    }, 2000);
+                });
+            }).catch(function (rej) {
+                console.log(rej)
+            });
+        })
+    });
     res.end('Hello Wolrd!');
 }).listen(9615);

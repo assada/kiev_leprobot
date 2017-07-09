@@ -8,8 +8,7 @@ module.exports = class PidorGenerator {
         this.UserChatRepository = UserChatRepository;
     }
 
-    get(msg) {
-        const chat = msg.chat.id;
+    get(chat) {
         let pr = this.PidorRepository;
         let ucr = this.UserChatRepository;
         return new Promise(function (fulfill, reject) {
@@ -20,7 +19,7 @@ module.exports = class PidorGenerator {
                     ucr.getActiveUser(chat).then(users => {
                         if (users.length > 0) {
                             let user = users[Math.floor(Math.random() * users.length)];
-                            pr.store(msg, user.dataValues.user);
+                            pr.store(chat, user.dataValues.user);
                             fulfill({status: 'new', user: user.dataValues.user});
                         } else {
                             reject('Rej 2');

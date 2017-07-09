@@ -33,6 +33,11 @@ module.exports = class UserChatRepository {
         return true;
     }
 
+    /**
+     *
+     * @param chat
+     * @returns {Promise.<Array.<Model>>}
+     */
     getActiveUser(chat) {
         let now= new Date().toISOString().slice(0, 19).replace('T', ' ');
         let yesterday = new Date(new Date().getTime() - (24 * 60 * 60 * 1000)).toISOString().slice(0, 19).replace('T', ' ');
@@ -42,5 +47,9 @@ module.exports = class UserChatRepository {
                 updatedAt: {$between: [yesterday, now]},
             },
         });
+    }
+
+    getChats() {
+        return this.UserChat.findAll({group: 'chat', attributes: ['chat']});
     }
 };
