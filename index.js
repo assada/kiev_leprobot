@@ -104,7 +104,7 @@ bot.onText(/\/boobs/, (msg, match) => {
                 caption: json[0].model
             });
         });
-    }, 1500);
+    }, 500);
 });
 
 bot.onText(/\/cat/, (msg, match) => {
@@ -117,7 +117,7 @@ bot.onText(/\/cat/, (msg, match) => {
                 caption: catP[Math.floor(Math.random() * catP.length)]
             });
         });
-    }, 1500);
+    }, 500);
 });
 
 bot.onText(/\/top/, (msg, match) => {
