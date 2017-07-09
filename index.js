@@ -151,7 +151,7 @@ bot.onText(/\/new_pidor/, (msg, match) => {
             if(res.status === 'old') {
                 message = 'Пидор дня - *' + user.first_name + ' ' + user.last_name + '*';
             }else if(res.status === 'new') {
-                message = 'Поздравляю! Ты, @' + user.username + ' (' + user.first_name + ' ' + user.last_name + '),- пидор дня!'
+                message = 'TI PIDOR @' + user.username + ' (' + user.first_name + ' ' + user.last_name + ')!'
             }
             bot.sendMessage(msg.chat.id, message, {
                 parse_mode: 'Markdown'
@@ -160,4 +160,16 @@ bot.onText(/\/new_pidor/, (msg, match) => {
     }).catch(function (rej) {
         console.log(rej)
     });
+});
+
+bot.onText(/\/new_pidor_top/, (msg, match) => {
+    if (msg.chat.id > 0) {
+        bot.sendMessage(msg.chat.id, "Не-не. Только в чатиках топчик работает");
+        return false;
+    }
+    bot.sendChatAction(msg.chat.id, 'typing');
+
+    sequelize.query('SELECT count(p.id) c, p.user, u.first_name, u.last_name, u.username FROM pidors p LEFT JOIN users u ON p.user = u.user WHERE p.chat = '+msg.chat.id+' GROUP BY p.user, u.first_name, u.last_name, u.username').spread((results, metadata) => {
+        console.log(results);
+    })
 });
