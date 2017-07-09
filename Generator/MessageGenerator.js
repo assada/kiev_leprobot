@@ -27,10 +27,15 @@ module.exports = class MessageGenerator {
 
         let word = words[Math.floor(Math.random() * words.length)];
         console.log(word);
+        let constr = [];
+
+        words.forEach(function(word) {
+            constr.push({$like: '%' + word + '%'})
+        });
 
 
         return new Promise(function (fulfill, reject) {
-            Message.findAll({where: {body: {$like: '%' + word + '%'}}, limit: 100, order: ['RAND()'], attributes: ['body']}).then(Messages => {
+            Message.findAll({where: {body: {$or: constr}}, limit: 100, order: ['RAND()'], attributes: ['body']}).then(Messages => {
                 Messages.forEach(function (item) {
                     m.push(item.body)
                 });
