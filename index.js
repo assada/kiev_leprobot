@@ -205,8 +205,8 @@ bot.onText(/\/new_pidor_top/, (msg, match) => {
     })
 });
 
-http.createServer(function (req, res) {
-    res.writeHead(200, {'Content-Type': 'text/plain'});
+http.createServer(function (req, response) {
+    response.writeHead(200, {'Content-Type': 'text/plain'});
     UserChatRepository.getChats().then(function(chats) {
         console.log(chats);
         chats.forEach(function (chat) {
@@ -225,7 +225,7 @@ http.createServer(function (req, res) {
                         message = 'TI PIDOR @' + user.username + ' (' + user.first_name + ' ' + user.last_name + ')!'
                     }
                     setTimeout(function () {
-                        res.end(message);
+                        response.end(message);
                         bot.sendMessage(chat.chat, message, {
                             parse_mode: 'Markdown'
                         });
