@@ -59,7 +59,7 @@ module.exports = class MessageGenerator {
                     debug.result = false;
                     console.log('Мало данных');
                 }
-                winston.logg('debug', debug);
+                winston.log('debug', debug);
             });
         });
     }
