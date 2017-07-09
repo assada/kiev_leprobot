@@ -1,30 +1,19 @@
-const rp = require('request-promise');
-const cheerio = require('cheerio');
+var request = require("request");
+var Parser = require("google-search-parser2");
+var parser = new Parser(request);
 const Promise = require('promise');
 
 function imageSearch(query) {
     let URL = 'http://images.google.com/search?tbm=isch&q='+encodeURIComponent(query);
 
     return new Promise(function (fulfill, reject) {
-        rp(URL)
-            .then(function(html) {
-                let $ = cheerio.load(html);
-                console.log(html);
-                let imgNodes = $('#ires td a img');
-                let aNodes = $('#ires td a');
-                let urls = [];
-                let hrefs = [];
-                imgNodes.map(function(imgNodeIdx) {
-                    let imgNode = imgNodes[imgNodeIdx];
-                    urls.push(imgNode.attribs['src']);
-                });
-                aNodes.map(function(aNodeIdx) {
-                    let aNode = aNodes[aNodeIdx];
-                    console.log(aNode.attribs['href']);
-                    hrefs.push(aNode.attribs['href']);
-                });
-                fulfill(urls[Math.floor(Math.random() * urls.length)]);
-            });
+        parser.parseImageUrls(searchTerm, function (urls) {
+            // console.log(urls); // [ { url: "https://upload.wikimedia.org/wikipedia/en/f/f4/Supermarioworld.jpg", caption: "foo" }, { url: "http ...
+            let url = urls[Math.floor(Math.random() * urls.length)].url;
+            console.log(url);
+            fulfill(url);
+        });
+        // fulfill(urls[Math.floor(Math.random() * urls.length)]);
     });
 }
 
