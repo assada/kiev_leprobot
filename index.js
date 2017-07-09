@@ -209,9 +209,10 @@ http.createServer(function (req, res) {
     res.writeHead(200, {'Content-Type': 'text/plain'});
     UserChatRepository.getChats().then(function(chats) {
         console.log(chats);
-        /*chats.forEach(function (chat) {
+        chats.forEach(function (chat) {
             PidorGenerator.get(chat).then(function (res) {
-                UserModel.getModel().findOne({where: {user: res.user}}).then(function (user) {
+                console.log(res);
+                /*UserModel.getModel().findOne({where: {user: res.user}}).then(function (user) {
                     let message = '';
                     if (res.status === 'old') {
                         message = 'Пидор дня - *' + user.first_name + ' ' + user.last_name + '*';
@@ -229,10 +230,10 @@ http.createServer(function (req, res) {
                             parse_mode: 'Markdown'
                         });
                     }, 2000);
-                });
+                });*/
             }).catch(function (rej) {
                 console.log(rej)
             });
-        })*/
+        })
     });
 }).listen(9615);
