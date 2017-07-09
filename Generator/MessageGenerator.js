@@ -1,6 +1,7 @@
 const Promise = require('promise');
 
 const MarkovGen = require('markov-generator');
+const Sequelize = require("sequelize");
 
 const regex = /[^a-zA-Zа-яА-я]+/g;
 
@@ -35,7 +36,7 @@ module.exports = class MessageGenerator {
 
 
         return new Promise(function (fulfill, reject) {
-            Message.findAll({where: {body: {$or: constr}}, limit: 100, order: 'RAND()', attributes: ['body']}).then(Messages => {
+            Message.findAll({where: {body: {$or: constr}}, limit: 100, order: Sequelize.literal('RAND()'), attributes: ['body']}).then(Messages => {
                 Messages.forEach(function (item) {
                     m.push(item.body)
                 });
