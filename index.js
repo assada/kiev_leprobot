@@ -160,6 +160,7 @@ bot.onText(/\/img (.+)/, (msg, match) => {
     bot.sendChatAction(msg.chat.id, 'upload_photo');
     setTimeout(function () {
         ImageGenerator.imageSearch(match[1] || 'Трактор').then(function (url) {
+            console.log(url);
             request.get(url, function (err, res, body) {
                 const photo = request(this.uri.href);
                 const chatId = msg.chat.id;
