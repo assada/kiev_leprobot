@@ -9,6 +9,10 @@ module.exports = class MessageRepository {
         this.Message = Message.getModel();
     }
 
+    cleanup(txt) {
+        return txt.replace(/(^[\\("']+)|([,:;.?!)"'|\\]+$)/, '').toLowerCase();
+    }
+
     /**
      * Store message
      * @param msg
