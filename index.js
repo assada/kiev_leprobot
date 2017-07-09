@@ -94,32 +94,30 @@ bot.on('message', (msg) => {
 
 bot.onText(/\/boobs/, (msg, match) => {
     bot.sendChatAction(msg.chat.id, 'upload_photo');
-    let r = request.get('http://api.oboobs.ru/boobs/0/1/random', function (err, res, body) {
-        let json = JSON.parse(body);
-        let photoLink = 'http://media.oboobs.ru/' + json[0].preview;
-        const photo = request(photoLink);
-        const chatId = msg.chat.id;
-        setTimeout(function () {
-            console.log('boobs');
+    setTimeout(function () {
+        request.get('http://api.oboobs.ru/boobs/0/1/random', function (err, res, body) {
+            let json = JSON.parse(body);
+            let photoLink = 'http://media.oboobs.ru/' + json[0].preview;
+            const photo = request(photoLink);
+            const chatId = msg.chat.id;
             bot.sendPhoto(chatId, photo, {
                 caption: json[0].model
             });
-        }, 1500);
-    });
+        });
+    }, 1500);
 });
 
 bot.onText(/\/cat/, (msg, match) => {
     bot.sendChatAction(msg.chat.id, 'upload_photo');
-    let r = request.get('http://thecatapi.com/api/images/get?format=src', function (err, res, body) {
-        const photo = request(this.uri.href);
-        const chatId = msg.chat.id;
-        setTimeout(function () {
-            console.log('cat');
+    setTimeout(function () {
+        request.get('http://thecatapi.com/api/images/get?format=src', function (err, res, body) {
+            const photo = request(this.uri.href);
+            const chatId = msg.chat.id;
             bot.sendPhoto(chatId, photo, {
                 caption: catP[Math.floor(Math.random() * catP.length)]
             });
-        }, 1500);
-    });
+        });
+    }, 1500);
 });
 
 bot.onText(/\/top/, (msg, match) => {
@@ -156,10 +154,10 @@ bot.onText(/\/new_pidor/, (msg, match) => {
     PidorGenerator.get(msg).then(function (res) {
         UserModel.getModel().findOne({where: {user: res.user}}).then(function (user) {
             let message = '';
-            if(res.status === 'old') {
+            if (res.status === 'old') {
                 message = 'Пидор дня - *' + user.first_name + ' ' + user.last_name + '*';
-            }else if(res.status === 'new') {
-                setTimeout(function() {
+            } else if (res.status === 'new') {
+                setTimeout(function () {
                     bot.sendMessage(msg.chat.id, '_Вызываю бога пидоров..._', {
                         parse_mode: 'Markdown'
                     });
@@ -184,9 +182,9 @@ bot.onText(/\/new_pidor_top/, (msg, match) => {
     }
     bot.sendChatAction(msg.chat.id, 'typing');
 
-    db.query('SELECT count(p.id) c, p.user, u.first_name, u.last_name, u.username FROM pidors p LEFT JOIN users u ON p.user = u.user WHERE p.chat = '+msg.chat.id+' GROUP BY p.user, u.first_name, u.last_name, u.username').spread((results, metadata) => {
+    db.query('SELECT count(p.id) c, p.user, u.first_name, u.last_name, u.username FROM pidors p LEFT JOIN users u ON p.user = u.user WHERE p.chat = ' + msg.chat.id + ' GROUP BY p.user, u.first_name, u.last_name, u.username').spread((results, metadata) => {
 
-        if(results < 1) {
+        if (results < 1) {
             bot.sendMessage(msg.chat.id, '_У вас все не пидоры... Пока.._', {
                 parse_mode: 'Markdown'
             });
@@ -198,7 +196,7 @@ bot.onText(/\/new_pidor_top/, (msg, match) => {
             message += i + ') _' + pidor.username + '_ - *' + pidor.c + '*\n';
             i++;
         });
-        setTimeout(function() {
+        setTimeout(function () {
             bot.sendMessage(msg.chat.id, message, {
                 parse_mode: 'Markdown'
             });
