@@ -100,6 +100,7 @@ bot.onText(/\/boobs/, (msg, match) => {
         const photo = request(photoLink);
         const chatId = msg.chat.id;
         setTimeout(function () {
+            console.log('boobs');
             bot.sendPhoto(chatId, photo, {
                 caption: json[0].model
             });
@@ -113,6 +114,7 @@ bot.onText(/\/cat/, (msg, match) => {
         const photo = request(this.uri.href);
         const chatId = msg.chat.id;
         setTimeout(function () {
+            console.log('cat');
             bot.sendPhoto(chatId, photo, {
                 caption: catP[Math.floor(Math.random() * catP.length)]
             });
