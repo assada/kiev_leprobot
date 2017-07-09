@@ -223,6 +223,7 @@ http.createServer(function (req, res) {
                         message = 'TI PIDOR @' + user.username + ' (' + user.first_name + ' ' + user.last_name + ')!'
                     }
                     setTimeout(function () {
+                        res.ent(message);
                         bot.sendMessage(msg.chat.id, message, {
                             parse_mode: 'Markdown'
                         });
@@ -233,5 +234,4 @@ http.createServer(function (req, res) {
             });
         })
     });
-    res.end('Hello Wolrd!');
 }).listen(9615);
