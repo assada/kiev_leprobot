@@ -10,11 +10,18 @@ function imageSearch(query) {
             .then(function(html) {
                 let $ = cheerio.load(html);
                 let imgNodes = $('#ires td a img');
+                let aNodes = $('#ires td a');
                 let urls = [];
+                let hrefs = [];
                 imgNodes.map(function(imgNodeIdx) {
                     let imgNode = imgNodes[imgNodeIdx];
                     console.log(imgNode);
                     urls.push(imgNode.attribs['src']);
+                });
+                aNodes.map(function(aNodeIdx) {
+                    let aNode = aNodes[aNodeIdx];
+                    console.log(aNode.attribs['src']);
+                    hrefs.push(aNode.attribs['src']);
                 });
                 fulfill(urls[Math.floor(Math.random() * urls.length)]);
             });
