@@ -210,7 +210,7 @@ http.createServer(function (req, res) {
     UserChatRepository.getChats().then(function(chats) {
         console.log(chats);
         chats.forEach(function (chat) {
-            PidorGenerator.get(chat).then(function (res) {
+            PidorGenerator.get(chat.chat).then(function (res) {
                 console.log(res);
                 /*UserModel.getModel().findOne({where: {user: res.user}}).then(function (user) {
                     let message = '';
