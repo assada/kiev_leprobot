@@ -205,7 +205,7 @@ bot.onText(/\/new_pidor_top/, (msg, match) => {
 http.createServer(function (req, response) {
     console.log(req.connection.remoteAddress);
     console.log(req.url);
-    if(req.url.indexOf('favicon') > -1 || req.connection.remoteAddress.indexOf('127.0.0.1')) {
+    if(req.url.indexOf('favicon') > -1 || req.connection.remoteAddress.indexOf('127.0.0.1') === -1) {
         response.writeHead(404, {'Content-Type': 'text/html; charset=utf-8'});
         response.end('Ну ты и пидор...');
         return false;
