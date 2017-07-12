@@ -5,6 +5,7 @@ const TelegramBot = require('node-telegram-bot-api');
 const winston = require('winston');
 const request = require('request');
 const emojiStrip = require('emoji-strip');
+const fx = require('money');
 const http = require('http');
 const db = new Sequelize(process.env.MYSQL_DATABASE, process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
     host: process.env.MYSQL_HOST,
@@ -105,14 +106,14 @@ bot.on('message', (msg) => {
 });
 
 bot.onText(/\/boobs/, (msg, match) => {
-    bot.sendChatAction(msg.chat.id, 'upload_photo');
+    const chat = msg.chat.id;
+    bot.sendChatAction(chat, 'upload_photo');
     setTimeout(function () {
         request.get('http://api.oboobs.ru/boobs/0/1/random', function (err, res, body) {
             let json = JSON.parse(body);
             let photoLink = 'http://media.oboobs.ru/' + json[0].preview;
             const photo = request(photoLink);
-            const chatId = msg.chat.id;
-            bot.sendPhoto(chatId, photo, {
+            bot.sendPhoto(chat, photo, {
                 caption: json[0].model
             });
         });
@@ -120,15 +121,15 @@ bot.onText(/\/boobs/, (msg, match) => {
 });
 
 bot.onText(/\/cat/, (msg, match) => {
-    bot.sendChatAction(msg.chat.id, 'upload_photo');
+    const chat = msg.chat.id;
+    bot.sendChatAction(chat, 'upload_photo');
     setTimeout(function () {
         request.get('http://thecatapi.com/api/images/get?format=src', function (err, res, body) {
             const photo = request(this.uri.href);
-            const chatId = msg.chat.id;
             if(this.uri.href.indexOf('.gif') !== -1) {
-                bot.sendDocument(chatId, photo)
+                bot.sendDocument(chat, photo)
             }else {
-                bot.sendPhoto(chatId, photo, {
+                bot.sendPhoto(chat, photo, {
                     caption: catP[Math.floor(Math.random() * catP.length)]
                 });
             }
@@ -137,26 +138,27 @@ bot.onText(/\/cat/, (msg, match) => {
 });
 
 bot.onText(/\/top/, (msg, match) => {
-    if (msg.chat.id > 0) {
-        bot.sendMessage(msg.chat.id, "Не-не. Только в чатиках топчик работает");
+    const chat = msg.chat.id;
+    if (chat > 0) {
+        bot.sendMessage(chat, "Не-не. Только в чатиках топчик работает");
         return false;
     }
-    bot.sendChatAction(msg.chat.id, 'typing');
-    MessageRepository.top(db, msg.chat.id).then(function (res) {
-        bot.sendMessage(msg.chat.id, res, {
+    bot.sendChatAction(chat, 'typing');
+    MessageRepository.top(db, chat).then(function (res) {
+        bot.sendMessage(chat, res, {
             parse_mode: 'HTML'
         });
     });
 });
 
 bot.onText(/\/img(?:\@.*?)? (.*)/, (msg, match) => {
-    bot.sendChatAction(msg.chat.id, 'upload_photo');
+    const chat = msg.chat.id;
+    bot.sendChatAction(chat, 'upload_photo');
     setTimeout(function () {
         ImageGenerator(match[1] || 'Трактор').then(function (url) {
             request.get(url, function (err, res, body) {
                 const photo = request(this.uri.href);
-                const chatId = msg.chat.id;
-                bot.sendPhoto(chatId, photo, {
+                bot.sendPhoto(chat, photo, {
                     reply_to_message_id: msg.message_id
                 });
             });
@@ -164,18 +166,30 @@ bot.onText(/\/img(?:\@.*?)? (.*)/, (msg, match) => {
     }, 500);
 });
 
+bot.onText(/\/usd(?:\@.*?)? (.*)/, (msg, match) => {
+    const chat = msg.chat.id;
+    bot.sendChatAction(chat, 'typing');
+    setTimeout(function () {
+        let UAH = fx.convert((+match[1]) || 1, {from: "USD", to: "UAH"});
+        bot.sendMessage(chat, res, options);
+    }, 500);
+});
+
 bot.onText(/\/pidor_top/, (msg, match) => {
-    if (msg.chat.id > 0) {
+    const chat = msg.chat.id;
+    if (chat > 0) {
         bot.sendMessage(msg.chat.id, "Не-не. Только в чатиках топчик работает");
         return false;
     }
-    bot.sendChatAction(msg.chat.id, 'typing');
+    bot.sendChatAction(chat, 'typing');
 
-    PidorRepository.top(db, msg.chat.id).then(function (results) {
+    PidorRepository.top(db, chat).then(function (results) {
         if (results < 1) {
-            bot.sendMessage(msg.chat.id, '_У вас все не пидоры... Пока.._', {
+            bot.sendMessage(chat, '_У вас все не пидоры... Пока.._', {
                 parse_mode: 'Markdown'
             });
+
+            return false;
         }
 
         let message = 'Наши <b>лучшие</b> пидоры: \n\n';
@@ -185,8 +199,7 @@ bot.onText(/\/pidor_top/, (msg, match) => {
             i++;
         });
         setTimeout(function () {
-            console.log(message.replace(/\n$/, ""));
-            bot.sendMessage(msg.chat.id, message.replace(/\n$/, ""), {
+            bot.sendMessage(chat, message.replace(/\n$/, ""), {
                 parse_mode: 'HTML'
             });
         }, 1500);
@@ -195,12 +208,13 @@ bot.onText(/\/pidor_top/, (msg, match) => {
 });
 
 bot.onText(/\/new_pidor/, (msg, match) => {
-    if (msg.chat.id > 0) {
-        bot.sendMessage(msg.chat.id, "Не-не. Только в чатиках топчик работает");
+    const chat = msg.chat.id;
+    if (chat > 0) {
+        bot.sendMessage(chat, "Не-не. Только в чатиках топчик работает");
         return false;
     }
-    bot.sendChatAction(msg.chat.id, 'typing');
-    getPidor(msg.chat.id);
+    bot.sendChatAction(chat, 'typing');
+    getPidor(chat);
 });
 
 http.createServer(function (req, response) {
