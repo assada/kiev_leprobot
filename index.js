@@ -209,9 +209,9 @@ http.createServer(function (req, response) {
     response.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
     UserChatRepository.getChats().then(function (chats) {
         chats.forEach(function (chat) {
-            if (chat.chat !== -1001048609359) {
-                getPidor(chat.chat)
-            }
+            //if (chat.chat !== -1001048609359) {
+            getPidor(chat.chat)
+            //}
         })
     });
     response.end('Done');
