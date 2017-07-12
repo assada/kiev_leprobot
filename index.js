@@ -6,6 +6,7 @@ const winston = require('winston');
 const request = require('request');
 const emojiStrip = require('emoji-strip');
 const fx = require('money');
+const currencyFormatter = require('currency-formatter');
 const http = require('http');
 const db = new Sequelize(process.env.MYSQL_DATABASE, process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
     host: process.env.MYSQL_HOST,
@@ -179,7 +180,7 @@ bot.onText(/\/curr(?:\@.*?)? (UAH|USD|BTC|EUR) (UAH|USD|BTC|EUR) ([0-9]*\.?[0-9]
             fx.base = openRates.base;
             let res = fx.convert(+match[3], opts);
 
-            let message = 'Из '+ match[1] + ' в ' + match[2] + ': ' + res;
+            let message = 'Из '+ match[1] + ' в ' + match[2] + ': ' + currencyFormatter.format(res, { code:  match[2] });
 
             bot.sendMessage(chat, message, {
                 parse_mode: 'Markdown'
