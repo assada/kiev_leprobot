@@ -60,8 +60,10 @@ module.exports = class PidorRepository {
      * @returns {*|Promise}
      */
     top(db, chat) {
+        console.log('PidorTop repo');
         return new Promise(function (fulfill, reject) {
             db.query('SELECT count(p.id) c, p.user, u.first_name, u.last_name, u.username FROM pidors p LEFT JOIN users u ON p.user = u.user WHERE p.chat = ' + msg.chat.id + ' GROUP BY p.user, u.first_name, u.last_name, u.username').spread((results, metadata) => {
+                console.log('[PidorTop repo] Result');
                 fulfill(result);
             })
         });
