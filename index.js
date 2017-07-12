@@ -172,15 +172,20 @@ bot.onText(/\/curr(?:\@.*?)? (UAH|USD|BTC|EUR) (UAH|USD|BTC|EUR) ([0-9]*\.?[0-9]
     console.log(opts);
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'typing');
-    setTimeout(function () {
-        let res = fx.convert(+match[3], opts);
+    request.get("https://openexchangerates.org/api/latest.json?app_id=" + process.env.OPENRATE_TOKEN, function (err, res, body) {
+        setTimeout(function () {
+            let openRates = JSON.parse(body);
+            fx.rates = openRates.rates;
+            fx.base = openRates.base;
+            let res = fx.convert(+match[3], opts);
 
-        let message = 'Из '+ match[1] + ' в ' + match[2] + ': ' + res;
+            let message = 'Из '+ match[1] + ' в ' + match[2] + ': ' + res;
 
-        bot.sendMessage(chat, message, {
-            parse_mode: 'Markdown'
-        });
-    }, 500);
+            bot.sendMessage(chat, message, {
+                parse_mode: 'Markdown'
+            });
+        }, 500);
+    });
 });
 
 bot.onText(/\/pidor_top/, (msg, match) => {
