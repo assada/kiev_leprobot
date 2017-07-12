@@ -125,9 +125,13 @@ bot.onText(/\/cat/, (msg, match) => {
         request.get('http://thecatapi.com/api/images/get?format=src', function (err, res, body) {
             const photo = request(this.uri.href);
             const chatId = msg.chat.id;
-            bot.sendPhoto(chatId, photo, {
-                caption: catP[Math.floor(Math.random() * catP.length)]
-            });
+            if(this.uri.href.indexOf('.gif') !== -1) {
+                bot.sendDocument(chatId, photo)
+            }else {
+                bot.sendPhoto(chatId, photo, {
+                    caption: catP[Math.floor(Math.random() * catP.length)]
+                });
+            }
         });
     }, 500);
 });
