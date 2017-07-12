@@ -188,8 +188,8 @@ bot.onText(/\/new_pidor_top/, (msg, match) => {
             i++;
         });
         setTimeout(function () {
-            console.log(message);
-            bot.sendMessage(msg.chat.id, message, {
+            console.log(message.replace(/\n$/, ""));
+            bot.sendMessage(msg.chat.id, message.replace(/\n$/, ""), {
                 parse_mode: 'Markdown'
             });
         }, 1500);
