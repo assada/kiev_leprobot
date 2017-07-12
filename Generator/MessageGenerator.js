@@ -3,7 +3,7 @@ const Promise = require('promise');
 const MarkovGen = require('markov-generator');
 const Sequelize = require("sequelize");
 const winston = require('winston');
-winston.add(winston.transports.File, { filename: 'markov.log' });
+winston.add(winston.transports.File, {filename: 'markov.log'});
 
 const regex = /[^a-zA-Zа-яА-я]+/g;
 
@@ -33,7 +33,7 @@ module.exports = class MessageGenerator {
         // let word = words[Math.floor(Math.random() * words.length)];
         let constr = [];
 
-        words.forEach(function(word) {
+        words.forEach(function (word) {
             constr.push({$like: '%' + word + '%'})
         });
 

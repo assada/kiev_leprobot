@@ -2,6 +2,7 @@ const Sequelize = require("sequelize");
 const env = require('dotenv').config();
 const Random = require("random-js");
 const TelegramBot = require('node-telegram-bot-api');
+const winston = require('winston');
 const request = require('request');
 const emojiStrip = require('emoji-strip');
 const http = require('http');
@@ -66,19 +67,20 @@ const names = [
 ];
 
 bot.on('message', (msg) => {
+    const chat = msg.chat.id;
+    winston.info(chat);
     UserRepository.store(msg.from);
-    if (msg.chat.id < 0) {
+    if (chat < 0) {
         UserChatRepository.store(msg.from, msg.chat);
     }
-    console.log(msg.chat.id);
     if (typeof msg.text !== 'undefined' && emojiStrip(msg.text).length > 1 && msg.text.charAt(0) !== '/') {
         let mention = new RegExp(names.join("|")).test(msg.text);
         let chance = randomizer.bool(0.1);
         MessageRepository.store(msg, names);
-        if ((chance || mention) && msg.chat.id !== -1001048609359) {
-            bot.sendChatAction(msg.chat.id, 'typing');
+        if ((chance || mention) && chat !== -1001048609359) {
+            bot.sendChatAction(chat, 'typing');
             (new MessageGenerator(MessageModel, msg)).get(names).then(function (res) {
-                console.log(res);
+                winston.info(res);
                 if (res !== false && res.length > 0) {
                     let options = {};
                     if (mention) {
@@ -87,7 +89,7 @@ bot.on('message', (msg) => {
                         };
                     }
                     setTimeout(function () {
-                        bot.sendMessage(msg.chat.id, res, options);
+                        bot.sendMessage(chat, res, options);
                     }, 2000);
                 }
             });
@@ -148,20 +150,10 @@ bot.onText(/\/top/, (msg, match) => {
     })
 });
 
-bot.onText(/\/new_pidor/, (msg, match) => {
-    if (msg.chat.id > 0) {
-        bot.sendMessage(msg.chat.id, "Не-не. Только в чатиках топчик работает");
-        return false;
-    }
-    bot.sendChatAction(msg.chat.id, 'typing');
-    getPidor(msg.chat.id);
-});
-
 bot.onText(/\/img (.+)/, (msg, match) => {
     bot.sendChatAction(msg.chat.id, 'upload_photo');
     setTimeout(function () {
         ImageGenerator(match[1] || 'Трактор').then(function (url) {
-            console.log(url);
             request.get(url, function (err, res, body) {
                 const photo = request(this.uri.href);
                 const chatId = msg.chat.id;
@@ -172,6 +164,7 @@ bot.onText(/\/img (.+)/, (msg, match) => {
         });
     }, 500);
 });
+
 
 bot.onText(/\/new_pidor_top/, (msg, match) => {
     if (msg.chat.id > 0) {
@@ -195,6 +188,7 @@ bot.onText(/\/new_pidor_top/, (msg, match) => {
             i++;
         });
         setTimeout(function () {
+            console.log(message);
             bot.sendMessage(msg.chat.id, message, {
                 parse_mode: 'Markdown'
             });
@@ -202,18 +196,26 @@ bot.onText(/\/new_pidor_top/, (msg, match) => {
     })
 });
 
+bot.onText(/\/new_pidor/, (msg, match) => {
+    if (msg.chat.id > 0) {
+        bot.sendMessage(msg.chat.id, "Не-не. Только в чатиках топчик работает");
+        return false;
+    }
+    bot.sendChatAction(msg.chat.id, 'typing');
+    getPidor(msg.chat.id);
+});
+
 http.createServer(function (req, response) {
-    console.log(req.connection.remoteAddress);
-    console.log(req.url);
-    if(req.url.indexOf('favicon') > -1 || req.connection.remoteAddress.indexOf('127.0.0.1') === -1) {
+    winston.info(req.connection.remoteAddress);
+    if (req.url.indexOf('favicon') > -1 || req.connection.remoteAddress.indexOf('127.0.0.1') === -1) {
         response.writeHead(404, {'Content-Type': 'text/html; charset=utf-8'});
         response.end('Ну ты и пидор...');
         return false;
     }
     response.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
-    UserChatRepository.getChats().then(function(chats) {
+    UserChatRepository.getChats().then(function (chats) {
         chats.forEach(function (chat) {
-            if(chat.chat !== -1001048609359) {
+            if (chat.chat !== -1001048609359) {
                 getPidor(chat.chat)
             }
         })
@@ -225,6 +227,7 @@ function getPidor(chat) {
     PidorGenerator.get(chat).then(function (res) {
         UserModel.getModel().findOne({where: {user: res.user}}).then(function (user) {
             let message = '';
+            winston.info('Pidor status: ' + res.status);
             if (res.status === 'old') {
                 message = 'Пидор дня - *' + user.first_name + ' ' + user.last_name + '*';
             } else if (res.status === 'new') {
@@ -236,7 +239,7 @@ function getPidor(chat) {
                 message = 'TI PIDOR @' + user.username + ' (' + user.first_name + ' ' + user.last_name + ')!'
             }
             setTimeout(function () {
-                console.log('Pidor message to ' + chat + ' chat');
+                winston.info('Pidor message to ' + chat + ' chat');
                 bot.sendMessage(chat, message, {
                     parse_mode: 'Markdown'
                 });
