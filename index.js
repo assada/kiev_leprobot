@@ -167,7 +167,7 @@ bot.onText(/\/img(?:\@.*?)? (.*)/, (msg, match) => {
     }, 500);
 });
 
-bot.onText(/\/curr(?:\@.*?)? (UAH|USD|BTC|EUR) (UAH|USD|BTC|EUR) ([0-9]*\.?[0-9]{0,2})/, (msg, match) => {
+bot.onText(/\/curr(?:\@.*?)? (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub) (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub) ([0-9]*\.?[0-9]{0,2})/, (msg, match) => {
     console.log('Из '+ match[1] + ' в ' + match[2] + ': ' + match[3]);
     let opts = {from: match[1], to: match[2]};
     console.log(opts);
