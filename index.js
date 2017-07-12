@@ -145,7 +145,7 @@ bot.onText(/\/top/, (msg, match) => {
     });
 });
 
-bot.onText(/\/img.* (.+)/, (msg, match) => {
+bot.onText(/\/img(?:\@.*?)? (.*)/, (msg, match) => {
     bot.sendChatAction(msg.chat.id, 'upload_photo');
     setTimeout(function () {
         ImageGenerator(match[1] || 'Трактор').then(function (url) {
