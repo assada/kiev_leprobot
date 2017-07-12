@@ -137,15 +137,15 @@ bot.onText(/\/top/, (msg, match) => {
     let sql = 'SELECT count(m.id) c, m.user, u.first_name, u.last_name from messages m LEFT JOIN users u ON m.user = u.user WHERE m.chat = ' + msg.chat.id + ' AND m.createdAt BETWEEN \'' + yesterday + '\' AND \'' + now + '\' GROUP by m.user, u.first_name, u.last_name ORDER BY c DESC LIMIT 5';
 
     db.query(sql).spread((results, metadata) => {
-        let result = '*Топ 5 пейсателей:* \n\n';
+        let result = '<b>Топ 5 пейсателей:</b> \n\n';
         results.forEach(function (item) {
-            result += item.first_name + (item.last_name !== '' && item.last_name !== null ? ' ' + item.last_name : '') + ' - *' + item.c + '*\n';
+            result += item.first_name + (item.last_name !== '' && item.last_name !== null ? ' ' + item.last_name : '') + ' - <b>' + item.c + '</b>\n';
         });
         if (results.length < 1) {
             result = 'Все молчали =('
         }
         bot.sendMessage(msg.chat.id, result, {
-            parse_mode: 'Markdown'
+            parse_mode: 'HTML'
         });
     })
 });
@@ -181,16 +181,16 @@ bot.onText(/\/new_pidor_top/, (msg, match) => {
             });
         }
 
-        let message = 'Наши *лучшие* пидоры: \n\n';
+        let message = 'Наши <b>лучшие</b> пидоры: \n\n';
         let i = 1;
         results.forEach(function (pidor) {
-            message += i + ') _' + pidor.username + '_ - *' + pidor.c + '*\n';
+            message += i + ') <i>' + pidor.username + '</i> - <b>' + pidor.c + '</b>\n';
             i++;
         });
         setTimeout(function () {
             console.log(message.replace(/\n$/, ""));
             bot.sendMessage(msg.chat.id, message.replace(/\n$/, ""), {
-                parse_mode: 'Markdown'
+                parse_mode: 'HTML'
             });
         }, 1500);
     })
