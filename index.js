@@ -168,10 +168,12 @@ bot.onText(/\/img(?:\@.*?)? (.*)/, (msg, match) => {
 
 bot.onText(/\/curr(?:\@.*?)? (UAH|USD|BTC|EUR) (UAH|USD|BTC|EUR) ([0-9]*\.?[0-9]{0,2})/, (msg, match) => {
     console.log('Из '+ match[1] + ' в ' + match[2] + ': ' + match[3]);
+    let opts = {from: match[1], to: match[2]};
+    console.log(opts);
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'typing');
     setTimeout(function () {
-        let res = fx.convert(+match[3], {from: match[1], to: match[2]});
+        let res = fx.convert(+match[3], opts);
 
         let message = 'Из '+ match[1] + ' в ' + match[2] + ': ' + res;
 
