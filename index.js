@@ -166,12 +166,17 @@ bot.onText(/\/img(?:\@.*?)? (.*)/, (msg, match) => {
     }, 500);
 });
 
-bot.onText(/\/usd(?:\@.*?)? (.*)/, (msg, match) => {
+bot.onText(/\/curr(?:\@.*?)? (UAH|USD|BTC|EUR) (UAH|USD|BTC|EUR) ([0-9]*\.?[0-9]{0,2})/, (msg, match) => {
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'typing');
     setTimeout(function () {
-        let UAH = fx.convert((+match[1]) || 1, {from: "USD", to: "UAH"});
-        bot.sendMessage(chat, res, options);
+        let res = fx.convert((+match[3]) || 1, {from: match[1], to: match[2]});
+
+        let message = 'Из '+ match[1] + ' в ' + match[2] + ': ' + match[3]
+
+        bot.sendMessage(chat, message, {
+            parse_mode: 'Markdown'
+        });
     }, 500);
 });
 
