@@ -1,11 +1,11 @@
 'use strict';
 
 const User = require("../Model/User");
+const Promise = require("promise");
 
 module.exports = class PidorRepository {
-    constructor(Pidor, UserModel) {
+    constructor(Pidor) {
         this.Pidor = Pidor.getModel();
-        this.UserModel = UserModel;
     }
 
     /**
@@ -25,19 +25,20 @@ module.exports = class PidorRepository {
         return true;
     }
 
+    /**
+     *
+     * @param chat
+     * @returns {*|Promise}
+     */
     get(chat) {
         const p = this.Pidor;
 
         return new Promise(function (fulfill, reject) {
             p.sync().then(() => {
-                let now= new Date().toISOString().slice(0, 19).replace('T', ' ');
+                let now = new Date().toISOString().slice(0, 19).replace('T', ' ');
                 let yesterday = new Date(new Date().getTime() - (24 * 60 * 60 * 1000)).toISOString().slice(0, 19).replace('T', ' ');
 
                 const res = p.findAll({
-                    /*include: [{
-                     model: User,
-                     where: {user: Sequelize.col('pidor.user')}
-                     }],*/
                     where: {
                         chat: chat,
                         updatedAt: {$between: [yesterday, now]},
@@ -49,6 +50,20 @@ module.exports = class PidorRepository {
                 });
                 fulfill(res);
             });
+        });
+    }
+
+    /**
+     *
+     * @param db
+     * @param chat
+     * @returns {*|Promise}
+     */
+    top(db, chat) {
+        return new Promise(function (fulfill, reject) {
+            db.query('SELECT count(p.id) c, p.user, u.first_name, u.last_name, u.username FROM pidors p LEFT JOIN users u ON p.user = u.user WHERE p.chat = ' + msg.chat.id + ' GROUP BY p.user, u.first_name, u.last_name, u.username').spread((results, metadata) => {
+                fulfill(result);
+            })
         });
     }
 };

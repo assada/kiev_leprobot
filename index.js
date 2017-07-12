@@ -65,6 +65,13 @@ const names = [
     "антонио",
     "Антонио",
 ];
+const pidorLoading = [
+    'Вызываю бога пидоров...',
+    'Запускаю пидор-машину...',
+    'Пидорок, приди... Я призываю тебя!',
+    'Сча пидора рожу!',
+    'Где-же он, наш пидор?'
+];
 
 bot.on('message', (msg) => {
     const chat = msg.chat.id;
@@ -131,23 +138,11 @@ bot.onText(/\/top/, (msg, match) => {
         return false;
     }
     bot.sendChatAction(msg.chat.id, 'typing');
-
-    let now = new Date().toISOString().slice(0, 19).replace('T', ' ');
-    let yesterday = new Date(new Date().getTime() - (24 * 60 * 60 * 1000)).toISOString().slice(0, 19).replace('T', ' ');
-    let sql = 'SELECT count(m.id) c, m.user, u.first_name, u.last_name from messages m LEFT JOIN users u ON m.user = u.user WHERE m.chat = ' + msg.chat.id + ' AND m.createdAt BETWEEN \'' + yesterday + '\' AND \'' + now + '\' GROUP by m.user, u.first_name, u.last_name ORDER BY c DESC LIMIT 5';
-
-    db.query(sql).spread((results, metadata) => {
-        let result = '<b>Топ 5 пейсателей:</b> \n\n';
-        results.forEach(function (item) {
-            result += item.first_name + (item.last_name !== '' && item.last_name !== null ? ' ' + item.last_name : '') + ' - <b>' + item.c + '</b>\n';
-        });
-        if (results.length < 1) {
-            result = 'Все молчали =('
-        }
-        bot.sendMessage(msg.chat.id, result, {
+    MessageRepository.top(db, msg.chat.id).then(function (res) {
+        bot.sendMessage(msg.chat.id, res, {
             parse_mode: 'HTML'
         });
-    })
+    });
 });
 
 bot.onText(/\/img (.+)/, (msg, match) => {
@@ -165,16 +160,14 @@ bot.onText(/\/img (.+)/, (msg, match) => {
     }, 500);
 });
 
-
-bot.onText(/\/new_pidor_top/, (msg, match) => {
+bot.onText(/\/pidor_top/, (msg, match) => {
     if (msg.chat.id > 0) {
         bot.sendMessage(msg.chat.id, "Не-не. Только в чатиках топчик работает");
         return false;
     }
     bot.sendChatAction(msg.chat.id, 'typing');
 
-    db.query('SELECT count(p.id) c, p.user, u.first_name, u.last_name, u.username FROM pidors p LEFT JOIN users u ON p.user = u.user WHERE p.chat = ' + msg.chat.id + ' GROUP BY p.user, u.first_name, u.last_name, u.username').spread((results, metadata) => {
-
+    PidorRepository.top(db, msg.chat.id).then(function (results) {
         if (results < 1) {
             bot.sendMessage(msg.chat.id, '_У вас все не пидоры... Пока.._', {
                 parse_mode: 'Markdown'
@@ -194,6 +187,7 @@ bot.onText(/\/new_pidor_top/, (msg, match) => {
             });
         }, 1500);
     })
+
 });
 
 bot.onText(/\/new_pidor/, (msg, match) => {
@@ -221,7 +215,7 @@ http.createServer(function (req, response) {
         })
     });
     response.end('Done');
-}).listen(9615);
+}).listen(process.env.SERVER_PORT);
 
 function getPidor(chat) {
     PidorGenerator.get(chat).then(function (res) {
@@ -232,11 +226,11 @@ function getPidor(chat) {
                 message = 'Пидор дня - *' + user.first_name + ' ' + user.last_name + '*';
             } else if (res.status === 'new') {
                 setTimeout(function () {
-                    bot.sendMessage(chat, '_Вызываю бога пидоров..._', {
+                    bot.sendMessage(chat, '_' + pidorLoading[Math.floor(Math.random() * pidorLoading.length)] + '_', {
                         parse_mode: 'Markdown'
                     });
                 }, 1000);
-                message = 'TI PIDOR @' + user.username + ' (' + user.first_name + ' ' + user.last_name + ')!'
+                message = 'Теперь ты наш пидор, @' + user.username + ' (' + user.first_name + ' ' + user.last_name + ')!'
             }
             setTimeout(function () {
                 winston.info('Pidor message to ' + chat + ' chat');
@@ -244,6 +238,9 @@ function getPidor(chat) {
                     parse_mode: 'Markdown'
                 });
             }, 2000);
+            setTimeout(function () {
+                bot.sendMessage(chat, 'Люблю же я этого пидора!');
+            }, 1000)
         });
     }).catch(function (rej) {
         console.log(rej)
