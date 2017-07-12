@@ -230,6 +230,9 @@ function getPidor(chat) {
                         parse_mode: 'Markdown'
                     });
                 }, 1000);
+                setTimeout(function () {
+                    bot.sendMessage(chat, 'Люблю же я этого пидора!');
+                }, 2000);
                 message = 'Теперь ты наш пидор, @' + user.username + ' (' + user.first_name + ' ' + user.last_name + ')!'
             }
             setTimeout(function () {
@@ -238,9 +241,6 @@ function getPidor(chat) {
                     parse_mode: 'Markdown'
                 });
             }, 2000);
-            setTimeout(function () {
-                bot.sendMessage(chat, 'Люблю же я этого пидора!');
-            }, 1000)
         });
     }).catch(function (rej) {
         console.log(rej)
