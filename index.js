@@ -171,7 +171,7 @@ bot.onText(/\/curr(?:\@.*?)? (UAH|USD|BTC|EUR) (UAH|USD|BTC|EUR) ([0-9]*\.?[0-9]
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'typing');
     setTimeout(function () {
-        let res = fx.convert((+match[3]) || 1, {from: match[1], to: match[2]});
+        let res = fx.convert(+match[3], {from: match[1], to: match[2]});
 
         let message = 'Из '+ match[1] + ' в ' + match[2] + ': ' + res;
 
