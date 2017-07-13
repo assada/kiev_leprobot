@@ -1,6 +1,7 @@
 # ChatBot Anton (from KievLeproChat)
+[![Coverage Status](https://coveralls.io/repos/github/Assada/kiev_leprobot/badge.svg?branch=master)](https://coveralls.io/github/Assada/kiev_leprobot?branch=master)
 
-[Bot Dev chat](https://t.me/joinchat/AA2vvkJ-30ul8uceXIJGJA)|[Trello TODO](https://trello.com/b/z6AhPYCY/%D0%B0%D0%BD%D1%82%D0%BE%D0%BD)
+[Bot Dev chat](https://t.me/joinchat/AA2vvkJ-30ul8uceXIJGJA) | [Trello TODO](https://trello.com/b/z6AhPYCY/%D0%B0%D0%BD%D1%82%D0%BE%D0%BD)
 
 ## Features
 - boobs - Post random nude picture
