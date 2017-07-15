@@ -29,9 +29,10 @@ module.exports = class NewsGenerator {
                         });
                     })).then(function (result) {
                         console.log(result);
-                        results = result.slice(0,10);
-                        winston.info('After slice:' + result.length);
-                        fulfill(result)
+                        let r = [];
+                        r = result.slice(0,10);
+                        winston.info('After slice:' + r.length);
+                        fulfill(r)
                     });
                 });
         });
