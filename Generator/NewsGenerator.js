@@ -23,9 +23,14 @@ module.exports = class NewsGenerator {
                     let result = tops.map(function (topic) {
                         googl.shorten(topic.Url)
                             .then(function (shortUrl) {
-                                console.log(shortUrl);
                                 return {title: topic.Title, link: shortUrl};
                             });
+                    });
+
+                    Promise.all(result).then(function (result) {
+                        console.log('-----');
+                        console.log(result);
+                        console.log('-----');
                     });
 
                     console.log(result);
