@@ -12,7 +12,7 @@ module.exports = class NewsGenerator {
                     let json = JSON.parse(page);
                     let tops = json.tops;
                     tops.filter(function (top) {
-                        return typeof top.Dops !== 'undefined';
+                        return typeof top.Dups !== 'undefined';
                     });
                     tops.forEach(function (topic) {
                         result.push({title: topic.Title, link: topic.Url})
