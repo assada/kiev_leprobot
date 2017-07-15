@@ -21,12 +21,11 @@ module.exports = class NewsGenerator {
                     tops.forEach(function (topic) {
                         googl.shorten(topic.Url)
                             .then(function (shortUrl) {
-                                console.log(shortUrl);
+                                result.push({title: topic.Title, link: shortUrl})
                             })
                             .catch(function (err) {
                                 console.error(err.message);
                             });
-                        result.push({title: topic.Title, link: topic.Url})
                     });
                     result = result.slice(0,10);
                     winston.info(result.length);
