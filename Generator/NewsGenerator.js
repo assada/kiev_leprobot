@@ -19,7 +19,7 @@ module.exports = class NewsGenerator {
                     tops.forEach(function (topic) {
                         result.push({title: topic.Title, link: topic.Url})
                     });
-                    result.slice(0,10);
+                    result = result.slice(0,10);
                     winston.info(result.length);
                     fulfill(result);
                 });
