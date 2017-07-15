@@ -20,8 +20,7 @@ module.exports = class NewsGenerator {
                     });
                     winston.info('End: ' + tops.length);
 
-                    let result = [];
-                    tops.forEach(function (topic) {
+                    let result = tops.map(function (topic) {
                         googl.shorten(topic.Url)
                             .then(function (shortUrl) {
                                 result.push({title: topic.Title, link: shortUrl})
