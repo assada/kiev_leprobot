@@ -23,7 +23,7 @@ module.exports = class NewsGenerator {
                     let result = tops.map(function (topic) {
                         googl.shorten(topic.Url)
                             .then(function (shortUrl) {
-                                result.push({title: topic.Title, link: shortUrl})
+                                return {title: topic.Title, link: shortUrl};
                             })
                             .catch(function (err) {
                                 console.error(err.message);
@@ -33,7 +33,7 @@ module.exports = class NewsGenerator {
                     Promise.all(result).then(function(results) {
                         winston.info(results);
                         result = results.slice(0,10);
-                        winston.info(results.length);
+                        winston.info('After slice:' + results.length);
                         fulfill(results)
                     }).catch(function(err){
                         winston.error(err);
