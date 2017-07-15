@@ -31,15 +31,11 @@ module.exports = class NewsGenerator {
                                 });
                         });
                     })).then(function (result) {
-                        console.log('-----');
                         console.log(result);
-                        console.log('-----');
+                        results = result.slice(0,10);
+                        winston.info('After slice:' + result.length);
+                        fulfill(result)
                     });
-
-                    console.log(result);
-                    results = result.slice(0,10);
-                    winston.info('After slice:' + result.length);
-                    fulfill(result)
                 });
         });
     }
