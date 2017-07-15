@@ -26,13 +26,13 @@ module.exports = class NewsGenerator {
                                 return {title: topic.Title, link: shortUrl};
                             })
                             .catch(function (err) {
-                                console.error(err.message);
+                                return err.message;
                             });
                     });
 
                     Promise.all(result).then(function(results) {
                         winston.info(results);
-                        result = results.slice(0,10);
+                        results = results.slice(0,10);
                         winston.info('After slice:' + results.length);
                         fulfill(results)
                     }).catch(function(err){
