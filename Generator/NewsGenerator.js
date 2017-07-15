@@ -7,6 +7,7 @@ googl.setKey('AIzaSyA9i1EFuezxTxIb_AfFHK_nk4mmjQJ0bUo');
 module.exports = class NewsGenerator {
     get() {
         winston.info('Loading news');
+        let t = this;
         return new Promise(function (fulfill, reject) {
             request({uri: 'https://www.ukr.net/news/dat/kiev/1/', method: 'GET', encoding: 'binary'},
                 function (err, res, page) {
@@ -19,7 +20,7 @@ module.exports = class NewsGenerator {
                     });
                     winston.info('End: ' + tops.length);
 
-                    this.fetchResult.then(function (result) {
+                    t.fetchResult.then(function (result) {
                         result = result.slice(0,10);
                         winston.info(result.length);
                         fulfill(result);
