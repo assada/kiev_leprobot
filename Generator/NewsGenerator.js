@@ -20,7 +20,7 @@ module.exports = class NewsGenerator {
                     });
                     winston.info('End: ' + tops.length);
 
-                    result = t.fetchResult(tops);
+                    let result = t.fetchResult(tops);
                     result = result.slice(0,10);
                     winston.info(result.length);
                     fulfill(result);
