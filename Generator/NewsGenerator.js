@@ -28,14 +28,10 @@ module.exports = class NewsGenerator {
                             });
                     });
 
-                    Promise.all(result).then(function(results) {
-                        console.log(results);
-                        results = results.slice(0,10);
-                        winston.info('After slice:' + results.length);
-                        fulfill(results)
-                    }).catch(function(err){
-                        winston.error(err);
-                    });
+                    console.log(result);
+                    results = result.slice(0,10);
+                    winston.info('After slice:' + result.length);
+                    fulfill(result)
                 });
         });
     }
