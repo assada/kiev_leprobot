@@ -1,6 +1,7 @@
 const Promise = require('promise');
 const request = require('request');
 const winston = require('winston');
+const UrlShorter = require('node-url-shorter');
 
 module.exports = class NewsGenerator {
     get() {
@@ -17,6 +18,11 @@ module.exports = class NewsGenerator {
                     });
                     winston.info('End: ' + tops.length);
                     tops.forEach(function (topic) {
+                        UrlShorter
+                            .getShortUrl(topic.Url)
+                            .then(function(data){
+                                console.log('getShortUrl success = ', data);
+                            });
                         result.push({title: topic.Title, link: topic.Url})
                     });
                     result = result.slice(0,10);
