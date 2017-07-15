@@ -1,12 +1,17 @@
 const Promise = require('promise');
 const request = require('request'), cheerio = require('cheerio');
+const winston = require('winston');
 
 module.exports = class NewsGenerator {
     get() {
+        winston.info('Loading news');
         return new Promise(function (fulfill, reject) {
             request({uri: 'https://www.ukr.net/news/kiev.html', method: 'GET', encoding: 'binary'},
                 function (err, res, page) {
+                    let result = [];
                     let $ = cheerio.load(page);
+
+                    console.log(page);
 
                     $('section .im-tl-bk .im-tl').each(function (i, elem) {
                         let $this = $(this);
@@ -14,9 +19,12 @@ module.exports = class NewsGenerator {
                             let $a = $this.find('a');
                             let text = $a.text();
                             let link = $a.attr('href');
-                            console.log(text + ': ' + link)
+                            console.log(text + ': ' + link);
+                            result.push({title: text, link: link})
                         }
-                    })
+                    });
+
+                    fulfill(result);
 
                 });
         });
