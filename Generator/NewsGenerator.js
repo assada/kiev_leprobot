@@ -10,7 +10,7 @@ module.exports = class NewsGenerator {
         return new Promise(function (fulfill, reject) {
             request({uri: 'https://www.ukr.net/news/dat/kiev/1/', method: 'GET', encoding: 'binary'},
                 function (err, res, page) {
-                    let result = [];
+
                     let json = JSON.parse(page);
                     let tops = json.tops;
                     winston.info('Start: ' + tops.length);
@@ -18,19 +18,35 @@ module.exports = class NewsGenerator {
                         return typeof top.Dups !== 'undefined';
                     });
                     winston.info('End: ' + tops.length);
-                    tops.forEach(function (topic) {
-                        googl.shorten(topic.Url)
-                            .then(function (shortUrl) {
-                                result.push({title: topic.Title, link: shortUrl})
-                            })
-                            .catch(function (err) {
-                                console.error(err.message);
-                            });
-                    });
-                    result = result.slice(0,10);
-                    winston.info(result.length);
-                    fulfill(result);
+
+                    this.fetchResult.then(function (result) {
+                        result = result.slice(0,10);
+                        winston.info(result.length);
+                        fulfill(result);
+                    })
                 });
         });
+    }
+
+    fetchResult(tops) {
+        return new Promise(function (fulfill, reject) {
+            let result = [];
+            tops.forEach(function (topic) {
+                googl.shorten(topic.Url)
+                    .then(function (shortUrl) {
+                        result.push({title: topic.Title, link: shortUrl})
+                    })
+                    .catch(function (err) {
+                        console.error(err.message);
+                    });
+            });
+
+            Promise.all(result).then(function(results) {
+                fulfill(results)
+            }).catch(function(err){
+                winston.error(err);
+            });
+        });
+
     }
 };
