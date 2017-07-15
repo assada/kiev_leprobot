@@ -139,6 +139,12 @@ bot.onText(/\/cat/, (msg, match) => {
     }, 500);
 });
 
+function lengthInUtf8Bytes(str) {
+    // Matches only the 10.. bytes that are non-initial characters in a multi-byte sequence.
+    let m = encodeURIComponent(str).match(/%[89ABab]/g);
+    return str.length + (m ? m.length : 0);
+}
+
 bot.onText(/\/news/, (msg, match) => {
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'typing');
@@ -150,7 +156,7 @@ bot.onText(/\/news/, (msg, match) => {
              news.forEach(function (post) {
                  messages[i] += '<i>' + post.title + '</i> \n';
 
-                 if(messages.length > 4000) {
+                 if(messages[i].length > 4000) {
                      i++;
                  }
              });
