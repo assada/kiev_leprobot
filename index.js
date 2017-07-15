@@ -155,7 +155,7 @@ bot.onText(/\/news/, (msg, match) => {
             let n = 1;
             messages[i] = '10 новостей за прошедший час: \n\n';
             news.forEach(function (post) {
-                messages[i] += n + ') ['+post.link+']('+post.title+')\n';
+                messages[i] += n + ') <i>' + post.title + '</i> \n' + post.link + '\n';
                 n++;
                 if (messages[i].length > 4000) {
                     i++;
@@ -163,7 +163,7 @@ bot.onText(/\/news/, (msg, match) => {
             });
             messages.forEach(function (message) {
                 bot.sendMessage(chat, message, {
-                    parse_mode: 'Markdown'
+                    parse_mode: 'HTML'
                 });
             });
 
