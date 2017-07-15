@@ -9,6 +9,7 @@
   "author": "Assada <assada.ua@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
     "currency-formatter": "^1.2.1",
     "dotenv": "^4.0.0",
     "emoji-strip": "^1.0.1",

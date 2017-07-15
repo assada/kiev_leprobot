@@ -43,6 +43,7 @@ const UserChatRepository = new UCRepository(UserChatModel);
 const MessageGenerator = require("./Generator/MessageGenerator");
 const PGenerator = require("./Generator/PidorGenerator");
 const ImageGenerator = require("./Generator/ImageGenerator");
+const NewsGenerator = require("./Generator/NewsGenerator");
 const PidorGenerator = new PGenerator(PidorRepository, UserChatRepository);
 
 
@@ -135,6 +136,14 @@ bot.onText(/\/cat/, (msg, match) => {
                 });
             }
         });
+    }, 500);
+});
+
+bot.onText(/\/news/, (msg, match) => {
+    const chat = msg.chat.id;
+    bot.sendChatAction(chat, 'typing');
+    setTimeout(function () {
+         (new NewsGenerator).get();
     }, 500);
 });
 
