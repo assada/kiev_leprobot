@@ -12,8 +12,7 @@ module.exports = class NewsGenerator {
                     let json = JSON.parse(page);
                     let tops = json.tops;
                     winston.info('Start: ' + tops.length);
-                    tops.filter(function (top) {
-                        console.log(typeof top.Dups !== 'undefined');
+                    tops = tops.filter(function (top) {
                         return typeof top.Dups !== 'undefined';
                     });
                     winston.info('End: ' + tops.length);
