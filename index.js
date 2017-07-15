@@ -143,7 +143,15 @@ bot.onText(/\/news/, (msg, match) => {
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'typing');
     setTimeout(function () {
-         (new NewsGenerator).get();
+         (new NewsGenerator).get().then(function (news) {
+             let message = 'Новости за прошедший час: \n\n';
+             news.forEach(function (post) {
+                 message += '<i>' + post.title + '</i> \n';
+             });
+             bot.sendMessage(chat, message, {
+                 parse_mode: 'HTML'
+             });
+         });
     }, 500);
 });
 
