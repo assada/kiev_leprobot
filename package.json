@@ -13,6 +13,7 @@
     "currency-formatter": "^1.2.1",
     "dotenv": "^4.0.0",
     "emoji-strip": "^1.0.1",
+    "goo.gl": "^0.1.4",
     "google-search-parser2": "0.0.8",
     "install": "^0.10.1",
     "markov-generator": "^1.2.2",

@@ -1,7 +1,8 @@
 const Promise = require('promise');
 const request = require('request');
 const winston = require('winston');
-const UrlShorter = require('node-url-shorter');
+const googl = require('goo.gl');
+googl.setKey('AIzaSyA9i1EFuezxTxIb_AfFHK_nk4mmjQJ0bUo');
 
 module.exports = class NewsGenerator {
     get() {
@@ -18,13 +19,13 @@ module.exports = class NewsGenerator {
                     });
                     winston.info('End: ' + tops.length);
                     tops.forEach(function (topic) {
-                        UrlShorter
-                            .getShortUrl(topic.Url)
-                            .then(function(data){
-                                console.log('getShortUrl success = ', data);
-                            }).fail(function(err){
-                            console.log('getShortUrl fail err = ', err);
-                        });
+                        googl.shorten(topic.Url)
+                            .then(function (shortUrl) {
+                                console.log(shortUrl);
+                            })
+                            .catch(function (err) {
+                                console.error(err.message);
+                            });
                         result.push({title: topic.Title, link: topic.Url})
                     });
                     result = result.slice(0,10);
