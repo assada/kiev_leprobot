@@ -22,7 +22,9 @@ module.exports = class NewsGenerator {
                             .getShortUrl(topic.Url)
                             .then(function(data){
                                 console.log('getShortUrl success = ', data);
-                            });
+                            }).fail(function(err){
+                            console.log('getShortUrl fail err = ', err);
+                        });
                         result.push({title: topic.Title, link: topic.Url})
                     });
                     result = result.slice(0,10);
