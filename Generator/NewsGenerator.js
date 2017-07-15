@@ -20,34 +20,26 @@ module.exports = class NewsGenerator {
                     });
                     winston.info('End: ' + tops.length);
 
-                    t.fetchResult(tops).then(function (result) {
-                        result = result.slice(0,10);
-                        winston.info(result.length);
-                        fulfill(result);
-                    })
+                    let result = [];
+                    tops.forEach(function (topic) {
+                        googl.shorten(topic.Url)
+                            .then(function (shortUrl) {
+                                result.push({title: topic.Title, link: shortUrl})
+                            })
+                            .catch(function (err) {
+                                console.error(err.message);
+                            });
+                    });
+
+                    Promise.all(result).then(function(results) {
+                        winston.info(results);
+                        result = results.slice(0,10);
+                        winston.info(results.length);
+                        fulfill(results)
+                    }).catch(function(err){
+                        winston.error(err);
+                    });
                 });
         });
-    }
-
-    fetchResult(tops) {
-        return new Promise(function (fulfill, reject) {
-            let result = [];
-            tops.forEach(function (topic) {
-                googl.shorten(topic.Url)
-                    .then(function (shortUrl) {
-                        result.push({title: topic.Title, link: shortUrl})
-                    })
-                    .catch(function (err) {
-                        console.error(err.message);
-                    });
-            });
-
-            Promise.all(result).then(function(results) {
-                fulfill(results)
-            }).catch(function(err){
-                winston.error(err);
-            });
-        });
-
     }
 };
