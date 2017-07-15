@@ -144,7 +144,7 @@ bot.onText(/\/news/, (msg, match) => {
     bot.sendChatAction(chat, 'typing');
     setTimeout(function () {
          (new NewsGenerator).get().then(function (news) {
-             let message = 'Новости за прошедший час: \n\n';
+             let message = '10 новостей за прошедший час: \n\n';
              news.forEach(function (post) {
                  message += '<i>' + post.title + '</i> \n';
              });

@@ -17,6 +17,9 @@ module.exports = class NewsGenerator {
                     tops.forEach(function (topic) {
                         result.push({title: topic.Title, link: topic.Url})
                     });
+                    if(result.length > 10) {
+                        result.slice(0,10);
+                    }
                     fulfill(result);
                 });
         });
