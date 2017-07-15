@@ -20,14 +20,11 @@ module.exports = class NewsGenerator {
                     });
                     winston.info('End: ' + tops.length);
 
-
-
                     Promise.all(tops.map(function (topic) {
                         return new Promise(function(resolve, reject) {
                             googl.shorten(topic.Url)
                                 .then(function (shortUrl) {
-                                    result.push({title: topic.Title, link: shortUrl});
-                                    resolve(result);
+                                    resolve({title: topic.Title, link: shortUrl});
                                 });
                         });
                     })).then(function (result) {
