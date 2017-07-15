@@ -144,13 +144,22 @@ bot.onText(/\/news/, (msg, match) => {
     bot.sendChatAction(chat, 'typing');
     setTimeout(function () {
          (new NewsGenerator).get().then(function (news) {
-             let message = '10 новостей за прошедший час: \n\n';
+             let messages = [];
+             let i = 0;
+             messages[i] = '10 новостей за прошедший час: \n\n';
              news.forEach(function (post) {
-                 message += '<i>' + post.title + '</i> \n';
+                 messages[i] += '<i>' + post.title + '</i> \n';
+
+                 if(messages.length > 4000) {
+                     i++;
+                 }
              });
-             bot.sendMessage(chat, message, {
-                 parse_mode: 'HTML'
+             messages.forEach(function (message) {
+                 bot.sendMessage(chat, message, {
+                     parse_mode: 'HTML'
+                 });
              });
+
          });
     }, 500);
 });
