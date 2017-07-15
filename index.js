@@ -128,9 +128,9 @@ bot.onText(/\/cat/, (msg, match) => {
     setTimeout(function () {
         request.get('http://thecatapi.com/api/images/get?format=src', function (err, res, body) {
             const photo = request(this.uri.href);
-            if(this.uri.href.indexOf('.gif') !== -1) {
+            if (this.uri.href.indexOf('.gif') !== -1) {
                 bot.sendDocument(chat, photo)
-            }else {
+            } else {
                 bot.sendPhoto(chat, photo, {
                     caption: catP[Math.floor(Math.random() * catP.length)]
                 });
@@ -149,24 +149,25 @@ bot.onText(/\/news/, (msg, match) => {
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'typing');
     setTimeout(function () {
-         (new NewsGenerator).get().then(function (news) {
-             let messages = [];
-             let i = 0;
-             messages[i] = '10 новостей за прошедший час: \n\n';
-             news.forEach(function (post) {
-                 messages[i] += '<i>' + post.title + '</i> \n';
+        (new NewsGenerator).get().then(function (news) {
+            let messages = [];
+            let i = 0;
+            let n = 1;
+            messages[i] = '10 новостей за прошедший час: \n\n';
+            news.forEach(function (post) {
+                messages[i] += n + ') <i>' + post.title + '</i> \n';
+                n++;
+                if (messages[i].length > 4000) {
+                    i++;
+                }
+            });
+            messages.forEach(function (message) {
+                bot.sendMessage(chat, message, {
+                    parse_mode: 'HTML'
+                });
+            });
 
-                 if(messages[i].length > 4000) {
-                     i++;
-                 }
-             });
-             messages.forEach(function (message) {
-                 /*bot.sendMessage(chat, message, {
-                     parse_mode: 'HTML'
-                 });*/
-             });
-
-         });
+        });
     }, 500);
 });
 
@@ -200,7 +201,7 @@ bot.onText(/\/img(?:\@.*?)? (.*)/, (msg, match) => {
 });
 
 bot.onText(/\/curr(?:\@.*?)? (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub) (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub) ([0-9]*\.?[0-9]{0,2})/, (msg, match) => {
-    console.log('Из '+ match[1] + ' в ' + match[2] + ': ' + match[3]);
+    console.log('Из ' + match[1] + ' в ' + match[2] + ': ' + match[3]);
     let opts = {from: match[1], to: match[2]};
     console.log(opts);
     const chat = msg.chat.id;
@@ -212,7 +213,7 @@ bot.onText(/\/curr(?:\@.*?)? (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub) (UAH|USD|
             fx.base = openRates.base;
             let res = fx.convert(+match[3], opts);
 
-            let message = 'Из '+ currencyFormatter.format(+match[3], { code:  match[1] }) + ' в ' + match[2] + ': ' + currencyFormatter.format(res, { code:  match[2] });
+            let message = 'Из ' + currencyFormatter.format(+match[3], {code: match[1]}) + ' в ' + match[2] + ': ' + currencyFormatter.format(res, {code: match[2]});
 
             bot.sendMessage(chat, message, {
                 parse_mode: 'Markdown'
