@@ -20,15 +20,17 @@ module.exports = class NewsGenerator {
                     });
                     winston.info('End: ' + tops.length);
 
-                    let result = tops.map(function (topic) {
-                        googl.shorten(topic.Url)
-                            .then(function (shortUrl) {
-                                result.push({title: topic.Title, link: shortUrl});
-                                Promise.resolve(result);
-                            });
-                    });
 
-                    Promise.all(result).then(function (result) {
+
+                    Promise.all(tops.map(function (topic) {
+                        return new Promise(function(resolve, reject) {
+                            googl.shorten(topic.Url)
+                                .then(function (shortUrl) {
+                                    result.push({title: topic.Title, link: shortUrl});
+                                    resolve(result);
+                                });
+                        });
+                    })).then(function (result) {
                         console.log('-----');
                         console.log(result);
                         console.log('-----');
