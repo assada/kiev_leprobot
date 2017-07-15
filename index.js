@@ -161,9 +161,9 @@ bot.onText(/\/news/, (msg, match) => {
                  }
              });
              messages.forEach(function (message) {
-                 bot.sendMessage(chat, message, {
+                 /*bot.sendMessage(chat, message, {
                      parse_mode: 'HTML'
-                 });
+                 });*/
              });
 
          });

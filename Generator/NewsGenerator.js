@@ -11,13 +11,16 @@ module.exports = class NewsGenerator {
                     let result = [];
                     let json = JSON.parse(page);
                     let tops = json.tops;
+                    winston.info('Start: ' + tops.length);
                     tops.filter(function (top) {
                         return typeof top.Dups !== 'undefined';
                     });
+                    winston.info('End: ' + tops.length);
                     tops.forEach(function (topic) {
                         result.push({title: topic.Title, link: topic.Url})
                     });
                     result.slice(0,10);
+                    winston.info(result.length);
                     fulfill(result);
                 });
         });
