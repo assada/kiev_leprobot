@@ -5,9 +5,7 @@
  * @type {MessageGenerator}
  */
 module.exports = class MessageGenerator {
-    constructor(parameters) {
-        let {MessageModel, msg, Promise, MarkovGen, Sequelize, winston} = parameters;
-
+    constructor(MessageModel, msg, Promise, MarkovGen, Sequelize, winston) {
         this.winston = winston;
         this.winston.add(winston.transports.File, {filename: 'logs/markov.log'});
         this.Sequelize = Sequelize;

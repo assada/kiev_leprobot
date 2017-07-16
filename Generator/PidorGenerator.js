@@ -10,9 +10,7 @@
  * @type {PidorGenerator}
  */
 module.exports = class PidorGenerator {
-    constructor(parameters) {
-        let {Promise, PidorRepository, UserChatRepository} = parameters;
-
+    constructor(Promise, PidorRepository, UserChatRepository) {
         this.PidorRepository = PidorRepository;
         this.UserChatRepository = UserChatRepository;
         this.Promise = Promise;

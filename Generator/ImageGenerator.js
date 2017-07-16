@@ -9,10 +9,7 @@
  * @type {ImageGenerator}
  */
 module.exports = class ImageGenerator {
-    constructor(parameters) {
-        let {Promise, parser} = parameters;
-        console.log(parameters);
-
+    constructor(Promise, parser) {
         this.Promise = Promise;
         this.Parser = parser;
     }
