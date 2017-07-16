@@ -36,13 +36,16 @@ module.exports = class NewsGenerator {
                     t.winston.info('Top news: ' + tops.length);
                     t.Promise.all(tops.map(function (topic) {
                         t.winston.info('Try shorting url: ' + topic.Url);
-                        return new t.Promise(function (resolve) {
+                        return new t.Promise(function (resolve, fail) {
                             t.winston.info('processing...');
                             t.googl.shorten(topic.Url)
                                 .then(function (shortUrl) {
                                     t.winston.info('Done: ' + shortUrl);
                                     resolve({title: topic.Title, link: shortUrl});
-                                });
+                                }).catch(function (err) {
+                                t.winston.error(err);
+                                fail(err);
+                            });
                         });
                     })).then(function (result) {
                         let r = result.slice(0, 10);
