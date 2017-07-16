@@ -35,9 +35,11 @@ module.exports = class NewsGenerator {
                     });
                     t.winston.info('Top news: ' + tops.length);
                     t.Promise.all(tops.map(function (topic) {
+                        t.winston.info('Try shorting url: ' + topic.Url);
                         return new t.Promise(function (resolve) {
                             t.googl.shorten(topic.Url)
                                 .then(function (shortUrl) {
+                                    t.winston.info('Done: ' + shortUrl);
                                     resolve({title: topic.Title, link: shortUrl});
                                 });
                         });
