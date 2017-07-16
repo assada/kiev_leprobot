@@ -20,11 +20,9 @@ module.exports = class ImageGenerator {
      * @returns {Promise}
      */
     get(query) {
-        return new this.Promise(function (fulfill, reject) {
-            console.log(query);
-            this.Parser.parseImageUrls(query, function (urls) {
-                console.log(query);
-                console.log(urls);
+        const t = this;
+        return new t.Promise(function (fulfill) {
+            t.Parser.parseImageUrls(query, function (urls) {
                 let url = urls[Math.floor(Math.random() * urls.length)].url;
                 fulfill(url);
             });
