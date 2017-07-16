@@ -11,6 +11,7 @@
 module.exports = class ImageGenerator {
     constructor(parameters) {
         let {Promise, parser} = parameters;
+        console.log(Promise);
 
         this.Promise = Promise;
         this.Parser = parser;
@@ -22,7 +23,6 @@ module.exports = class ImageGenerator {
      * @returns {Promise}
      */
     get(query) {
-        console.log(this.Promise);
         return new this.Promise(function (fulfill, reject) {
             this.Parser.parseImageUrls(query, function (urls) {
                 let url = urls[Math.floor(Math.random() * urls.length)].url;
