@@ -1,37 +1,50 @@
-const Promise = require('promise');
-const request = require('request');
-const winston = require('winston');
-const googl = require('goo.gl');
-googl.setKey('AIzaSyA9i1EFuezxTxIb_AfFHK_nk4mmjQJ0bUo');
+'use strict';
 
+/**
+ * News Generator
+ *
+ * @param {Promise}
+ * @param {request} Request
+ * @param {winston} Winston
+ *
+ * @type {NewsGenerator}
+ */
 module.exports = class NewsGenerator {
-    get() {
-        winston.info('Loading news');
-        let t = this;
-        return new Promise(function (fulfill, reject) {
-            request({uri: 'https://www.ukr.net/news/dat/kiev/1/', method: 'GET', encoding: 'binary'},
-                function (err, res, page) {
+    constructor(parameters) {
+        let {Promise, Request, winston, googl} = parameters;
 
+        this.Promise = Promise;
+        this.request = Request;
+        this.winston = winston;
+        this.googl = googl;
+    }
+
+    /**
+     *
+     * @returns {Promise}
+     */
+    get() {
+        this.winston.info('Loading news');
+        let t = this;
+        return new t.Promise(function (fulfill) {
+            t.request({uri: 'https://www.ukr.net/news/dat/kiev/1/', method: 'GET', encoding: 'binary'},
+                function (err, res, page) {
                     let json = JSON.parse(page);
                     let tops = json.tops;
-                    winston.info('Start: ' + tops.length);
+                    t.winston.info('Total news: ' + tops.length);
                     tops = tops.filter(function (top) {
                         return typeof top.Dups !== 'undefined';
                     });
-                    winston.info('End: ' + tops.length);
-
-                    Promise.all(tops.map(function (topic) {
-                        return new Promise(function(resolve, reject) {
-                            googl.shorten(topic.Url)
+                    t.winston.info('Top news: ' + tops.length);
+                    t.Promise.all(tops.map(function (topic) {
+                        return new t.Promise(function (resolve) {
+                            t.googl.shorten(topic.Url)
                                 .then(function (shortUrl) {
                                     resolve({title: topic.Title, link: shortUrl});
                                 });
                         });
                     })).then(function (result) {
-                        console.log(result);
-                        let r = [];
-                        r = result.slice(0,10);
-                        winston.info('After slice:' + r.length);
+                        let r = result.slice(0, 10);
                         fulfill(r)
                     });
                 });

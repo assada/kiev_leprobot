@@ -6,3 +6,4 @@ MYSQL_DATABASE=leprobot
 TZ=Europe/Kiev
 SERVER_PORT=9615
 OPENRATE_TOKEN=openrate
+GOO_GL=token

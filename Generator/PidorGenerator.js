@@ -1,17 +1,32 @@
 'use strict';
 
-const Promise = require('promise');
-
+/**
+ * Pidor functionality
+ *
+ * @param {Promise} Promise
+ * @param {PidorRepository} PidorRepository
+ * @param {UserChatRepository} UserChatRepository
+ *
+ * @type {PidorGenerator}
+ */
 module.exports = class PidorGenerator {
-    constructor(PidorRepository, UserChatRepository) {
+    constructor(parameters) {
+        let {Promise, PidorRepository, UserChatRepository} = parameters;
+
         this.PidorRepository = PidorRepository;
         this.UserChatRepository = UserChatRepository;
+        this.Promise = Promise;
     }
 
+    /**
+     * Get pidor for chat
+     * @param {string} chat
+    * @returns {*}
+    */
     get(chat) {
         let pr = this.PidorRepository;
         let ucr = this.UserChatRepository;
-        return new Promise(function (fulfill, reject) {
+        return new this.Promise(function (fulfill, reject) {
             pr.get(chat).then(function (res) {
                 if (res.length > 0) {
                     fulfill({status: 'old', user: res[0].dataValues.user});
@@ -22,13 +37,12 @@ module.exports = class PidorGenerator {
                             pr.store(chat, user.dataValues.user);
                             fulfill({status: 'new', user: user.dataValues.user});
                         } else {
-                            reject('Rej 2');
+                            reject('Users not found');
                         }
-
                     });
                 }
             }).catch(function (res) {
-                console.log(res);
+                reject(res);
             });
         });
     }

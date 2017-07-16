@@ -1,5 +1,5 @@
 const Sequelize = require("sequelize");
-const env = require('dotenv').config();
+const dotenv = require('dotenv');
 const Random = require("random-js");
 const TelegramBot = require('node-telegram-bot-api');
 const winston = require('winston');
@@ -8,6 +8,13 @@ const emojiStrip = require('emoji-strip');
 const fx = require('money');
 const currencyFormatter = require('currency-formatter');
 const http = require('http');
+const Promise = require('promise');
+const googl = require('goo.gl');
+const googleSearchParser2 = require("google-search-parser2");
+const GoogleSearchParser = new googleSearchParser2(request);
+const MarkovGen = require('markov-generator');
+googl.setKey(process.env.GOO_GL);
+dotenv.config();
 const db = new Sequelize(process.env.MYSQL_DATABASE, process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
     host: process.env.MYSQL_HOST,
     dialect: 'mysql', logging: false
@@ -38,14 +45,12 @@ const PidorRepository = new PRepository(PidorModel, User);
 const UCRepository = require("./Repository/UserChatRepository");
 const UserChatRepository = new UCRepository(UserChatModel);
 
-
 //Generators
 const MessageGenerator = require("./Generator/MessageGenerator");
 const PGenerator = require("./Generator/PidorGenerator");
 const ImageGenerator = require("./Generator/ImageGenerator");
 const NewsGenerator = require("./Generator/NewsGenerator");
-const PidorGenerator = new PGenerator(PidorRepository, UserChatRepository);
-
+const PidorGenerator = new PGenerator(Promise, PidorRepository, UserChatRepository);
 
 //Strings
 const catP = [
@@ -89,7 +94,7 @@ bot.on('message', (msg) => {
         MessageRepository.store(msg, names);
         if ((chance || mention) && chat !== -1001048609359) {
             bot.sendChatAction(chat, 'typing');
-            (new MessageGenerator(MessageModel, msg)).get(names).then(function (res) {
+            (new MessageGenerator(MessageModel, msg, Promise, MarkovGen, Sequelize, winston)).get(names).then(function (res) {
                 winston.info(res);
                 if (res !== false && res.length > 0) {
                     let options = {};
@@ -139,17 +144,11 @@ bot.onText(/\/cat/, (msg, match) => {
     }, 500);
 });
 
-function lengthInUtf8Bytes(str) {
-    // Matches only the 10.. bytes that are non-initial characters in a multi-byte sequence.
-    let m = encodeURIComponent(str).match(/%[89ABab]/g);
-    return str.length + (m ? m.length : 0);
-}
-
 bot.onText(/\/news/, (msg, match) => {
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'typing');
     setTimeout(function () {
-        (new NewsGenerator).get().then(function (news) {
+        (new NewsGenerator(Promise, request, winston, googl)).get().then(function (news) {
             let messages = [];
             let i = 0;
             let n = 1;
@@ -189,7 +188,7 @@ bot.onText(/\/img(?:\@.*?)? (.*)/, (msg, match) => {
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'upload_photo');
     setTimeout(function () {
-        ImageGenerator(match[1] || 'Трактор').then(function (url) {
+        (new ImageGenerator(Promise, GoogleSearchParser)).get(match[1] || 'Трактор').then(function (url) {
             request.get(url, function (err, res, body) {
                 const photo = request(this.uri.href);
                 bot.sendPhoto(chat, photo, {
