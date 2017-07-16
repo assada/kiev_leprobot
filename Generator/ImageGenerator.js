@@ -11,7 +11,7 @@
 module.exports = class ImageGenerator {
     constructor(parameters) {
         let {Promise, parser} = parameters;
-        console.log(Promise);
+        console.log(parameters);
 
         this.Promise = Promise;
         this.Parser = parser;
