@@ -13,8 +13,8 @@ const googl = require('goo.gl');
 const googleSearchParser2 = require("google-search-parser2");
 const GoogleSearchParser = new googleSearchParser2(request);
 const MarkovGen = require('markov-generator');
-googl.setKey(process.env.GOO_GL);
 dotenv.config();
+googl.setKey(process.env.GOO_GL);
 const db = new Sequelize(process.env.MYSQL_DATABASE, process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
     host: process.env.MYSQL_HOST,
     dialect: 'mysql', logging: false

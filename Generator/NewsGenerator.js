@@ -43,7 +43,6 @@ module.exports = class NewsGenerator {
                                     t.winston.info('Done: ' + shortUrl);
                                     resolve({title: topic.Title, link: shortUrl});
                                 }).catch(function (err) {
-                                t.winston.error(err);
                                 fail(err);
                             });
                         });
