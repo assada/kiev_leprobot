@@ -195,6 +195,8 @@ bot.onText(/\/img(?:\@.*?)? (.*)/, (msg, match) => {
                     reply_to_message_id: msg.message_id
                 });
             });
+        }).catch(function (err) {
+            winston.error(err);
         });
     }, 500);
 });
