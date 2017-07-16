@@ -12,6 +12,7 @@ module.exports = class ImageGenerator {
     constructor(Promise, parser) {
         this.Promise = Promise;
         this.Parser = parser;
+        console.log(parser);
     }
 
     /**
@@ -21,6 +22,7 @@ module.exports = class ImageGenerator {
      */
     get(query) {
         return new this.Promise(function (fulfill, reject) {
+            console.log(query);
             this.Parser.parseImageUrls(query, function (urls) {
                 console.log(query);
                 console.log(urls);
