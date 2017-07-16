@@ -24,7 +24,7 @@ module.exports = class NewsGenerator {
     get() {
         this.winston.info('Loading news');
         let t = this;
-        return new t.Promise(function (fulfill) {
+        return new this.Promise(function (fulfill) {
             t.request({uri: 'https://www.ukr.net/news/dat/kiev/1/', method: 'GET', encoding: 'binary'},
                 function (err, res, page) {
                     let json = JSON.parse(page);
@@ -43,6 +43,7 @@ module.exports = class NewsGenerator {
                         });
                     })).then(function (result) {
                         let r = result.slice(0, 10);
+                        t.winston.info('After slice: ' + r.length);
                         fulfill(r)
                     });
                 });
