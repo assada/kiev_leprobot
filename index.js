@@ -188,6 +188,7 @@ bot.onText(/\/img(?:\@.*?)? (.*)/, (msg, match) => {
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'upload_photo');
     setTimeout(function () {
+        console.log(Promise);
         (new ImageGenerator(Promise, GoogleSearchParser)).get(match[1] || 'Трактор').then(function (url) {
             request.get(url, function (err, res, body) {
                 const photo = request(this.uri.href);
