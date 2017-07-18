@@ -216,7 +216,7 @@ bot.onText(/\/graph_top/, (msg, match) => {
                 datasets: [
                     {
                         label: 'Messages',
-                        backgroundColor: "rgba(75,192,192,1)",
+                        backgroundColor: "rgba(255,255,255,1)",
                         borderColor: "rgba(75,192,192,1)",
                         borderCapStyle: 'butt',
                         lineTension: 0,
