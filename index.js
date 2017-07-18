@@ -270,7 +270,7 @@ bot.onText(/\/curr(?:\@.*?)? (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub) (UAH|USD|
             fx.rates = openRates.rates;
             fx.base = openRates.base;
             let res = fx.convert(+match[3], opts);
-            let message = 'Из ' + currencyFormatter.format(+match[3], {code: match[1]}) + ' в ' + match[2] + ': ' + currencyFormatter.format(res, {code: match[2]});
+            let message = 'Из ' + currencyFormatter.format(+match[3], {code: match[1].toUpperCase()}) + ' в ' + match[2] + ': ' + currencyFormatter.format(res, {code: match[2].toUpperCase()});
             bot.sendMessage(chat, message, {
                 parse_mode: 'Markdown'
             });
