@@ -23,6 +23,7 @@
     "node-telegram-bot-api": "^0.27.1",
     "node-url-shorter": "0.0.4",
     "npm": "^5.3.0",
+    "plotly": "^1.0.6",
     "promise": "^8.0.1",
     "random-js": "^1.0.8",
     "request": "^2.81.0",

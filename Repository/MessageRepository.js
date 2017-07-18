@@ -52,4 +52,13 @@ module.exports = class MessageRepository {
             });
         });
     }
+
+    topByDays(db, chat) {
+        const sql = 'SELECT count(id) as count, DAY(createdAt) as day, MONTH(createdAt) as month, YEAR(createdAt) as year FROM messages WHERE chat = '+chat+' GROUP BY day, month, year ORDER BY day DESC, month DESC, year DESC LIMIT 10';
+        return new Promise(function (fulfill) {
+            db.query(sql).spread((result, metadata) => {
+                fulfill(result);
+            })
+        });
+    }
 };

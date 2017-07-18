@@ -194,6 +194,33 @@ bot.onText(/\/top/, (msg, match) => {
     });
 });
 
+bot.onText(/\/graph_top/, (msg, match) => {
+    const chat = msg.chat.id;
+    if (chat > 0) {
+        bot.sendMessage(chat, "Не-не. Только в чатиках топчик работает");
+        return false;
+    }
+    bot.sendChatAction(chat, 'typing');
+    MessageRepository.topByDay(db, chat).then(function (res) {
+        let x = [];
+        let y = [];
+        let data = [
+            {
+                x: [],
+                y: [],
+                type: "scatter"
+            }
+        ];
+        res.forEach((value) => {
+            x.push(value.day + ' ' + value.month + ' ' + value.year + ' 00:00:00');
+            y.push(value.count);
+        });
+        data[0].x = x;
+        data[0].y = y;
+        console.log(data);
+    });
+});
+
 bot.onText(/\/img(?:\@.*?)? (.*)/, (msg, match) => {
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'upload_photo');
