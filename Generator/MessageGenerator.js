@@ -6,8 +6,7 @@
  */
 module.exports = class MessageGenerator {
     constructor(MessageModel, msg, Promise, MarkovGen, Sequelize, winston) {
-        this.winston = winston;
-        this.winston.add(winston.transports.File, {filename: 'logs/markov.log'});
+        this.winston = winston.loggers.get('category1');
         this.Sequelize = Sequelize;
         this.MarkovGen = MarkovGen;
         this.Promise = Promise;

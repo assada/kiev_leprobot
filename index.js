@@ -15,6 +15,16 @@ const GoogleSearchParser = new googleSearchParser2(request);
 const MarkovGen = require('markov-generator');
 dotenv.config();
 googl.setKey(process.env.GOO_GL);
+winston.loggers.add('markov', {
+    console: {
+        level: 'silly',
+        colorize: true,
+        label: '[Markov]'
+    },
+    file: {
+        filename: 'logs/markov.log'
+    }
+});
 const db = new Sequelize(process.env.MYSQL_DATABASE, process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
     host: process.env.MYSQL_HOST,
     dialect: 'mysql', logging: false
