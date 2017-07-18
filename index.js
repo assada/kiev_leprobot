@@ -231,6 +231,9 @@ bot.onText(/\/graph_top/, (msg, match) => {
             console.log(data);
             bot.sendPhoto(chat, imageStream);
         });
+    }).catch((err) => {
+        "use strict";
+        winston.error(err);
     });
 });
 
