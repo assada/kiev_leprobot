@@ -218,9 +218,8 @@ bot.onText(/\/graph_top/, (msg, match) => {
         });
         data[0].x = x;
         data[0].y = y;
-        console.log(data);
 
-        var imgOpts = {
+        let imgOpts = {
             format: 'png',
             width: 1000,
             height: 500
@@ -228,6 +227,8 @@ bot.onText(/\/graph_top/, (msg, match) => {
 
         ploty.getImage(data, imgOpts, function (error, imageStream) {
             if (error) return console.log (error);
+            console.log('Generated');
+            console.log(data);
             bot.sendPhoto(chat, imageStream);
         });
     });
