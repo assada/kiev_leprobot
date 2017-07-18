@@ -208,6 +208,9 @@ bot.onText(/\/graph_top/, (msg, match) => {
         let data = {
             type: 'line',
             bezierCurve: false,
+            options: {
+                plugins: false
+            },
             data: {
                 labels: [],
                 datasets: [
