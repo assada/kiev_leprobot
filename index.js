@@ -5,6 +5,7 @@ const TelegramBot = require('node-telegram-bot-api');
 const winston = require('winston');
 const request = require('request');
 const emojiStrip = require('emoji-strip');
+const ploty = require('plotly');
 const fx = require('money');
 const currencyFormatter = require('currency-formatter');
 const http = require('http');
@@ -212,7 +213,7 @@ bot.onText(/\/graph_top/, (msg, match) => {
             }
         ];
         res.forEach((value) => {
-            x.push(value.day + ' ' + value.month + ' ' + value.year + ' 00:00:00');
+            x.push(value.year + '-' + (value.day < 10 ? '0'+value.day : value.day) + '-' + (value.month < 10 ? '0'+value.month : value.month) + ' 00:00:00');
             y.push(value.count);
         });
         data[0].x = x;
