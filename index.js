@@ -271,6 +271,7 @@ bot.onText(/\/curr(?:\@.*?)? (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub) (UAH|USD|
     request.get("https://openexchangerates.org/api/latest.json?app_id=" + process.env.OPENRATE_TOKEN, function (err, res, body) {
         setTimeout(function () {
             let openRates = JSON.parse(body);
+            console.log(openRates);
             fx.rates = openRates.rates;
             fx.base = openRates.base;
             let res = fx.convert(+match[3], opts);
