@@ -5,7 +5,7 @@ const TelegramBot = require('node-telegram-bot-api');
 const winston = require('winston');
 const request = require('request');
 const emojiStrip = require('emoji-strip');
-const ploty = require('plotly');
+const plotly = require('plotly')('Assada', 'rPtGQlb1Azmr36xp9v2U');
 const fx = require('money');
 const currencyFormatter = require('currency-formatter');
 const http = require('http');
@@ -225,7 +225,7 @@ bot.onText(/\/graph_top/, (msg, match) => {
             height: 500
         };
 
-        ploty.getImage(data, imgOpts, function (error, imageStream) {
+        plotly.getImage(data, imgOpts, function (error, imageStream) {
             if (error) return console.log (error);
             console.log('Generated');
             console.log(data);
