@@ -215,8 +215,8 @@ bot.onText(/\/graph_top/, (msg, match) => {
                 labels: [],
                 datasets: [
                     {
-                        label: 'Orders',
-                        backgroundColor: "rgba(75,192,192,0.4)",
+                        label: 'Messages',
+                        backgroundColor: "rgba(75,192,192,1)",
                         borderColor: "rgba(75,192,192,1)",
                         borderCapStyle: 'butt',
                         lineTension: 0,
@@ -234,10 +234,8 @@ bot.onText(/\/graph_top/, (msg, match) => {
 
         let chartNode = new ChartjsNode(600, 600);
         chartNode.drawChart(data).then(() => {
-            chartNode.getImageBuffer('image/jpeg').then((res) => {
-                "use strict";
-                console.log(res);
-                bot.sendDocument(chat, res);
+            chartNode.getImageBuffer('image/png').then((res) => {
+                bot.sendPhoto(chat, res);
             });
 
         });
