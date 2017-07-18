@@ -234,13 +234,12 @@ bot.onText(/\/graph_top/, (msg, match) => {
 
         let chartNode = new ChartjsNode(600, 600);
         chartNode.drawChart(data).then(() => {
-            let bufer = chartNode.getImageBuffer('image/jpeg');
-            console.log(bufer);
-            bot.sendDocument(chat, bufer);
-        }).then(buffer => {
-            return chartNode.getImageStream('image/jpeg');
-        }).then(streamResult => {
-            bot.sendPhoto(chat, chartNode.getImageDataUrl('image/jpeg'));
+            chartNode.getImageBuffer('image/jpeg').then((res) => {
+                "use strict";
+                console.log(res);
+                bot.sendDocument(chat, res);
+            });
+
         });
     }).catch((err) => {
         "use strict";
