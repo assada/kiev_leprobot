@@ -298,7 +298,7 @@ bot.onText(/\/pidor_top/, (msg, match) => {
         let message = 'Наши <b>лучшие</b> пидоры: \n\n';
         let i = 1;
         results.forEach(function (pidor) {
-            message += i + ') <i>' + pidor.username + '</i> - <b>' + pidor.c + '</b>\n';
+            message += i + ') <i>' + pidor.username + '(' + pidor.first_name + ')' + '</i> - <b>' + pidor.c + '</b>\n';
             i++;
         });
         setTimeout(function () {
