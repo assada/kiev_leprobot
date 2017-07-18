@@ -234,7 +234,8 @@ bot.onText(/\/graph_top/, (msg, match) => {
 
         let chartNode = new ChartjsNode(600, 600);
         chartNode.drawChart(data).then(() => {
-            return chartNode.getImageBuffer('image/png');
+            let bufer = chartNode.getImageBuffer('image/png');
+            bot.sendPhoto(chat, bufer);
         }).then(buffer => {
             return chartNode.getImageStream('image/png');
         }).then(streamResult => {
