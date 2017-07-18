@@ -229,8 +229,8 @@ bot.onText(/\/graph_top/, (msg, match) => {
             x.push((value.day < 10 ? '0' + value.day : value.day));
             y.push(value.count);
         });
-        data.data.labels = x;
-        data.data.datasets[0].data = y;
+        data.data.labels = x.reverse();
+        data.data.datasets[0].data = y.reverse();
 
         let chartNode = new ChartjsNode(1200, 800);
         chartNode.drawChart(data).then(() => {
