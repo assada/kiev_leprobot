@@ -201,7 +201,7 @@ bot.onText(/\/graph_top/, (msg, match) => {
         bot.sendMessage(chat, "Не-не. Только в чатиках топчик работает");
         return false;
     }
-    bot.sendChatAction(chat, 'typing');
+    bot.sendChatAction(chat, 'upload_photo');
     MessageRepository.topByDays(db, chat).then(function (res) {
         let x = [];
         let y = [];
@@ -219,6 +219,17 @@ bot.onText(/\/graph_top/, (msg, match) => {
         data[0].x = x;
         data[0].y = y;
         console.log(data);
+
+        var imgOpts = {
+            format: 'png',
+            width: 1000,
+            height: 500
+        };
+
+        ploty.getImage(data, imgOpts, function (error, imageStream) {
+            if (error) return console.log (error);
+            bot.sendPhoto(chat, imageStream);
+        });
     });
 });
 
