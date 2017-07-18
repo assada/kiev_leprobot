@@ -260,11 +260,11 @@ bot.onText(/\/img(?:\@.*?)? (.*)/, (msg, match) => {
     }, 500);
 });
 
-bot.onText(/\/curr(?:\@.*?)? (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub) (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub) ([0-9]*\.?[0-9]{0,2})/, (msg, match) => {
+bot.onText(/\/curr(?:\@.*?)? (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub|ETH|eth) (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub|ETH|eth) ([0-9]*\.?[0-9]{0,2})/, (msg, match) => {
     let opts = {from: match[1].toUpperCase(), to: match[2].toUpperCase()};
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'typing');
-    request.get("https://openexchangerates.org/api/latest.json?app_id=" + process.env.OPENRATE_TOKEN, function (err, res, body) {
+    request.get("https://openexchangerates.org/api/latest.json?app_id=" + process.env.OPENRATE_TOKEN + '&show_alternative=1', function (err, res, body) {
         setTimeout(function () {
             let openRates = JSON.parse(body);
             fx.rates = openRates.rates;
