@@ -94,7 +94,6 @@ const pidorLoading = [
 
 bot.on('message', (msg) => {
     const chat = msg.chat.id;
-    winston.info(chat);
     UserRepository.store(msg.from);
     if (chat < 0) {
         UserChatRepository.store(msg.from, msg.chat);
@@ -106,7 +105,6 @@ bot.on('message', (msg) => {
         if ((chance || mention) && chat !== -1001048609359) {
             bot.sendChatAction(chat, 'typing');
             (new MessageGenerator(MessageModel, msg, Promise, MarkovGen, Sequelize, winston)).get(names).then(function (res) {
-                winston.info(res);
                 if (res !== false && res.length > 0) {
                     let options = {};
                     if (mention) {
@@ -263,21 +261,16 @@ bot.onText(/\/img(?:\@.*?)? (.*)/, (msg, match) => {
 });
 
 bot.onText(/\/curr(?:\@.*?)? (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub) (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub) ([0-9]*\.?[0-9]{0,2})/, (msg, match) => {
-    console.log('Из ' + match[1] + ' в ' + match[2] + ': ' + match[3]);
     let opts = {from: match[1].toUpperCase(), to: match[2].toUpperCase()};
-    console.log(opts);
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'typing');
     request.get("https://openexchangerates.org/api/latest.json?app_id=" + process.env.OPENRATE_TOKEN, function (err, res, body) {
         setTimeout(function () {
             let openRates = JSON.parse(body);
-            console.log(openRates);
             fx.rates = openRates.rates;
             fx.base = openRates.base;
             let res = fx.convert(+match[3], opts);
-
             let message = 'Из ' + currencyFormatter.format(+match[3], {code: match[1]}) + ' в ' + match[2] + ': ' + currencyFormatter.format(res, {code: match[2]});
-
             bot.sendMessage(chat, message, {
                 parse_mode: 'Markdown'
             });
@@ -328,7 +321,6 @@ bot.onText(/\/new_pidor/, (msg, match) => {
 });
 
 http.createServer(function (req, response) {
-    winston.info(req.connection.remoteAddress);
     if (req.url.indexOf('favicon') > -1 || req.connection.remoteAddress.indexOf('127.0.0.1') === -1) {
         response.writeHead(404, {'Content-Type': 'text/html; charset=utf-8'});
         response.end('Ну ты и пидор...');
@@ -349,7 +341,6 @@ function getPidor(chat) {
     PidorGenerator.get(chat).then(function (res) {
         UserModel.getModel().findOne({where: {user: res.user}}).then(function (user) {
             let message = '';
-            winston.info('Pidor status: ' + res.status);
             if (res.status === 'old') {
                 message = 'Пидор дня - *' + user.first_name + ' ' + user.last_name + '*';
             } else if (res.status === 'new') {
@@ -364,13 +355,12 @@ function getPidor(chat) {
                 message = 'Теперь ты наш пидор, @' + user.username + ' (' + user.first_name + ' ' + user.last_name + ')!'
             }
             setTimeout(function () {
-                winston.info('Pidor message to ' + chat + ' chat');
                 bot.sendMessage(chat, message, {
                     parse_mode: 'Markdown'
                 });
             }, 2000);
         });
     }).catch(function (rej) {
-        console.log(rej)
+        winston.error(rej);
     });
 }
