@@ -226,13 +226,13 @@ bot.onText(/\/graph_top/, (msg, match) => {
             }
         };
         res.forEach((value) => {
-            x.push(value.year + '-' + (value.day < 10 ? '0' + value.day : value.day) + '-' + (value.month < 10 ? '0' + value.month : value.month) + ' 00:00:00');
+            x.push(value.year + '-' + (value.day < 10 ? '0' + value.day : value.day) + '-' + (value.month < 10 ? '0' + value.month : value.month));
             y.push(value.count);
         });
         data.data.labels = x;
         data.data.datasets[0].data = y;
 
-        let chartNode = new ChartjsNode(600, 600);
+        let chartNode = new ChartjsNode(600, 1200);
         chartNode.drawChart(data).then(() => {
             chartNode.getImageBuffer('image/png').then((res) => {
                 bot.sendPhoto(chat, res);
