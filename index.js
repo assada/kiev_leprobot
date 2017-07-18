@@ -201,7 +201,7 @@ bot.onText(/\/graph_top/, (msg, match) => {
         return false;
     }
     bot.sendChatAction(chat, 'typing');
-    MessageRepository.topByDay(db, chat).then(function (res) {
+    MessageRepository.topByDays(db, chat).then(function (res) {
         let x = [];
         let y = [];
         let data = [
