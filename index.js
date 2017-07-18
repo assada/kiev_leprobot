@@ -238,7 +238,7 @@ bot.onText(/\/graph_top/, (msg, match) => {
         }).then(buffer => {
             return chartNode.getImageStream('image/png');
         }).then(streamResult => {
-            bot.sendPhoto(chat, streamResult.stream);
+            bot.sendPhoto(chat, chartNode.getImageDataUrl('image/png'));
         });
     }).catch((err) => {
         "use strict";
