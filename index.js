@@ -205,31 +205,37 @@ bot.onText(/\/graph_top/, (msg, match) => {
     MessageRepository.topByDays(db, chat).then(function (res) {
         let x = [];
         let y = [];
-        let data = [
-            {
-                x: [],
-                y: [],
-                type: "scatter"
+        let data = {
+            type: 'line',
+            bezierCurve: false,
+            data: {
+                labels: [],
+                datasets: [
+                    {
+                        label: 'Orders',
+                        backgroundColor: "rgba(75,192,192,0.4)",
+                        borderColor: "rgba(75,192,192,1)",
+                        borderCapStyle: 'butt',
+                        lineTension: 0,
+                        fill: false,
+                        data: []
+                    }]
             }
-        ];
+        };
         res.forEach((value) => {
-            x.push(value.year + '-' + (value.day < 10 ? '0'+value.day : value.day) + '-' + (value.month < 10 ? '0'+value.month : value.month) + ' 00:00:00');
+            x.push(value.year + '-' + (value.day < 10 ? '0' + value.day : value.day) + '-' + (value.month < 10 ? '0' + value.month : value.month) + ' 00:00:00');
             y.push(value.count);
         });
-        data[0].x = x;
-        data[0].y = y;
+        data.data.labels = x;
+        data.data.datasets[0].data = y;
 
-        let imgOpts = {
-            format: 'png',
-            width: 1000,
-            height: 500
-        };
-
-        plotly.getImage(data, imgOpts, function (error, imageStream) {
-            if (error) return console.log (error);
-            console.log('Generated');
-            console.log(data);
-            bot.sendPhoto(chat, imageStream);
+        let chartNode = new ChartjsNode(600, 600);
+        chartNode.drawChart(data).then(() => {
+            return chartNode.getImageBuffer('image/png');
+        }).then(buffer => {
+            return chartNode.getImageStream('image/png');
+        }).then(streamResult => {
+            bot.sendPhoto(chat, streamResult.stream);
         });
     }).catch((err) => {
         "use strict";
