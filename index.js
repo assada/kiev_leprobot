@@ -367,7 +367,7 @@ bot.onText(/\/new_pidor/, (msg, match) => {
         return false;
     }
     bot.sendChatAction(chat, 'typing');
-    getPidor(chat);
+    getPidor(msg);
 });
 
 http.createServer(function (req, response) {
@@ -380,7 +380,7 @@ http.createServer(function (req, response) {
     UserChatRepository.getChats().then(function (chats) {
         chats.forEach(function (chat) {
             //if (chat.chat !== -1001048609359) {
-            getPidor(chat.chat)
+            //getPidor(chat.chat)
             //}
         })
     });
@@ -391,8 +391,9 @@ http.createServer(function (req, response) {
  *
  * @param chat
  */
-function getPidor(chat) {
-    PidorGenerator.get(chat).then(function (res) {
+function getPidor(msg) {
+    const chat = msg.chat.id;
+    PidorGenerator.get(msg).then(function (res) {
         UserModel.getModel().findOne({where: {user: res.user}}).then(function (user) {
             PidorRepository.pidorCount(db, user.user).then((count) => {
                 let lvl = pidorLvl[0];
