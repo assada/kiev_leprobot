@@ -398,6 +398,8 @@ function getPidor(msg) {
             PidorRepository.pidorCount(db, user.user).then((count) => {
                 let lvl = pidorLvl[0];
 
+                console.log(count);
+
                 if (count.count > 1 && count.count <= 3) {
                     lvl = pidorLvl[1];
                 } else if (count.count > 3 && count.count <= 7) {
