@@ -67,8 +67,8 @@ module.exports = class PidorRepository {
         });
     }
 
-    pidorCount(db, user) {
-        const sql = 'SELECT COUNT(id) as count FROM pidors WHERE user = :user: LIMIT 1'.replace(':user:', user);
+    pidorCount(db, user, chat) {
+        const sql = 'SELECT COUNT(id) as count FROM pidors WHERE user = :user: AND chat = :chat: LIMIT 1'.replace(':user:', user).replace(':chat:', chat);
         return new Promise(function (fulfill) {
             db.query(sql).spread((results, metadata) => {
                 let count = results.length > 0 ? results[0].count : 0;

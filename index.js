@@ -395,7 +395,7 @@ function getPidor(msg) {
     const chat = msg.chat.id;
     PidorGenerator.get(msg).then(function (res) {
         UserModel.getModel().findOne({where: {user: res.user}}).then(function (user) {
-            PidorRepository.pidorCount(db, user.user).then((count) => {
+            PidorRepository.pidorCount(db, user.user, chat).then((count) => {
                 let lvl = pidorLvl[0];
                 console.log(count);
 
@@ -421,7 +421,6 @@ function getPidor(msg) {
                     }, 2000);
                 } else if (res.status === 'new') {
                     MessageRepository.countUserMessages(db, user.user).then(function (messages) {
-                        console.log(messages);
                         const scenario = pidorScenario[Math.floor(Math.random() * pidorScenario.length)];
                         let timeout = 1000;
                         scenario.forEach((pmsg) => {
