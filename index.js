@@ -400,11 +400,14 @@ http.createServer(function (req, response) {
 function getPidor(msg) {
     const chat = msg.chat.id;
     PidorGenerator.get(msg).then(function (res) {
+        if(res.status === 'old' && res.user === msg.from.id) {
+            bot.sendMessage(chat, 'Страдай педрилка!', {
+                parse_mode: 'HTML'
+            });
+        }
         UserModel.getModel().findOne({where: {user: res.user}}).then(function (user) {
             PidorRepository.pidorCount(db, user.user, chat).then((count) => {
                 let lvl = pidorLvl[0];
-                console.log(count);
-
                 if (count > 1 && count <= 3) {
                     console.log(count);
                     lvl = pidorLvl[1];
