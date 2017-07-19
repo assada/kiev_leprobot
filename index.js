@@ -420,6 +420,7 @@ function getPidor(msg) {
                 } else if (res.status === 'new') {
                     MessageRepository.countUserMessages(db, user.user).then(function (messages) {
                         const scenario = pidorScenario[Math.floor(Math.random() * pidorScenario.length)];
+                        let timeout = 1000;
                         scenario.forEach((pmsg) => {
                             setTimeout(function () {
                                 pmsg = pmsg
@@ -432,7 +433,8 @@ function getPidor(msg) {
                                 bot.sendMessage(chat, pmsg, {
                                     parse_mode: 'HTML'
                                 });
-                            }, 1000);
+                            }, timeout);
+                            timeout += 500;
                         });
                     });
                 }
