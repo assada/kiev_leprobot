@@ -397,20 +397,18 @@ function getPidor(msg) {
         UserModel.getModel().findOne({where: {user: res.user}}).then(function (user) {
             PidorRepository.pidorCount(db, user.user).then((count) => {
                 let lvl = pidorLvl[0];
-                console.log(count[0]);
-                console.log(count[1]);
-                console.log(count + '');
+                console.log(count);
 
-                if (count.count > 1 && count.count <= 3) {
-                    console.log(count.count);
+                if (count > 1 && count <= 3) {
+                    console.log(count);
                     lvl = pidorLvl[1];
-                } else if (count.count > 3 && count.count <= 7) {
+                } else if (count > 3 && count <= 7) {
                     lvl = pidorLvl[2];
-                } else if (count.count > 7 && count.count <= 14) {
+                } else if (count > 7 && count <= 14) {
                     lvl = pidorLvl[3];
-                } else if (count.count > 14 && count.count <= 20) {
+                } else if (count > 14 && count <= 20) {
                     lvl = pidorLvl[4];
-                } else if (count.count > 20) {
+                } else if (count > 20) {
                     lvl = pidorLvl[5];
                 }
 
