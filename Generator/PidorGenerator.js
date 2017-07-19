@@ -18,10 +18,11 @@ module.exports = class PidorGenerator {
 
     /**
      * Get pidor for chat
-     * @param {string} chat
-    * @returns {*}
-    */
-    get(chat) {
+     * @param {Message} msg
+     * @returns {*}
+     */
+    get(msg) {
+        const chat = msg.chat.id;
         let pr = this.PidorRepository;
         let ucr = this.UserChatRepository;
         return new this.Promise(function (fulfill, reject) {
@@ -29,7 +30,8 @@ module.exports = class PidorGenerator {
                 if (res.length > 0) {
                     fulfill({status: 'old', user: res[0].dataValues.user});
                 } else {
-                    ucr.getActiveUser(chat).then(users => {
+                    ucr.getActiveUser(chat, msg.from.id).then(users => {
+                        console.log(users);
                         if (users.length > 0) {
                             let user = users[Math.floor(Math.random() * users.length)];
                             pr.store(chat, user.dataValues.user);

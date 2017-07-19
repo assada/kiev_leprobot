@@ -37,13 +37,14 @@ module.exports = class UserChatRepository {
      * @param chat
      * @returns {Promise.<Array.<Model>>}
      */
-    getActiveUser(chat) {
-        let now= new Date().toISOString().slice(0, 19).replace('T', ' ');
+    getActiveUser(chat, user) {
+        let now = new Date().toISOString().slice(0, 19).replace('T', ' ');
         let yesterday = new Date(new Date().getTime() - (24 * 60 * 60 * 1000)).toISOString().slice(0, 19).replace('T', ' ');
         return this.UserChat.findAll({
             where: {
                 chat: chat,
                 updatedAt: {$between: [yesterday, now]},
+                user: {$ne: user}
             },
         });
     }

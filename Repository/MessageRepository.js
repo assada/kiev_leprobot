@@ -61,4 +61,13 @@ module.exports = class MessageRepository {
             })
         });
     }
+
+    countUserMessages(db, user) {
+        const sql = 'SELECT COUNT(id) as count FROM messages WHERE user=:user:'.replace(':user:', user);
+        return new Promise(function (fulfill) {
+            db.query(sql).spread((result, metadata) => {
+                fulfill(result);
+            })
+        });
+    }
 };

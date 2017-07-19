@@ -92,6 +92,49 @@ const pidorLoading = [
     'Где-же он, наш пидор?'
 ];
 
+const pidorScenario = [
+    [
+        'Погодите ка, сначала нужно спасти остров!',
+        '<i>4 8 15 16 23 42</i>',
+        '108:00 <i>Успели...</i>',
+        'Остров спасли? Спасли. И пидора короновать не забудем.',
+        'Наш :lvl: это... @:username: (:first_name: :last_name:)! Ура, :lvl:!'
+    ],
+    [
+        'Начнем наш ежедневный розыгрыш <b>#:draw:</b>!',
+        'Крутим барабан, господа!',
+        'Достаем номер... Итак...',
+        'Наш :lvl: на следующие 24 часа теперь участник написавший :messages: сообщений...',
+        '... ... @:username: (:first_name: :last_name:)! Поздравляем :first_name: с этим СОБЫТИЕМ!'
+    ],
+    [
+        'Чо чо? Хотите подора? <i>Сейчас я вам найду</i> пидора...',
+        '<i>Ох ты...</i>',
+        'ЭТОГО НИКТО НЕ ОЖИДАЛ!',
+        'Вы готовы?',
+        'Теперь наш :lvl: - @:username: (:first_name: :last_name:)!',
+        '<i>Охуеть, да?</i>',
+    ],
+    [
+        'ТЕПЕРЬ ЭТО НЕ ОСТАНОВИТЬ!',
+        '<i>Шаманим-шаманим...</i>',
+        'Доступ получен. Анн<b>а</b>лирование протокола.',
+        'TI PIDOR, @:username:'
+    ],
+    [
+        'Осторожно! <b>Пидор дня</b> активирован!',
+        'Сканирую...',
+        'КЕК',
+        'Стоять! Не двигаться! Вы объявлены <b>пидором дня</b>, @:username:',
+    ],
+    [
+        'Сейчас поколдуем...',
+        '<i>Хм...</i>',
+        'Так-так, что же тут у нас...',
+        'Ого, вы посмотрите только! А :lvl: дня то - @:username:',
+    ],
+];
+
 bot.on('message', (msg) => {
     const chat = msg.chat.id;
     UserRepository.store(msg.from);
@@ -337,28 +380,37 @@ http.createServer(function (req, response) {
     response.end('Done');
 }).listen(process.env.SERVER_PORT);
 
+/**
+ *
+ * @param chat
+ */
 function getPidor(chat) {
     PidorGenerator.get(chat).then(function (res) {
         UserModel.getModel().findOne({where: {user: res.user}}).then(function (user) {
-            let message = '';
             if (res.status === 'old') {
-                message = 'Пидор дня - *' + user.first_name + ' ' + user.last_name + '*';
-            } else if (res.status === 'new') {
                 setTimeout(function () {
-                    bot.sendMessage(chat, '_' + pidorLoading[Math.floor(Math.random() * pidorLoading.length)] + '_', {
-                        parse_mode: 'Markdown'
+                    bot.sendMessage(chat, 'Пидор дня - <b>' + user.first_name + ' ' + user.last_name + '</b>', {
+                        parse_mode: 'HTML'
                     });
-                }, 1000);
-                setTimeout(function () {
-                    bot.sendMessage(chat, 'Люблю же я этого пидора!');
                 }, 2000);
-                message = 'Теперь ты наш пидор, @' + user.username + ' (' + user.first_name + ' ' + user.last_name + ')!'
-            }
-            setTimeout(function () {
-                bot.sendMessage(chat, message, {
-                    parse_mode: 'Markdown'
+            } else if (res.status === 'new') {
+                MessageRepository.countUserMessages(db, user.user).then(function (res) {
+                    const scenario = pidorScenario[Math.floor(Math.random() * pdorScenraio.length)];
+                    scenario.forEach((pmsg) => {
+                        setTimeout(function () {
+                            pmsg = pmsg
+                                .replace(':username:', user.username)
+                                .replace(':last_name:', user.username)
+                                .replace(':messages:', res.count)
+                                .replace(':draw:', randomizer.integer(15, 99999))
+                                .replace(':first_name:', user.first_name);
+                            bot.sendMessage(chat, pmsg, {
+                                parse_mode: 'HTML'
+                            });
+                        }, 1000);
+                    });
                 });
-            }, 2000);
+            }
         });
     }).catch(function (rej) {
         winston.error(rej);
