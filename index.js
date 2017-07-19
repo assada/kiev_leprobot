@@ -397,8 +397,9 @@ function getPidor(msg) {
         UserModel.getModel().findOne({where: {user: res.user}}).then(function (user) {
             PidorRepository.pidorCount(db, user.user).then((count) => {
                 let lvl = pidorLvl[0];
-
                 console.log(count[0]);
+                console.log(count[1]);
+                console.log(count + '');
 
                 if (count.count > 1 && count.count <= 3) {
                     console.log(count.count);
