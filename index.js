@@ -401,6 +401,7 @@ function getPidor(msg) {
                 console.log(count);
 
                 if (count.count > 1 && count.count <= 3) {
+                    console.log(count.count);
                     lvl = pidorLvl[1];
                 } else if (count.count > 3 && count.count <= 7) {
                     lvl = pidorLvl[2];
