@@ -91,7 +91,14 @@ const pidorLoading = [
     'Сча пидора рожу!',
     'Где-же он, наш пидор?'
 ];
-
+const pidorLvl = [
+    'пидорасик',
+    'пидорок',
+    'пидор',
+    'неудержимый пидор',
+    'пидорасище',
+    'пидор из пидоров',
+];
 const pidorScenario = [
     [
         'Погодите ка, сначала нужно спасти остров!',
@@ -387,32 +394,54 @@ http.createServer(function (req, response) {
 function getPidor(chat) {
     PidorGenerator.get(chat).then(function (res) {
         UserModel.getModel().findOne({where: {user: res.user}}).then(function (user) {
-            if (res.status === 'old') {
-                setTimeout(function () {
-                    bot.sendMessage(chat, 'Пидор дня - <b>' + user.first_name + ' ' + user.last_name + '</b>', {
-                        parse_mode: 'HTML'
+            PidorRepository.pidorCount(db, user.user).then((count) => {
+                let lvl = pidorLvl[0];
+
+                if (count.count > 1 && count.count <= 3) {
+                    lvl = pidorLvl[1];
+                } else if (count.count > 3 && count.count <= 7) {
+                    lvl = pidorLvl[2];
+                } else if (count.count > 7 && count.count <= 14) {
+                    lvl = pidorLvl[3];
+                } else if (count.count > 14 && count.count <= 20) {
+                    lvl = pidorLvl[4];
+                } else if (count.count > 20) {
+                    lvl = pidorLvl[5];
+                }
+
+
+                if (res.status === 'old') {
+                    setTimeout(function () {
+                        bot.sendMessage(chat, (':lvl: дня - <b>' + user.first_name + ' ' + user.last_name + '</b>').replace(':lvl:', capitalizeFirstLetter(lvl)), {
+                            parse_mode: 'HTML'
+                        });
+                    }, 2000);
+                } else if (res.status === 'new') {
+                    MessageRepository.countUserMessages(db, user.user).then(function (messages) {
+                        const scenario = pidorScenario[Math.floor(Math.random() * pidorScenario.length)];
+                        scenario.forEach((pmsg) => {
+                            setTimeout(function () {
+                                pmsg = pmsg
+                                    .replace(':username:', user.username)
+                                    .replace(':last_name:', user.username)
+                                    .replace(':messages:', messages.count)
+                                    .replace(':lvl:', lvl)
+                                    .replace(':draw:', randomizer.integer(15, 99999))
+                                    .replace(':first_name:', user.first_name);
+                                bot.sendMessage(chat, pmsg, {
+                                    parse_mode: 'HTML'
+                                });
+                            }, 1000);
+                        });
                     });
-                }, 2000);
-            } else if (res.status === 'new') {
-                MessageRepository.countUserMessages(db, user.user).then(function (res) {
-                    const scenario = pidorScenario[Math.floor(Math.random() * pdorScenraio.length)];
-                    scenario.forEach((pmsg) => {
-                        setTimeout(function () {
-                            pmsg = pmsg
-                                .replace(':username:', user.username)
-                                .replace(':last_name:', user.username)
-                                .replace(':messages:', res.count)
-                                .replace(':draw:', randomizer.integer(15, 99999))
-                                .replace(':first_name:', user.first_name);
-                            bot.sendMessage(chat, pmsg, {
-                                parse_mode: 'HTML'
-                            });
-                        }, 1000);
-                    });
-                });
-            }
+                }
+            });
         });
     }).catch(function (rej) {
         winston.error(rej);
     });
+}
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }
