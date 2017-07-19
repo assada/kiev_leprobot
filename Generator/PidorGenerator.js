@@ -34,7 +34,7 @@ module.exports = class PidorGenerator {
                         console.log(users);
                         if (users.length > 0) {
                             let user = users[Math.floor(Math.random() * users.length)];
-                            //pr.store(chat, user.dataValues.user);
+                            pr.store(chat, user.dataValues.user);
                             fulfill({status: 'new', user: user.dataValues.user});
                         } else {
                             reject('Users not found');
