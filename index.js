@@ -146,6 +146,24 @@ const pidorScenario = [
         'Так-так, что же тут у нас...',
         'Ого, вы посмотрите только! А :lvl: дня то - @:username:',
     ],
+    [
+        'Начинаю поиск любителя техники Apple...',
+        'Что-то слишком дохуя их здесь, кого бы выбрать...',
+        'Выберу самого жирного!',
+        ':lvl: дня - @:username:!'
+    ],
+    [
+        'Пора наколдовать нового пидора!',
+        'Смешиваю немного SEO, вейпа, смузи и заливаю в чан...',
+        'Тщательно мешаю и сливаю в чат...',
+        'БА-БАХ! А @:username:-то :lvl:!',
+    ],
+    [
+        '甚至不要尝试翻译文本。',
+        '如果您尝试 - 你会是一个同性恋的天结束。',
+        '就这样吧。',
+        '盖伊的一天 - @:username:!',
+    ],
 ];
 
 bot.on('message', (msg) => {
@@ -400,7 +418,7 @@ http.createServer(function (req, response) {
 function getPidor(msg) {
     const chat = msg.chat.id;
     PidorGenerator.get(msg).then(function (res) {
-        if(res.status === 'old' && res.user === msg.from.id) {
+        if (res.status === 'old' && res.user === msg.from.id) {
             bot.sendMessage(chat, 'Страдай педрилка!', {
                 parse_mode: 'HTML'
             });
