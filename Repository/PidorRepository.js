@@ -68,7 +68,7 @@ module.exports = class PidorRepository {
     }
 
     pidorCount(db, user) {
-        const sql = 'SELECT COUNT(id) as count FORM pidors WHERE user = :user:'.replace(':user:', user);
+        const sql = 'SELECT COUNT(id) as count FROM pidors WHERE user = :user:'.replace(':user:', user);
         return new Promise(function (fulfill) {
             db.query(sql).spread((results, metadata) => {
                 fulfill(results);
