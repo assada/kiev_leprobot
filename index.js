@@ -419,22 +419,23 @@ function getPidor(msg) {
                     }, 2000);
                 } else if (res.status === 'new') {
                     MessageRepository.countUserMessages(db, user.user).then(function (messages) {
+                        console.log(messages);
                         const scenario = pidorScenario[Math.floor(Math.random() * pidorScenario.length)];
                         let timeout = 1000;
                         scenario.forEach((pmsg) => {
                             setTimeout(function () {
                                 pmsg = pmsg
                                     .replace(':username:', user.username)
-                                    .replace(':last_name:', user.username)
+                                    .replace(':last_name:', user.last_name)
+                                    .replace(':first_name:', user.first_name)
                                     .replace(':messages:', messages.count)
                                     .replace(':lvl:', lvl)
-                                    .replace(':draw:', randomizer.integer(15, 99999))
-                                    .replace(':first_name:', user.first_name);
+                                    .replace(':draw:', randomizer.integer(15, 99999));
                                 bot.sendMessage(chat, pmsg, {
                                     parse_mode: 'HTML'
                                 });
                             }, timeout);
-                            timeout += 500;
+                            timeout += randomizer.integer(1000, 1500);
                         });
                     });
                 }
