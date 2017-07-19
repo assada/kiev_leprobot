@@ -427,12 +427,12 @@ function getPidor(msg) {
                         scenario.forEach((pmsg) => {
                             setTimeout(function () {
                                 pmsg = pmsg
-                                    .replace(':username:', user.username)
-                                    .replace(':last_name:', user.last_name)
-                                    .replace(':first_name:', user.first_name)
-                                    .replace(':messages:', messages.count)
-                                    .replace(':lvl:', lvl)
-                                    .replace(':draw:', randomizer.integer(15, 99999));
+                                    .replace(/:username:/g, user.username)
+                                    .replace(/:last_name:/g, user.last_name)
+                                    .replace(/:first_name:/g, user.first_name)
+                                    .replace(/:messages:/g, messages[0].count)
+                                    .replace(/:lvl:/g, lvl)
+                                    .replace(/:draw:/g, randomizer.integer(15, 99999));
                                 bot.sendMessage(chat, pmsg, {
                                     parse_mode: 'HTML'
                                 });
