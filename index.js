@@ -218,7 +218,7 @@ bot.onText(/^\/cat(?:\@.*?)?$/, (msg, match) => {
                 bot.sendDocument(chat, photo)
             } else {
                 bot.sendPhoto(chat, photo, {
-                    caption: Random.pick(randomizer, catP)
+                    caption: randomizer.pick(catP)
                 });
             }
         });
@@ -427,7 +427,7 @@ function getPidor(msg) {
                     }, 2000);
                 } else if (res.status === 'new') {
                     MessageRepository.countUserMessages(db, user.user).then(function (messages) {
-                        const scenario = Random.pick(randomizer, pidorScenario);
+                        const scenario = randomizer.pick(pidorScenario);
                         let timeout = 1000;
                         scenario.forEach((pmsg) => {
                             setTimeout(function () {
