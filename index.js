@@ -188,7 +188,7 @@ bot.on('message', (msg) => {
     }
 });
 
-bot.onText(/^\/boobs/, (msg, match) => {
+bot.onText(/^\/boobs(?:\@.*?)?$/, (msg, match) => {
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'upload_photo');
     setTimeout(function () {
@@ -203,7 +203,7 @@ bot.onText(/^\/boobs/, (msg, match) => {
     }, 500);
 });
 
-bot.onText(/^\/cat/, (msg, match) => {
+bot.onText(/^\/cat(?:\@.*?)?$/, (msg, match) => {
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'upload_photo');
     setTimeout(function () {
@@ -220,7 +220,7 @@ bot.onText(/^\/cat/, (msg, match) => {
     }, 500);
 });
 
-bot.onText(/^\/news/, (msg, match) => {
+bot.onText(/^\/news(?:\@.*?)?$/, (msg, match) => {
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'typing');
     setTimeout(function () {
@@ -246,7 +246,7 @@ bot.onText(/^\/news/, (msg, match) => {
     }, 500);
 });
 
-bot.onText(/^\/top/, (msg, match) => {
+bot.onText(/^\/top(?:\@.*?)?$/, (msg, match) => {
     const chat = msg.chat.id;
     if (chat > 0) {
         bot.sendMessage(chat, "Не-не. Только в чатиках топчик работает");
@@ -260,7 +260,7 @@ bot.onText(/^\/top/, (msg, match) => {
     });
 });
 
-bot.onText(/^\/graph_top/, (msg, match) => {
+bot.onText(/^\/graph_top(?:\@.*?)?$/, (msg, match) => {
     const chat = msg.chat.id;
     if (chat > 0) {
         bot.sendMessage(chat, "Не-не. Только в чатиках топчик работает");
@@ -345,7 +345,7 @@ bot.onText(/^\/curr(?:\@.*?)? (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub|ETH|eth) 
     });
 });
 
-bot.onText(/^\/pidor_top/, (msg, match) => {
+bot.onText(/^\/pidor_top(?:\@.*?)?$/, (msg, match) => {
     const chat = msg.chat.id;
     if (chat > 0) {
         bot.sendMessage(msg.chat.id, "Не-не. Только в чатиках топчик работает");
@@ -377,7 +377,7 @@ bot.onText(/^\/pidor_top/, (msg, match) => {
 
 });
 
-bot.onText(/^\/new_pidor/, (msg, match) => {
+bot.onText(/^\/pidor/, (msg, match) => {
     const chat = msg.chat.id;
     if (chat > 0) {
         bot.sendMessage(chat, "Не-не. Только в чатиках топчик работает");
