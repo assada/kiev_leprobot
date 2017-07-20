@@ -1,7 +1,7 @@
 'use strict';
 
 const random = require("random-js");
-const randomizer = new Random(random.engines.mt19937().autoSeed());
+const randomizer = new random(random.engines.mt19937().autoSeed());
 
 /**
  * Pidor functionality
