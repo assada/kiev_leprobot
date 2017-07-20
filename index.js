@@ -273,41 +273,48 @@ bot.onText(/^\/graph_top(?:\@.*?)?$/, (msg, match) => {
     }
     bot.sendChatAction(chat, 'upload_photo');
     MessageRepository.topByDays(db, chat).then(function (res) {
-        let x = [];
-        let y = [];
-        let data = {
-            type: 'line',
-            bezierCurve: false,
-            options: {
-                plugins: false
-            },
-            data: {
-                labels: [],
-                datasets: [
-                    {
-                        label: 'Messages',
-                        backgroundColor: "rgba(255,255,255,1)",
-                        borderColor: "rgba(75,192,192,1)",
-                        borderCapStyle: 'butt',
-                        lineTension: 0,
-                        fill: false,
-                        data: []
-                    }]
+        new Promise((ok) => {
+            if (cache.get('graph') === null) {
+                let x = [];
+                let y = [];
+                let data = {
+                    type: 'line',
+                    bezierCurve: false,
+                    options: {
+                        plugins: false
+                    },
+                    data: {
+                        labels: [],
+                        datasets: [
+                            {
+                                label: 'Messages',
+                                backgroundColor: "rgba(255,255,255,1)",
+                                borderColor: "rgba(75,192,192,1)",
+                                borderCapStyle: 'butt',
+                                lineTension: 0,
+                                fill: false,
+                                data: []
+                            }]
+                    }
+                };
+                res.forEach((value) => {
+                    x.push((value.day < 10 ? '0' + value.day : value.day));
+                    y.push(value.count);
+                });
+                data.data.labels = x.reverse();
+                data.data.datasets[0].data = y.reverse();
+                let chartNode = new ChartjsNode(1200, 800);
+                chartNode.drawChart(data).then(() => {
+                    chartNode.getImageBuffer('image/png').then((buffer) => {
+                        cache.put('graph', buffer, 60 * 60 * 1000);
+                        ok(buffer);
+                    });
+                });
+            } else {
+                ok(cache.get('graph'));
             }
-        };
-        res.forEach((value) => {
-            x.push((value.day < 10 ? '0' + value.day : value.day));
-            y.push(value.count);
-        });
-        data.data.labels = x.reverse();
-        data.data.datasets[0].data = y.reverse();
-
-        let chartNode = new ChartjsNode(1200, 800);
-        chartNode.drawChart(data).then(() => {
-            chartNode.getImageBuffer('image/png').then((res) => {
-                bot.sendPhoto(chat, res);
-            });
-
+        }).then((photo) => {
+            bot.sendPhoto(chat, photo);
         });
     }).catch((err) => {
         "use strict";
