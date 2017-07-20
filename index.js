@@ -5,7 +5,7 @@ const TelegramBot = require('node-telegram-bot-api');
 const winston = require('winston');
 const request = require('request');
 const emojiStrip = require('emoji-strip');
-const ChartjsNode = require('chartjs-node')
+const ChartjsNode = require('chartjs-node');
 const fx = require('money');
 const currencyFormatter = require('currency-formatter');
 const http = require('http');
@@ -83,13 +83,6 @@ const names = [
     "Тоха ",
     "антонио",
     "Антонио",
-];
-const pidorLoading = [
-    'Вызываю бога пидоров...',
-    'Запускаю пидор-машину...',
-    'Пидорок, приди... Я призываю тебя!',
-    'Сча пидора рожу!',
-    'Где-же он, наш пидор?'
 ];
 const pidorLvl = [
     'пидорасик',
@@ -195,7 +188,7 @@ bot.on('message', (msg) => {
     }
 });
 
-bot.onText(/\/boobs/, (msg, match) => {
+bot.onText(/^\/boobs/, (msg, match) => {
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'upload_photo');
     setTimeout(function () {
@@ -210,7 +203,7 @@ bot.onText(/\/boobs/, (msg, match) => {
     }, 500);
 });
 
-bot.onText(/\/cat/, (msg, match) => {
+bot.onText(/^\/cat/, (msg, match) => {
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'upload_photo');
     setTimeout(function () {
@@ -227,7 +220,7 @@ bot.onText(/\/cat/, (msg, match) => {
     }, 500);
 });
 
-bot.onText(/\/news/, (msg, match) => {
+bot.onText(/^\/news/, (msg, match) => {
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'typing');
     setTimeout(function () {
@@ -253,7 +246,7 @@ bot.onText(/\/news/, (msg, match) => {
     }, 500);
 });
 
-bot.onText(/\/top/, (msg, match) => {
+bot.onText(/^\/top/, (msg, match) => {
     const chat = msg.chat.id;
     if (chat > 0) {
         bot.sendMessage(chat, "Не-не. Только в чатиках топчик работает");
@@ -267,7 +260,7 @@ bot.onText(/\/top/, (msg, match) => {
     });
 });
 
-bot.onText(/\/graph_top/, (msg, match) => {
+bot.onText(/^\/graph_top/, (msg, match) => {
     const chat = msg.chat.id;
     if (chat > 0) {
         bot.sendMessage(chat, "Не-не. Только в чатиках топчик работает");
@@ -317,7 +310,7 @@ bot.onText(/\/graph_top/, (msg, match) => {
     });
 });
 
-bot.onText(/\/img(?:\@.*?)? (.*)/, (msg, match) => {
+bot.onText(/^\/img(?:\@.*?)? (.*)/, (msg, match) => {
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'upload_photo');
     setTimeout(function () {
@@ -334,7 +327,7 @@ bot.onText(/\/img(?:\@.*?)? (.*)/, (msg, match) => {
     }, 500);
 });
 
-bot.onText(/\/curr(?:\@.*?)? (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub|ETH|eth) (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub|ETH|eth) ([0-9]*\.?[0-9]{0,2})/, (msg, match) => {
+bot.onText(/^\/curr(?:\@.*?)? (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub|ETH|eth) (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub|ETH|eth) ([0-9]*\.?[0-9]{0,2})/, (msg, match) => {
     let opts = {from: match[1].toUpperCase(), to: match[2].toUpperCase()};
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'typing');
@@ -352,7 +345,7 @@ bot.onText(/\/curr(?:\@.*?)? (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub|ETH|eth) (
     });
 });
 
-bot.onText(/\/pidor_top/, (msg, match) => {
+bot.onText(/^\/pidor_top/, (msg, match) => {
     const chat = msg.chat.id;
     if (chat > 0) {
         bot.sendMessage(msg.chat.id, "Не-не. Только в чатиках топчик работает");
@@ -384,7 +377,7 @@ bot.onText(/\/pidor_top/, (msg, match) => {
 
 });
 
-bot.onText(/\/new_pidor/, (msg, match) => {
+bot.onText(/^\/new_pidor/, (msg, match) => {
     const chat = msg.chat.id;
     if (chat > 0) {
         bot.sendMessage(chat, "Не-не. Только в чатиках топчик работает");
@@ -413,7 +406,7 @@ http.createServer(function (req, response) {
 
 /**
  *
- * @param chat
+ * @param msg
  */
 function getPidor(msg) {
     const chat = msg.chat.id;

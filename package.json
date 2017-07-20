@@ -28,6 +28,9 @@
     "random-js": "^1.0.8",
     "request": "^2.81.0",
     "sequelize": "^4.3.2",
-    "winston": "^2.3.1"
+    "winston": "^2.3.1",
+    "chartjs-node": "^1.4.1",
+    "chart.js": "^2.4.0",
+    "canvas": "^1.6.5"
   }
 }
