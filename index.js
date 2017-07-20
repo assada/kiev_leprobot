@@ -14,6 +14,9 @@ const googl = require('goo.gl');
 const googleSearchParser2 = require("google-search-parser2");
 const GoogleSearchParser = new googleSearchParser2(request);
 const MarkovGen = require('markov-generator');
+const cache = require('memory-cache');
+
+//Configuring
 dotenv.config();
 googl.setKey(process.env.GOO_GL);
 winston.loggers.add('markov', {
@@ -55,6 +58,8 @@ const PRepository = require("./Repository/PidorRepository");
 const PidorRepository = new PRepository(PidorModel, User);
 const UCRepository = require("./Repository/UserChatRepository");
 const UserChatRepository = new UCRepository(UserChatModel);
+const ERRepository = require("./Repository/ExchangeRatesRepository");
+const ExchangeRatesRepository = new ERRepository(request, Promise, cache);
 
 //Generators
 const MessageGenerator = require("./Generator/MessageGenerator");
@@ -331,18 +336,17 @@ bot.onText(/^\/curr(?:\@.*?)? (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub|ETH|eth) 
     let opts = {from: match[1].toUpperCase(), to: match[2].toUpperCase()};
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'typing');
-    request.get("https://openexchangerates.org/api/latest.json?app_id=" + process.env.OPENRATE_TOKEN + '&show_alternative=1', function (err, res, body) {
-        setTimeout(function () {
-            let openRates = JSON.parse(body);
-            fx.rates = openRates.rates;
-            fx.base = openRates.base;
-            let res = fx.convert(+match[3], opts);
-            let message = 'Из ' + currencyFormatter.format(+match[3], {code: match[1].toUpperCase()}) + ' в ' + match[2] + ': ' + currencyFormatter.format(res, {code: match[2].toUpperCase()});
-            bot.sendMessage(chat, message, {
-                parse_mode: 'Markdown'
-            });
-        }, 500);
-    });
+    setTimeout(function () {
+        let openRates = ExchangeRatesRepository.get(process.env.OPENRATE_TOKEN);
+        fx.rates = openRates.rates;
+        fx.base = openRates.base;
+        let res = fx.convert(+match[3], opts);
+        let message = 'Из ' + currencyFormatter.format(+match[3], {code: match[1].toUpperCase()}) + ' в ' + match[2] + ': ' + currencyFormatter.format(res, {code: match[2].toUpperCase()});
+        bot.sendMessage(chat, message, {
+            parse_mode: 'Markdown'
+        });
+    }, 500);
+
 });
 
 bot.onText(/^\/pidor_top(?:\@.*?)?$/, (msg, match) => {
@@ -386,23 +390,6 @@ bot.onText(/^\/pidor/, (msg, match) => {
     bot.sendChatAction(chat, 'typing');
     getPidor(msg);
 });
-
-http.createServer(function (req, response) {
-    if (req.url.indexOf('favicon') > -1 || req.connection.remoteAddress.indexOf('127.0.0.1') === -1) {
-        response.writeHead(404, {'Content-Type': 'text/html; charset=utf-8'});
-        response.end('Ну ты и пидор...');
-        return false;
-    }
-    response.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
-    UserChatRepository.getChats().then(function (chats) {
-        chats.forEach(function (chat) {
-            //if (chat.chat !== -1001048609359) {
-            //getPidor(chat.chat)
-            //}
-        })
-    });
-    response.end('Done');
-}).listen(process.env.SERVER_PORT);
 
 /**
  *
