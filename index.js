@@ -336,17 +336,18 @@ bot.onText(/^\/curr(?:\@.*?)? (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub|ETH|eth) 
     let opts = {from: match[1].toUpperCase(), to: match[2].toUpperCase()};
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'typing');
-    setTimeout(function () {
-        let openRates = ExchangeRatesRepository.get(process.env.OPENRATE_TOKEN);
-        fx.rates = openRates.rates;
-        fx.base = openRates.base;
-        let res = fx.convert(+match[3], opts);
-        let message = 'Из ' + currencyFormatter.format(+match[3], {code: match[1].toUpperCase()}) + ' в ' + match[2] + ': ' + currencyFormatter.format(res, {code: match[2].toUpperCase()});
-        bot.sendMessage(chat, message, {
-            parse_mode: 'Markdown'
-        });
-    }, 500);
 
+    ExchangeRatesRepository.get(process.env.OPENRATE_TOKEN).then((openRates) => {
+        setTimeout(function () {
+            fx.rates = openRates.rates;
+            fx.base = openRates.base;
+            let res = fx.convert(+match[3], opts);
+            let message = 'Из ' + currencyFormatter.format(+match[3], {code: match[1].toUpperCase()}) + ' в ' + match[2] + ': ' + currencyFormatter.format(res, {code: match[2].toUpperCase()});
+            bot.sendMessage(chat, message, {
+                parse_mode: 'Markdown'
+            });
+        }, 500);
+    });
 });
 
 bot.onText(/^\/pidor_top(?:\@.*?)?$/, (msg, match) => {
