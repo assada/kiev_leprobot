@@ -306,11 +306,13 @@ bot.onText(/^\/graph_top(?:\@.*?)?$/, (msg, match) => {
                 let chartNode = new ChartjsNode(1200, 800);
                 chartNode.drawChart(data).then(() => {
                     chartNode.getImageBuffer('image/png').then((buffer) => {
+                        winston.info('Creating cache for graph');
                         cache.put('graph', buffer, 60 * 60 * 1000);
                         ok(buffer);
                     });
                 });
             } else {
+                winston.info('Using cache for graph');
                 ok(cache.get('graph'));
             }
         }).then((photo) => {
