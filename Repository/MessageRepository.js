@@ -6,8 +6,9 @@ const Promise = require('promise');
 const regex = /\@[0-9a-zA-Z_]*/g;
 
 module.exports = class MessageRepository {
-    constructor(Message) {
+    constructor(Message, cache) {
         this.Message = Message.getModel();
+        this.cache = cache;
     }
 
     cleanup(txt) {
@@ -54,20 +55,33 @@ module.exports = class MessageRepository {
     }
 
     topByDays(db, chat) {
-        const sql = 'SELECT count(id) as count, DAY(createdAt) as day, MONTH(createdAt) as month, YEAR(createdAt) as year FROM messages WHERE chat = '+chat+' GROUP BY day, month, year ORDER BY day DESC, month DESC, year DESC LIMIT 10';
+        const t = this;
         return new Promise(function (fulfill) {
-            db.query(sql).spread((result, metadata) => {
-                fulfill(result);
-            })
+            if (t.cache.get('topByDays') === null) {
+                db.query(sql).spread((result, metadata) => {
+                    const sql = 'SELECT count(id) as count, DAY(createdAt) as day, MONTH(createdAt) as month, YEAR(createdAt) as year FROM messages WHERE chat = ' + chat + ' GROUP BY day, month, year ORDER BY day DESC, month DESC, year DESC LIMIT 10';
+                    t.cache.put('topByDays', result, 60 * 60 * 1000);
+                    fulfill(result);
+                })
+            } else {
+                fulfill(t.cache.get('topByDays'));
+            }
         });
     }
 
     countUserMessages(db, user) {
-        const sql = 'SELECT COUNT(id) as count FROM messages WHERE user=:user:'.replace(':user:', user);
+        const t = this;
         return new Promise(function (fulfill) {
-            db.query(sql).spread((result, metadata) => {
-                fulfill(result);
-            })
-        });
+                if (t.cache.get('countUserMessages') === null) {
+                    const sql = 'SELECT COUNT(id) as count FROM messages WHERE user=:user:'.replace(':user:', user);
+                    db.query(sql).spread((result, metadata) => {
+                        t.cache.put('countUserMessages', result, 10 * 60 * 1000);
+                        fulfill(result);
+                    })
+                } else {
+                    fulfill(t.cache.get('countUserMessages'));
+                }
+            }
+        );
     }
 };

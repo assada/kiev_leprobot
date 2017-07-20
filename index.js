@@ -51,7 +51,7 @@ const UserChatModel = new UserChat(db);
 
 //Repository
 const MRepository = require("./Repository/MessageRepository");
-const MessageRepository = new MRepository(MessageModel);
+const MessageRepository = new MRepository(MessageModel, cache);
 const URepository = require("./Repository/UserRepository");
 const UserRepository = new URepository(UserModel);
 const PRepository = require("./Repository/PidorRepository");
