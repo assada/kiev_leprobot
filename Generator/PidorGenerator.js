@@ -1,5 +1,8 @@
 'use strict';
 
+const random = require("random-js");
+const randomizer = new Random(random.engines.mt19937().autoSeed());
+
 /**
  * Pidor functionality
  *
@@ -31,9 +34,8 @@ module.exports = class PidorGenerator {
                     fulfill({status: 'old', user: res[0].dataValues.user});
                 } else {
                     ucr.getActiveUser(chat, msg.from.id).then(users => {
-                        console.log(users);
                         if (users.length > 0) {
-                            let user = users[Math.floor(Math.random() * users.length)];
+                            let user = randomizer.pick(users);
                             pr.store(chat, user.dataValues.user);
                             fulfill({status: 'new', user: user.dataValues.user});
                         } else {

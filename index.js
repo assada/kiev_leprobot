@@ -31,7 +31,7 @@ const db = new Sequelize(process.env.MYSQL_DATABASE, process.env.MYSQL_USER, pro
     dialect: 'mysql', logging: false
 });
 const bot = new TelegramBot(process.env.TOKEN, {polling: true});
-const randomizer = new Random(Random.engines.mt19937().seed('fsdfbk' + Math.random()));
+const randomizer = new Random(Random.engines.mt19937().autoSeed());
 
 //Model
 const Message = require("./Model/Message");
@@ -213,7 +213,7 @@ bot.onText(/^\/cat(?:\@.*?)?$/, (msg, match) => {
                 bot.sendDocument(chat, photo)
             } else {
                 bot.sendPhoto(chat, photo, {
-                    caption: catP[Math.floor(Math.random() * catP.length)]
+                    caption: Random.pick(randomizer, catP)
                 });
             }
         });
@@ -432,7 +432,6 @@ function getPidor(msg) {
                     lvl = pidorLvl[5];
                 }
 
-
                 if (res.status === 'old') {
                     setTimeout(function () {
                         bot.sendMessage(chat, (':lvl: дня - <b>' + user.first_name + ' ' + user.last_name + '</b>').replace(':lvl:', capitalizeFirstLetter(lvl)), {
@@ -441,7 +440,7 @@ function getPidor(msg) {
                     }, 2000);
                 } else if (res.status === 'new') {
                     MessageRepository.countUserMessages(db, user.user).then(function (messages) {
-                        const scenario = pidorScenario[Math.floor(Math.random() * pidorScenario.length)];
+                        const scenario = Random.pick(randomizer, pidorScenario);
                         let timeout = 1000;
                         scenario.forEach((pmsg) => {
                             setTimeout(function () {
