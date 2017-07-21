@@ -35,7 +35,7 @@ module.exports = class MessageGenerator {
         });
         debug.parsedWords = words;
         words.forEach(function (word) {
-            constr.push({like: t.Sequelize.fn('LOWER', t.Sequelize.literal('%' + word + '%'))})
+            constr.push({like: t.Sequelize.fn('LOWER', t.Sequelize.literal('\'%' + word + '\'%'))})
         });
 
         debug.query = constr;
