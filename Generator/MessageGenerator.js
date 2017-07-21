@@ -28,7 +28,7 @@ module.exports = class MessageGenerator {
         let m = [];
         let words = this.msg.text.split(' ');
         words = words.filter(function (item) {
-            return item.length >= 3 && names.indexOf(item.toLowerCase()) === -1;
+            return item.length > 3 && names.indexOf(item.toLowerCase()) === -1;
         });
         words = words.map(function (x) {
             return x.replace(regex, '');
