@@ -35,7 +35,7 @@ module.exports = class MessageGenerator {
         });
         debug.parsedWords = words;
         words.forEach(function (word) {
-            constr.push({$like: 'LOWER(%' + word + '%)'})
+            constr.push({$like: 'LOWER(\'%' + word + '\'%)'})
         });
 
         debug.query = constr;
