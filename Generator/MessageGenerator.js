@@ -42,7 +42,7 @@ module.exports = class MessageGenerator {
 
         return new t.Promise(function (fulfill, reject) {
             Message.findAll({
-                where: sequelize.where(sequelize.fn('LOWER', sequelize.col('body')), {$or: constr}),
+                where: t.Sequelize.where(t.Sequelize.fn('LOWER', t.Sequelize.col('body')), {$or: constr}),
                 limit: 100,
                 order: t.Sequelize.literal('RAND()'),
                 attributes: ['body']
