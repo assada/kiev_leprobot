@@ -188,6 +188,9 @@ bot.on('message', (msg) => {
                         bot.sendMessage(chat, capitalizeFirstLetter(res), options);
                     }, 2000);
                 }
+            }).catch((err) => {
+                "use strict";
+                winston.error(err);
             });
         }
     }
