@@ -35,14 +35,14 @@ module.exports = class MessageGenerator {
         });
         debug.parsedWords = words;
         words.forEach(function (word) {
-            constr.push({$like: '%' + word + '%'})
+            constr.push({$like: 'LOWER(%' + word + '%)'})
         });
 
         debug.query = constr;
 
         return new t.Promise(function (fulfill, reject) {
             Message.findAll({
-                where: {body: {$or: constr}},
+                where: sequelize.where(sequelize.fn('LOWER', sequelize.col('body')), {$or: constr}),
                 limit: 100,
                 order: t.Sequelize.literal('RAND()'),
                 attributes: ['body']
