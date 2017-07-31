@@ -36,7 +36,7 @@ module.exports = class PidorRepository {
         return new Promise(function (fulfill, reject) {
             p.sync().then(() => {
                 let now = new Date().setHours(0, 0, 0, 0).toISOString().slice(0, 19).replace('T', ' ');
-                let yesterday = new Date().setHours(23, 59, 59, 999).toISOString().slice(0, 19).replace('T', ' ');
+                let yesterday = new Date().setHours(21, 59, 59, 999).toISOString().slice(0, 19).replace('T', ' ');
 
                 const res = p.findAll({
                     where: {
