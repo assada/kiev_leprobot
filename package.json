@@ -1,6 +1,6 @@
 {
   "name": "leprobot",
-  "version": "1.2.0",
+  "version": "1.6.1",
   "description": "Kiev LeproBot",
   "repository": "https://github.com/Assada/kiev_leprobot.git",
   "main": "index.js",
