@@ -56,15 +56,16 @@ module.exports = class MessageRepository {
 
     topByDays(db, chat) {
         const t = this;
+        const cacheKey = 'data_' + chat + '-topByDays';
         return new Promise(function (fulfill) {
-            if (t.cache.get('topByDays') === null) {
+            if (t.cache.get(cacheKey) === null) {
                 const sql = 'SELECT count(id) as count, DAY(createdAt) as day, MONTH(createdAt) as month, YEAR(createdAt) as year FROM messages WHERE chat = ' + chat + ' GROUP BY day, month, year ORDER BY year DESC,month DESC, day DESC LIMIT 10';
                 db.query(sql).spread((result, metadata) => {
-                    t.cache.put('topByDays', result, 60 * 60 * 1000);
+                    t.cache.put(cacheKey, result, 60 * 60 * 1000);
                     fulfill(result);
                 })
             } else {
-                fulfill(t.cache.get('topByDays'));
+                fulfill(t.cache.get(cacheKey));
             }
         });
     }
