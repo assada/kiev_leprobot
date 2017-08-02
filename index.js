@@ -270,6 +270,7 @@ bot.onText(/^\/top(?:\@.*?)?$/, (msg, match) => {
 
 bot.onText(/^\/graph_top(?:\@.*?)?$/, (msg, match) => {
     const chat = msg.chat.id;
+    const cacheKey = "_" + chat + "-graph";
     if (chat > 0) {
         bot.sendMessage(chat, "Не-не. Только в чатиках топчик работает");
         return false;
@@ -277,7 +278,7 @@ bot.onText(/^\/graph_top(?:\@.*?)?$/, (msg, match) => {
     bot.sendChatAction(chat, 'upload_photo');
     MessageRepository.topByDays(db, chat).then(function (res) {
         new Promise((ok) => {
-            if (cache.get('graph') === null) {
+            if (cache.get(cacheKey) === null) {
                 let x = [];
                 let y = [];
                 let data = {
@@ -310,13 +311,13 @@ bot.onText(/^\/graph_top(?:\@.*?)?$/, (msg, match) => {
                 chartNode.drawChart(data).then(() => {
                     chartNode.getImageBuffer('image/png').then((buffer) => {
                         winston.info('Creating cache for graph');
-                        cache.put('graph', buffer, 60 * 60 * 1000);
+                        cache.put(cacheKey, buffer, 60 * 60 * 1000);
                         ok(buffer);
                     });
                 });
             } else {
                 winston.info('Using cache for graph');
-                ok(cache.get('graph'));
+                ok(cache.get(cacheKey));
             }
         }).then((photo) => {
             bot.sendPhoto(chat, photo);
