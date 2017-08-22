@@ -173,7 +173,7 @@ bot.on('message', (msg) => {
     }
     if (typeof msg.text !== 'undefined' && emojiStrip(msg.text).length > 1 && msg.text.charAt(0) !== '/') {
         let mention = new RegExp(names.join("|")).test(msg.text);
-        let chance = randomizer.bool(0.1);
+        let chance = randomizer.bool(0.03);
         MessageRepository.store(msg, names);
         if ((chance || mention || chat > 0 )
         // && chat !== -1001048609359
