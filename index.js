@@ -178,6 +178,8 @@ bot.on('message', (msg) => {
             bot.sendChatAction(chat, 'typing');
             (new MessageGenerator(MessageModel, msg, Promise, MarkovGen, Sequelize, winston)).get(names).then(function (res) {
                 if (res !== false && res.length > 0) {
+                    let message = randomizer.pick(res);
+                    let m = message.join(' ');
                     let options = {};
                     if (mention) {
                         options = {
@@ -185,7 +187,7 @@ bot.on('message', (msg) => {
                         };
                     }
                     setTimeout(function () {
-                        bot.sendMessage(chat, capitalizeFirstLetter(res), options);
+                        bot.sendMessage(chat, capitalizeFirstLetter(m), options);
                     }, 2000);
                 }
             }).catch((err) => {
