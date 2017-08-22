@@ -15,6 +15,7 @@ const googleSearchParser2 = require("google-search-parser2");
 const GoogleSearchParser = new googleSearchParser2(request);
 const MarkovGen = require('markov-generator');
 const cache = require('memory-cache');
+const natural = require('natural');
 
 //Configuring
 dotenv.config();
@@ -176,10 +177,10 @@ bot.on('message', (msg) => {
         MessageRepository.store(msg, names);
         if ((chance || mention || chat > 0 ) && chat !== -1001048609359) {
             bot.sendChatAction(chat, 'typing');
-            (new MessageGenerator(MessageModel, msg, Promise, MarkovGen, Sequelize, winston)).get(names).then(function (res) {
+            (new MessageGenerator(MessageModel, msg, Promise, natural, Sequelize, winston)).get(names).then(function (res) {
                 if (res !== false && res.length > 0) {
                     let message = randomizer.pick(res);
-                    let m = message.join(' ');
+                    let m = message.join(' ').replace(/,?\.?[а-яА-Я]{1,3}+$/, '').replace(/,?\.?+$/, '');
                     let options = {};
                     if (mention) {
                         options = {

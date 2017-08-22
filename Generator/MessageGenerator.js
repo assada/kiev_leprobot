@@ -8,8 +8,7 @@ module.exports = class MessageGenerator {
     constructor(MessageModel, msg, Promise, MarkovGen, Sequelize, winston) {
         this.winston = winston.loggers.get('category1');
         this.Sequelize = Sequelize;
-        let natural = require('natural');
-        this.MarkovGen = natural.NGrams;
+        this.MarkovGen = MarkovGen.NGrams;
         this.Promise = Promise;
         this.MessageModel = MessageModel;
         this.msg = msg;
@@ -36,7 +35,7 @@ module.exports = class MessageGenerator {
         });
         debug.parsedWords = words;
         words.forEach(function (word) {
-            constr.push({like: t.Sequelize.fn('LOWER', t.Sequelize.literal('\'%' + word + '%\''))})
+            constr.push({like: t.Sequelize.fn('LOWER', t.Sequelize.literal('\'%' + word.toLowerCase() + '%\''))})
         });
 
         debug.query = constr;
