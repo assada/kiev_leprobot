@@ -8,7 +8,8 @@ module.exports = class MessageGenerator {
     constructor(MessageModel, msg, Promise, MarkovGen, Sequelize, winston) {
         this.winston = winston.loggers.get('category1');
         this.Sequelize = Sequelize;
-        this.MarkovGen = MarkovGen;
+        let natural = require('natural');
+        this.MarkovGen = natural.NGrams;
         this.Promise = Promise;
         this.MessageModel = MessageModel;
         this.msg = msg;
@@ -19,7 +20,7 @@ module.exports = class MessageGenerator {
      * @param {*} names
      * @returns {Promise}
      */
-    get(names) {
+    get (names) {
         const regex = /[^a-zA-Zа-яА-я]+/g;
         const t = this;
         let constr = [];
@@ -52,11 +53,7 @@ module.exports = class MessageGenerator {
                 debug.messages = m;
 
                 if (m.length > 1) {
-                    let markov = new t.MarkovGen({
-                        input: m,
-                        minLength: 4
-                    });
-                    let str = markov.makeChain(4);
+                    let str = t.MarkovGen.trigrams(m.split(' '));
                     debug.result = str;
                     fulfill(str);
                 } else {
