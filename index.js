@@ -175,7 +175,9 @@ bot.on('message', (msg) => {
         let mention = new RegExp(names.join("|")).test(msg.text);
         let chance = randomizer.bool(0.1);
         MessageRepository.store(msg, names);
-        if ((chance || mention || chat > 0 ) && chat !== -1001048609359) {
+        if ((chance || mention || chat > 0 )
+        // && chat !== -1001048609359
+        ) {
             bot.sendChatAction(chat, 'typing');
             (new MessageGenerator(MessageModel, msg, Promise, natural, Sequelize, winston)).get(names).then(function (res) {
                 if (res !== false && res.length > 0) {
