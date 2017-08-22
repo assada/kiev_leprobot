@@ -52,8 +52,10 @@ module.exports = class MessageGenerator {
                 });
                 debug.messages = m;
 
+                console.log(typeof  m);
+
                 if (m.length > 1) {
-                    let str = t.MarkovGen.trigrams(m.split(' '));
+                    let str = t.MarkovGen.trigrams(m.toString().split(' '));
                     debug.result = str;
                     fulfill(str);
                 } else {
