@@ -31,7 +31,7 @@ winston.loggers.add('markov', {
 });
 const db = new Sequelize(process.env.MYSQL_DATABASE, process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
     host: process.env.MYSQL_HOST,
-    dialect: 'mysql', logging: true
+    dialect: 'mysql', logging: false
 });
 const bot = new TelegramBot(process.env.TOKEN, {polling: true});
 const randomizer = new Random(Random.engines.mt19937().autoSeed());
