@@ -54,7 +54,6 @@ module.exports = class MessageGenerator {
 
                 if (m.length > 1) {
                     let strings = t.MarkovGen.ngrams(m.toString().split(' '), 3, null, '.');
-                    strings = t.MarkovGen.ngrams(strings, 3, null, '.');
                     debug.result = strings;
                     fulfill(strings);
                 } else {
