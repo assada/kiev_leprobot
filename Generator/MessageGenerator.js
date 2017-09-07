@@ -9,7 +9,7 @@ module.exports = class MessageGenerator {
         this.winston = winston.loggers.get('category1');
         this.Sequelize = Sequelize;
         this.MarkovGen = MarkovGen.NGrams;
-        this.tokenizer = MarkovGen.WordTokenizer();
+        this.tokenizer = MarkovGen.TreebankWordTokenizer();
         this.Promise = Promise;
         this.MessageModel = MessageModel;
         this.msg = msg;
@@ -27,6 +27,7 @@ module.exports = class MessageGenerator {
         let debug = {msg: this.msg};
         let Message = this.MessageModel.getModel();
         let m = [];
+        this.winston.log('debug', typeof this.tokenizer);
         let words = this.tokenizer.tokenize(this.msg.text);
         words = words.filter(function (item) {
             return item.length > 2 && names.indexOf(item.toLowerCase()) === -1;
