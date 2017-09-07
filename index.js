@@ -182,7 +182,7 @@ bot.on('message', (msg) => {
             (new MessageGenerator(MessageModel, msg, Promise, natural, Sequelize, winston)).get(names).then(function (res) {
                 if (res !== false && res.length > 0) {
                     let message = randomizer.pick(res);
-                    console.log(res.slice(-1).pop());
+                    console.log(res);
                     let m = message.join(' ').replace(/(,|\.)[а-яА-Я]{1,3}$/, '').replace(/(,|\.)$/, '');
                     let options = {};
                     if (mention) {
