@@ -5,11 +5,11 @@
  * @type {MessageGenerator}
  */
 module.exports = class MessageGenerator {
-    constructor(MessageModel, msg, Promise, MarkovGen, Sequelize, winston) {
+    constructor(MessageModel, msg, Promise, natural, Sequelize, winston) {
         this.winston = winston.loggers.get('category1');
         this.Sequelize = Sequelize;
-        this.MarkovGen = MarkovGen.NGrams;
-        this.tokenizer = MarkovGen.TreebankWordTokenizer();
+        this.MarkovGen = natural.NGrams;
+        this.tokenizer = new natural.TreebankWordTokenizer();
         this.Promise = Promise;
         this.MessageModel = MessageModel;
         this.msg = msg;
