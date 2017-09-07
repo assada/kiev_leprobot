@@ -9,6 +9,7 @@ module.exports = class MessageGenerator {
         this.winston = winston.loggers.get('category1');
         this.Sequelize = Sequelize;
         this.MarkovGen = MarkovGen.NGrams;
+        this.tokenizer = MarkovGen.WordTokenizer();
         this.Promise = Promise;
         this.MessageModel = MessageModel;
         this.msg = msg;
@@ -26,13 +27,11 @@ module.exports = class MessageGenerator {
         let debug = {msg: this.msg};
         let Message = this.MessageModel.getModel();
         let m = [];
-        let words = this.msg.text.split(' ');
+        let words = this.tokenizer.tokenize(this.msg.text);
         words = words.filter(function (item) {
-            return item.length > 3 && names.indexOf(item.toLowerCase()) === -1;
+            return item.length > 2 && names.indexOf(item.toLowerCase()) === -1;
         });
-        words = words.map(function (x) {
-            return x.replace(regex, '');
-        });
+
         debug.parsedWords = words;
         words.forEach(function (word) {
             constr.push({like: t.Sequelize.fn('LOWER', t.Sequelize.literal('\'%' + word.toLowerCase() + '%\''))})
@@ -54,7 +53,7 @@ module.exports = class MessageGenerator {
                 console.log(typeof  m);
 
                 if (m.length > 1) {
-                    let str = t.MarkovGen.trigrams(m.toString().split(' '));
+                    let str = t.MarkovGen.ngrams(m.toString().split(' '), 3, null, '.');
                     debug.result = str;
                     fulfill(str);
                 } else {
