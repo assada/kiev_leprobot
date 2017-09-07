@@ -173,10 +173,10 @@ bot.on('message', (msg) => {
     }
     if (typeof msg.text !== 'undefined' && emojiStrip(msg.text).length > 1 && msg.text.charAt(0) !== '/') {
         let mention = new RegExp(names.join("|")).test(msg.text);
-        let chance = randomizer.bool(0.03);
+        let chance = randomizer.bool(0.025);
         MessageRepository.store(msg, names);
         if ((chance || mention || chat > 0 )
-        // && chat !== -1001048609359
+        && chat !== -1001048609359
         ) {
             bot.sendChatAction(chat, 'typing');
             (new MessageGenerator(MessageModel, msg, Promise, natural, Sequelize, winston)).get(names).then(function (res) {
@@ -403,11 +403,21 @@ bot.onText(/^\/pidor_top(?:\@.*?)?$/, (msg, match) => {
 bot.onText(/^\/pidor/, (msg, match) => {
     const chat = msg.chat.id;
     if (chat > 0) {
-        bot.sendMessage(chat, "Не-не. Только в чатиках топчик работает");
+        bot.sendMessage(chat, "Не-не. Только в чатиках пидорок работает");
         return false;
     }
     bot.sendChatAction(chat, 'typing');
     getPidor(msg);
+});
+
+bot.onText(/^\/fuckoff/, (msg, match) => {
+    const chat = msg.chat.id;
+    if (chat > 0) {
+        bot.sendMessage(chat, "Не-не. Только в чатиках затыкалка работает");
+        return false;
+    }
+
+    console.log(msg);
 });
 
 /**
