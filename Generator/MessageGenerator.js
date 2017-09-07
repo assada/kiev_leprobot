@@ -33,6 +33,8 @@ module.exports = class MessageGenerator {
             return item.length > 2 && names.indexOf(item.toLowerCase()) === -1;
         });
 
+        this.winston.log('debug', words);
+
         debug.parsedWords = words;
         words.forEach(function (word) {
             constr.push({like: t.Sequelize.fn('LOWER', t.Sequelize.literal('\'%' + word.toLowerCase() + '%\''))})
