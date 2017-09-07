@@ -176,12 +176,13 @@ bot.on('message', (msg) => {
         let chance = randomizer.bool(0.025);
         MessageRepository.store(msg, names);
         if ((chance || mention || chat > 0 )
-        && chat !== -1001048609359
+            && chat !== -1001048609359
         ) {
             bot.sendChatAction(chat, 'typing');
             (new MessageGenerator(MessageModel, msg, Promise, natural, Sequelize, winston)).get(names).then(function (res) {
                 if (res !== false && res.length > 0) {
                     let message = randomizer.pick(res);
+                    console.log(res.slice(-1).pop());
                     let m = message.join(' ').replace(/(,|\.)[а-яА-Я]{1,3}$/, '').replace(/(,|\.)$/, '');
                     let options = {};
                     if (mention) {

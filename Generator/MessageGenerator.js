@@ -53,7 +53,7 @@ module.exports = class MessageGenerator {
                 console.log(typeof  m);
 
                 if (m.length > 1) {
-                    let str = t.MarkovGen.ngrams(m.toString().split(' '), 4, null, '.');
+                    let str = t.MarkovGen.ngrams(m.toString().split(' '), 3, null, '.');
                     debug.result = str;
                     fulfill(str);
                 } else {
