@@ -33,9 +33,10 @@ module.exports = class MessageGenerator {
         });
 
         debug.parsedWords = words;
-        words.forEach(function (word) {
-            constr.push({like: t.Sequelize.fn('LOWER', t.Sequelize.literal('\'%' + word.toLowerCase() + '%\''))})
-        });
+        // words.forEach(function (word) {
+        constr.push({like: t.Sequelize.fn('LOWER', t.Sequelize.literal('\'%' + words[0].toLowerCase() + '%\''))});
+        constr.push({like: t.Sequelize.fn('LOWER', t.Sequelize.literal('\'%' + words[words.length - 1].toLowerCase() + '%\''))});
+        // });
 
         debug.query = constr;
 
