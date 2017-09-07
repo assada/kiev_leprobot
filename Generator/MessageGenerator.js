@@ -21,7 +21,6 @@ module.exports = class MessageGenerator {
      * @returns {Promise}
      */
     get (names) {
-        const regex = /[^a-zA-Zа-яА-я]+/g;
         const t = this;
         let constr = [];
         let debug = {msg: this.msg};
@@ -32,9 +31,6 @@ module.exports = class MessageGenerator {
         words = words.filter(function (item) {
             return item.length > 2 && names.indexOf(item.toLowerCase()) === -1;
         });
-
-        console.log(words);
-        this.winston.log('debug', words);
 
         debug.parsedWords = words;
         words.forEach(function (word) {
@@ -57,7 +53,7 @@ module.exports = class MessageGenerator {
                 console.log(typeof  m);
 
                 if (m.length > 1) {
-                    let str = t.MarkovGen.ngrams(m.toString().split(' '), 3, null, '.');
+                    let str = t.MarkovGen.ngrams(m.toString().split(' '), 4, null, '.');
                     debug.result = str;
                     fulfill(str);
                 } else {
@@ -65,7 +61,7 @@ module.exports = class MessageGenerator {
                     debug.result = false;
                     t.winston.warn('Мало данных');
                 }
-                t.winston.log('info', debug);
+                t.winston.log('debug', debug);
             });
         });
     }
