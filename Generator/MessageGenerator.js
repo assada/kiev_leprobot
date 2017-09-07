@@ -50,8 +50,6 @@ module.exports = class MessageGenerator {
                 });
                 debug.messages = m;
 
-                console.log(typeof  m);
-
                 if (m.length > 1) {
                     let strings = t.MarkovGen.ngrams(m.toString().split(' '), 3, null, '.');
                     debug.result = strings;
@@ -61,7 +59,7 @@ module.exports = class MessageGenerator {
                     debug.result = false;
                     t.winston.warn('Мало данных');
                 }
-                t.winston.log('debug', debug);
+                // t.winston.log('debug', debug);
             });
         });
     }
