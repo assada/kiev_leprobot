@@ -33,6 +33,7 @@ module.exports = class MessageGenerator {
             return item.length > 2 && names.indexOf(item.toLowerCase()) === -1;
         });
 
+        console.log(words);
         this.winston.log('debug', words);
 
         debug.parsedWords = words;
