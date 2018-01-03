@@ -61,7 +61,7 @@ module.exports = class PidorRepository {
      */
     top(db, chat) {
         return new Promise(function (fulfill, reject) {
-            db.query('SELECT count(p.id) c, p.user, u.first_name, u.last_name, u.username FROM pidors p LEFT JOIN users u ON p.user = u.user WHERE p.chat = ' + chat + ' GROUP BY p.user, u.first_name, u.last_name, u.username ORDER BY c DESC LIMIT 10').spread((results, metadata) => {
+            db.query('SELECT count(p.id) c, p.user, u.first_name, u.last_name, u.username FROM pidors p LEFT JOIN users u ON p.user = u.user WHERE p.chat = ' + chat + ' AND YEAR(p.updatedAt ) = 2018 GROUP BY p.user, u.first_name, u.last_name, u.username ORDER BY c DESC LIMIT 10').spread((results, metadata) => {
                 fulfill(results);
             })
         });
