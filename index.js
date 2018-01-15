@@ -175,7 +175,7 @@ bot.on('message', (msg) => {
         let mention = new RegExp(names.join("|")).test(msg.text);
         let chance = randomizer.bool(0.025);
         MessageRepository.store(msg, names);
-        if ((chance || mention || chat > 0 )
+        /*if ((chance || mention || chat > 0 )
             && chat !== -1001048609359
         ) {
             bot.sendChatAction(chat, 'typing');
@@ -198,7 +198,7 @@ bot.on('message', (msg) => {
                 "use strict";
                 winston.error(err);
             });
-        }
+        }*/
     }
 });
 
