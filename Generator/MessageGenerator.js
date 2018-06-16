@@ -34,7 +34,7 @@ module.exports = class MessageGenerator {
 
         debug.parsedWords = words;
         words.forEach(function (word) {
-            constr.push({like: t.Sequelize.fn('LOWER', t.Sequelize.literal('\'%' + word.toLowerCase() + '%\''))});
+            constr.push({like: t.Sequelize.fn('LOWER', t.Sequelize.literal('\'% ' + word.toLowerCase() + ' %\''))});
             // constr.push({like: t.Sequelize.fn('LOWER', t.Sequelize.literal('\'%' + words[words.length - 1].toLowerCase() + '%\''))});
         });
 
@@ -49,7 +49,7 @@ module.exports = class MessageGenerator {
                 Messages.forEach(function (item) {
                     m.push(item.body.replace('Антон', '')) //TODO: Regex
                 });
-                debug.messages = m;
+                // debug.messages = m;
 
                 if (m.length > 1) {
                     var dataset = t.MarkovGen.newDataSet();
