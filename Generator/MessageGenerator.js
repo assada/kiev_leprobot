@@ -55,7 +55,7 @@ module.exports = class MessageGenerator {
                     var dataset = t.MarkovGen.newDataSet();
                     dataset.trainOnString(m.toString(), 3, true);
                     let count = Math.floor(Math.random() * (10 - 4) + 4);
-                    let strings = dataset.generate(count, true);
+                    let strings = dataset.generate(count, false);
                     debug.result = strings;
                     dataset.clearData();
                     fulfill(strings);

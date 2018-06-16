@@ -202,7 +202,7 @@ bot.on('message', (msg) => {
                         };
                     }
                     setTimeout(function () {
-                        bot.sendMessage(chat, message, options);
+                        bot.sendMessage(chat, capitalizeFirstLetter(message), options);
                     }, 2000);
                 }
             }).catch((err) => {
