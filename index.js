@@ -177,6 +177,17 @@ const pidorScenario = [
     ]
 ];
 
+bot.on('left_chat_participant', (msg) => {
+    const chat = msg.chat.id;
+    UserChatRepository.destroy(msg.from, msg.chat);
+    bot.sendChatAction(chat, 'typing');
+    setTimeout(function () {
+        bot.sendMessage(chat, 'Слабак!', {
+            reply_to_message_id: msg.message_id
+        });
+    }, 2000);
+});
+
 bot.on('message', (msg) => {
     const chat = msg.chat.id;
     UserRepository.store(msg.from);
@@ -185,10 +196,10 @@ bot.on('message', (msg) => {
     }
     if (typeof msg.text !== 'undefined' && emojiStrip(msg.text).length > 1 && msg.text.charAt(0) !== '/') {
         let mention = new RegExp(names.join("|")).test(msg.text);
-        let chance = randomizer.bool(0.025);
+        let chance = randomizer.bool(0.02);
         MessageRepository.store(msg, names);
-        if ((chance || mention || chat > 0)
-            && chat === -1001126011592
+        if ((chance || mention)
+            && (chat === -1001126011592 || chat === -1001121487098 || chat > 0)
         ) {
             (new MessageGenerator(MessageModel, msg, Promise, natural, Sequelize, winston, markovski)).get(names).then(function (res) {
                 if (res !== false && res.length > 0) {
@@ -346,11 +357,15 @@ bot.onText(/^\/graph_top(?:\@.*?)?$/, (msg, match) => {
     });
 });
 
-bot.onText(/^\/img(?:\@.*?)? (.*)/, (msg, match) => {
+bot.onText(/^\/img(?:\@.*?)?(\s.*)?/, (msg, match) => {
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'upload_photo');
     setTimeout(function () {
-        (new ImageGenerator(Promise, GoogleSearchParser)).get(match[1] || 'Трактор').then(function (url) {
+        let query = 'Трактор';
+        if (match.length > 0) {
+            query = match[1].trim();
+        }
+        (new ImageGenerator(Promise, GoogleSearchParser)).get(query).then(function (url) {
             request.get(url, function (err, res, body) {
                 const photo = request(this.uri.href);
                 bot.sendPhoto(chat, photo, {
@@ -366,9 +381,9 @@ bot.onText(/^\/img(?:\@.*?)? (.*)/, (msg, match) => {
 bot.onText(/^\/curr(?:\@.*?)? (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub|ETH|eth) (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub|ETH|eth) ([0-9]*\.?[0-9]{0,2})/, (msg, match) => {
     let opts = {from: match[1].toUpperCase(), to: match[2].toUpperCase()};
     const chat = msg.chat.id;
-    bot.sendChatAction(chat, 'typing');
 
     ExchangeRatesRepository.get(process.env.OPENRATE_TOKEN).then((openRates) => {
+        bot.sendChatAction(chat, 'typing');
         setTimeout(function () {
             fx.rates = openRates.rates;
             fx.base = openRates.base;

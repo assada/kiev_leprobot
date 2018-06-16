@@ -33,6 +33,25 @@ module.exports = class UserChatRepository {
     }
 
     /**
+     * destroy UserChat
+     * @param user
+     * @param chat
+     * @returns {boolean}
+     */
+    destroy(user, chat) {
+        this.UserChat.sync().then(() => {
+            return this.UserChat.destroy({
+                where: {
+                    user: user.id,
+                    chat: chat.id
+                }
+            });
+        });
+
+        return true;
+    }
+
+    /**
      *
      * @param chat
      * @returns {Promise.<Array.<Model>>}

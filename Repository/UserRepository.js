@@ -26,7 +26,12 @@ module.exports = class UserRepository {
                 }
             }).spread((user, created) => {
                 if (!created) {
-                    this.User.update({updatedAt: new Date()}, {where: {user: user.id}});
+                    this.User.update({
+                        first_name: typeof user.first_name !== 'undefined' ? emojiStrip(user.first_name) : '',
+                        last_name: typeof user.last_name !== 'undefined' ? emojiStrip(user.last_name) : '',
+                        username: typeof user.username !== 'undefined' ? emojiStrip(user.username) : '',
+                        updatedAt: new Date()
+                    }, {where: {user: user.id}});
                 }
             });
         });
@@ -36,7 +41,7 @@ module.exports = class UserRepository {
 
 
     getActiveUser() {
-        let now= new Date().toISOString().slice(0, 19).replace('T', ' ');
+        let now = new Date().toISOString().slice(0, 19).replace('T', ' ');
         let yesterday = new Date(new Date().getTime() - (24 * 60 * 60 * 1000)).toISOString().slice(0, 19).replace('T', ' ');
         return this.User.findAll({
             where: {
