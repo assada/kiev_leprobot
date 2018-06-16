@@ -33,10 +33,10 @@ module.exports = class MessageGenerator {
         });
 
         debug.parsedWords = words;
-        // words.forEach(function (word) {
-        constr.push({like: t.Sequelize.fn('LOWER', t.Sequelize.literal('\'%' + words[0].toLowerCase() + '%\''))});
-        constr.push({like: t.Sequelize.fn('LOWER', t.Sequelize.literal('\'%' + words[words.length - 1].toLowerCase() + '%\''))});
-        // });
+        words.forEach(function (word) {
+            constr.push({like: t.Sequelize.fn('LOWER', t.Sequelize.literal('\'%' + word.toLowerCase() + '%\''))});
+            // constr.push({like: t.Sequelize.fn('LOWER', t.Sequelize.literal('\'%' + words[words.length - 1].toLowerCase() + '%\''))});
+        });
 
         debug.query = constr;
 
@@ -54,7 +54,8 @@ module.exports = class MessageGenerator {
                 if (m.length > 1) {
                     var dataset = t.MarkovGen.newDataSet();
                     dataset.trainOnString(m.toString(), 3, true);
-                    let strings = dataset.generate(3, true);
+                    let count = Math.floor(Math.random() * (10 - 4) + 4);
+                    let strings = dataset.generate(count, true);
                     debug.result = strings;
                     dataset.clearData();
                     fulfill(strings);
