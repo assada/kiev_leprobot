@@ -190,12 +190,12 @@ bot.on('message', (msg) => {
         if ((chance || mention || chat > 0)
             && chat === -1001126011592
         ) {
-            bot.sendChatAction(chat, 'typing');
             (new MessageGenerator(MessageModel, msg, Promise, natural, Sequelize, winston, markovski)).get(names).then(function (res) {
                 if (res !== false && res.length > 0) {
+                    bot.sendChatAction(chat, 'typing');
                     let message = res;
                     console.log(res);
-                    // let m = message.join(' ').replace(/(,|\.)[а-яА-Я]{1,3}$/, '').replace(/(,|\.)$/, '');
+                    let m = message.replace(/(,|\.)[а-яА-Я]{1,3}$/, '').replace(/(,|\.)$/, '');
                     let options = {};
                     if (mention) {
                         options = {
@@ -203,7 +203,7 @@ bot.on('message', (msg) => {
                         };
                     }
                     setTimeout(function () {
-                        bot.sendMessage(chat, capitalizeFirstLetter(message), options);
+                        bot.sendMessage(chat, capitalizeFirstLetter(m), options);
                     }, 2000);
                 }
             }).catch((err) => {
