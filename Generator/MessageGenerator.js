@@ -5,10 +5,10 @@
  * @type {MessageGenerator}
  */
 module.exports = class MessageGenerator {
-    constructor(MessageModel, msg, Promise, natural, Sequelize, winston) {
+    constructor(MessageModel, msg, Promise, natural, Sequelize, winston, markov) {
         this.winston = winston.loggers.get('category1');
         this.Sequelize = Sequelize;
-        this.MarkovGen = natural.NGrams;
+        this.MarkovGen = markov;
         this.tokenizer = new natural.WordTokenizer();
         this.Promise = Promise;
         this.MessageModel = MessageModel;
@@ -20,7 +20,7 @@ module.exports = class MessageGenerator {
      * @param {*} names
      * @returns {Promise}
      */
-    get (names) {
+    get(names) {
         const t = this;
         let constr = [];
         let debug = {msg: this.msg};
@@ -52,8 +52,11 @@ module.exports = class MessageGenerator {
                 debug.messages = m;
 
                 if (m.length > 1) {
-                    let strings = t.MarkovGen.ngrams(m.toString().split(' '), 3, words[0], words[words.length - 1]);
+                    var dataset = t.MarkovGen.newDataSet();
+                    dataset.trainOnString(m.toString(), 3, true);
+                    let strings = dataset.generate(3, true);
                     debug.result = strings;
+                    dataset.clearData();
                     fulfill(strings);
                 } else {
                     reject(false);

@@ -33,6 +33,7 @@
     "random-js": "^1.0.8",
     "request": "^2.81.0",
     "sequelize": "^4.3.2",
+    "string-markov-js": "^1.2.4",
     "winston": "^2.3.1"
   }
 }

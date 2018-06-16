@@ -14,6 +14,7 @@ const googl = require('goo.gl');
 const googleSearchParser2 = require("google-search-parser2");
 const GoogleSearchParser = new googleSearchParser2(request);
 const MarkovGen = require('markov-generator');
+const markov = require('string-markov-js');
 const cache = require('memory-cache');
 const natural = require('natural');
 
@@ -189,11 +190,11 @@ bot.on('message', (msg) => {
             && chat === -1001126011592
         ) {
             bot.sendChatAction(chat, 'typing');
-            (new MessageGenerator(MessageModel, msg, Promise, natural, Sequelize, winston)).get(names).then(function (res) {
+            (new MessageGenerator(MessageModel, msg, Promise, natural, Sequelize, winston, markov)).get(names).then(function (res) {
                 if (res !== false && res.length > 0) {
-                    let message = randomizer.pick(res);
+                    let message = res;
                     console.log(res);
-                    let m = message.join(' ').replace(/(,|\.)[а-яА-Я]{1,3}$/, '').replace(/(,|\.)$/, '');
+                    // let m = message.join(' ').replace(/(,|\.)[а-яА-Я]{1,3}$/, '').replace(/(,|\.)$/, '');
                     let options = {};
                     if (mention) {
                         options = {
@@ -201,7 +202,7 @@ bot.on('message', (msg) => {
                         };
                     }
                     setTimeout(function () {
-                        bot.sendMessage(chat, capitalizeFirstLetter(m), options);
+                        bot.sendMessage(chat, message, options);
                     }, 2000);
                 }
             }).catch((err) => {
