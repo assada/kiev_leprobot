@@ -53,7 +53,7 @@ module.exports = class MessageGenerator {
 
                 if (m.length > 1) {
                     var dataset = t.MarkovGen.newDataSet();
-                    let nGram = Math.floor(Math.random() * (4 - 3) + 3);
+                    let nGram = 3;
                     dataset.trainOnString(m.toString(), nGram, false);
                     let count = Math.floor(Math.random() * (15 - 4) + 4);
                     let string = dataset.generate(count, false);
@@ -65,7 +65,7 @@ module.exports = class MessageGenerator {
                     debug.result = false;
                     t.winston.warn('Мало данных');
                 }
-                // t.winston.log('debug', debug);
+                t.winston.log('debug', debug);
             });
         });
     }
