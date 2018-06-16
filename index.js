@@ -15,6 +15,7 @@ const googleSearchParser2 = require("google-search-parser2");
 const GoogleSearchParser = new googleSearchParser2(request);
 const MarkovGen = require('markov-generator');
 const markov = require('string-markov-js');
+const markovski = require('markovski');
 const cache = require('memory-cache');
 const natural = require('natural');
 
@@ -190,7 +191,7 @@ bot.on('message', (msg) => {
             && chat === -1001126011592
         ) {
             bot.sendChatAction(chat, 'typing');
-            (new MessageGenerator(MessageModel, msg, Promise, natural, Sequelize, winston, markov)).get(names).then(function (res) {
+            (new MessageGenerator(MessageModel, msg, Promise, natural, Sequelize, winston, markovski)).get(names).then(function (res) {
                 if (res !== false && res.length > 0) {
                     let message = res;
                     console.log(res);
