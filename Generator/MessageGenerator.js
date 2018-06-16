@@ -53,12 +53,13 @@ module.exports = class MessageGenerator {
 
                 if (m.length > 1) {
                     var dataset = t.MarkovGen.newDataSet();
-                    dataset.trainOnString(m.toString(), 3, true);
-                    let count = Math.floor(Math.random() * (10 - 4) + 4);
-                    let strings = dataset.generate(count, false);
-                    debug.result = strings;
+                    let nGram = Math.floor(Math.random() * (4 - 3) + 3);
+                    dataset.trainOnString(m.toString(), nGram, false);
+                    let count = Math.floor(Math.random() * (15 - 4) + 4);
+                    let string = dataset.generate(count, false);
+                    debug.result = string;
                     dataset.clearData();
-                    fulfill(strings);
+                    fulfill(string);
                 } else {
                     reject(false);
                     debug.result = false;
