@@ -39,12 +39,18 @@ module.exports = class MessageGenerator {
             }
             // constr.push({like: t.Sequelize.fn('LOWER', t.Sequelize.literal('\'%' + words[words.length - 1].toLowerCase() + '%\''))});
         });
-
         debug.query = constr;
+
+        let wordsWhere = t.Sequelize.where(t.Sequelize.fn('LOWER', t.Sequelize.col('body')), {$or: constr});
+        let lengthWhere = t.Sequelize.literal('CHAR_LENGTH(`body`) > 20');
+
 
         return new t.Promise(function (fulfill, reject) {
             Message.findAll({
-                where: t.Sequelize.where(t.Sequelize.fn('LOWER', t.Sequelize.col('body')), {$or: constr}),
+                where: t.Sequelize.and({
+                    wordsWhere,
+                    lengthWhere
+                }),
                 order: t.Sequelize.literal('RAND()'),
                 attributes: ['body']
             }).then(Messages => {
