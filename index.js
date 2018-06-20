@@ -18,6 +18,7 @@ const markov = require('string-markov-js');
 const markovski = require('markovski');
 const cache = require('memory-cache');
 const natural = require('natural');
+const randomPussy = require('random-vagina');
 
 //Configuring
 dotenv.config();
@@ -73,24 +74,26 @@ const PidorGenerator = new PGenerator(Promise, PidorRepository, UserChatReposito
 
 //Strings
 const catP = [
-    "Вот тебе котя!",
-    "Держи котю",
-    "Котя - топчик",
-    "СМОТРИ КАКОЙ ЗАБАВНЫЙ!",
-    "Всем котю!",
-    ":3"
+    'Вот тебе котя!',
+    'Держи котю',
+    'Котя - топчик',
+    'СМОТРИ КАКОЙ ЗАБАВНЫЙ!',
+    'Всем котю!',
+    ':3',
+    'Ой! Какой милаш!',
+    'Котики, конечно, лучшие!'
 ];
 const names = [
-    "антон",
-    "Антон",
-    "антоха",
-    "Антоха",
-    "Тох ",
-    "тох ",
-    "тоха ",
-    "Тоха ",
-    "антонио",
-    "Антонио",
+    'антон',
+    'Антон',
+    'антоха',
+    'Антоха',
+    'Тох ',
+    'тох ',
+    'тоха ',
+    'Тоха ',
+    'антонио',
+    'Антонио',
 ];
 const pidorLvl = [
     'пидорасик',
@@ -127,43 +130,43 @@ const pidorScenario = [
         'Открываю <b>Find My PIDOR..</b>',
         '<i>Сканирую местность...</i>',
         'Ах ты сука, от меня не спрячешься!',
-        ':lvl: дня - @:username:!'
+        ':lvl: дня - @:username: (:first_name: :last_name:)!'
     ],
     [
         'ТЕПЕРЬ ЭТО НЕ ОСТАНОВИТЬ!',
         '<i>Шаманим-шаманим...</i>',
         'Доступ получен. Анн<b>а</b>лирование протокола.',
-        'TI PIDOR, @:username:'
+        'TI PIDOR, @:username: (:first_name: :last_name:)'
     ],
     [
         'Осторожно! <b>Пидор дня</b> активирован!',
         'Сканирую...',
         'КЕК',
-        'Стоять! Не двигаться! Вы объявлены <b>пидором дня</b>, @:username:',
+        'Стоять! Не двигаться! Вы объявлены <b>пидором дня</b>, @:username: (:first_name: :last_name:)',
     ],
     [
         'Сейчас поколдуем...',
         '<i>Хм...</i>',
         'Так-так, что же тут у нас...',
-        'Ого, вы посмотрите только! А :lvl: дня то - @:username:',
+        'Ого, вы посмотрите только! А :lvl: дня то - @:username: (:first_name: :last_name:)',
     ],
     [
         'Начинаю поиск любителя техники Apple...',
         'Что-то слишком дохуя их здесь, кого бы выбрать...',
         'Выберу самого жирного!',
-        ':lvl: дня - @:username:!'
+        ':lvl: дня - @:username: (:first_name: :last_name:)!'
     ],
     [
         'Пора наколдовать нового пидора!',
         'Смешиваю немного SEO, вейпа, смузи и заливаю в чан...',
         'Тщательно мешаю и сливаю в чат...',
-        'БА-БАХ! А @:username:-то :lvl:!',
+        'БА-БАХ! А @:username:-то :lvl:! Который (:first_name: :last_name:)',
     ],
     [
         '甚至不要尝试翻译文本。',
         '如果您尝试 - 你会是一个同性恋的天结束。',
         '就这样吧。',
-        '盖伊的一天 - @:username:!',
+        '盖伊的一天 - @:username: (:first_name: :last_name:)!',
     ],
     [
         'Ну',
@@ -173,9 +176,13 @@ const pidorScenario = [
         'пидор!',
         'ВНИМАНИЕ!',
         '*ПДЫЖЬ*',
-        '@:username: - :lvl: дня',
+        '@:username: (:first_name: :last_name:) - :lvl: дня',
     ]
 ];
+
+const errorsMessages = {
+    onlyForChats: 'Не-не. Только в чатиках пидорок работает'
+};
 
 bot.on('left_chat_participant', (msg) => {
     const chat = msg.chat.id;
@@ -196,17 +203,12 @@ bot.on('message', (msg) => {
     }
     if (typeof msg.text !== 'undefined' && emojiStrip(msg.text).length > 1 && msg.text.charAt(0) !== '/') {
         let mention = new RegExp(names.join("|")).test(msg.text);
-        let chance = randomizer.bool(0.02);
-        MessageRepository.store(msg, names);
-        if ((chance || mention)
+        if ((randomizer.bool(0.02) || mention)
             && (chat === -1001126011592 || chat === -1001121487098 || chat > 0)
         ) {
-            (new MessageGenerator(MessageModel, msg, Promise, natural, Sequelize, winston, markovski)).get(names).then(function (res) {
-                if (res !== false && res.length > 0) {
+            (new MessageGenerator(MessageModel, msg, Promise, natural, Sequelize, winston, markovski)).get(names).then(function (replay) {
+                if (replay !== false && replay.length > 0) {
                     bot.sendChatAction(chat, 'typing');
-                    let message = res;
-                    console.log(res);
-                    let m = message.replace(/(,|\.)[а-яА-Я]{1,3}$/, '').replace(/(,|\.)$/, '');
                     let options = {};
                     if (mention) {
                         options = {
@@ -214,7 +216,7 @@ bot.on('message', (msg) => {
                         };
                     }
                     setTimeout(function () {
-                        bot.sendMessage(chat, capitalizeFirstLetter(m), options);
+                        bot.sendMessage(chat, capitalizeFirstLetter(replay), options);
                     }, 2000);
                 }
             }).catch((err) => {
@@ -222,10 +224,11 @@ bot.on('message', (msg) => {
                 winston.error(err);
             });
         }
+        MessageRepository.store(msg);
     }
 });
 
-bot.onText(/^\/boobs(?:\@.*?)?$/, (msg, match) => {
+bot.onText(/^\/boobs(?:\@.*?)?$/, (msg) => {
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'upload_photo');
     setTimeout(function () {
@@ -254,6 +257,26 @@ bot.onText(/^\/cat(?:\@.*?)?$/, (msg, match) => {
                 });
             }
         });
+    }, 500);
+});
+
+bot.onText(/^\/pussy(?:\@.*?)?$/, (msg) => {
+    const chat = msg.chat.id;
+    bot.sendChatAction(chat, 'upload_photo');
+    setTimeout(function () {
+        randomPussy()
+            .then(url => {
+                request.get(url, function (err, res, body) {
+                    const photo = request(this.uri.href);
+                    if (this.uri.href.indexOf('.gif') !== -1) {
+                        bot.sendDocument(chat, photo)
+                    } else {
+                        bot.sendPhoto(chat, photo, {
+                            caption: randomizer.pick(catP)
+                        });
+                    }
+                });
+            })
     }, 500);
 });
 
@@ -286,7 +309,7 @@ bot.onText(/^\/news(?:\@.*?)?$/, (msg, match) => {
 bot.onText(/^\/top(?:\@.*?)?$/, (msg, match) => {
     const chat = msg.chat.id;
     if (chat > 0) {
-        bot.sendMessage(chat, "Не-не. Только в чатиках топчик работает");
+        bot.sendMessage(chat, errorsMessages.onlyForChats);
         return false;
     }
     bot.sendChatAction(chat, 'typing');
@@ -297,11 +320,11 @@ bot.onText(/^\/top(?:\@.*?)?$/, (msg, match) => {
     });
 });
 
-bot.onText(/^\/graph_top(?:\@.*?)?$/, (msg, match) => {
+bot.onText(/^\/graph_top(?:\@.*?)?$/, (msg) => {
     const chat = msg.chat.id;
     const cacheKey = "_" + chat + "-graph";
     if (chat > 0) {
-        bot.sendMessage(chat, "Не-не. Только в чатиках топчик работает");
+        bot.sendMessage(chat, errorsMessages.onlyForChats);
         return false;
     }
     bot.sendChatAction(chat, 'upload_photo');
@@ -359,23 +382,26 @@ bot.onText(/^\/graph_top(?:\@.*?)?$/, (msg, match) => {
 
 bot.onText(/^\/img(?:\@.*?)?(\s.*)?/, (msg, match) => {
     const chat = msg.chat.id;
+
+    let query = 'Трактор';
+    if (match.length > 0) {
+        query = match[1].trim();
+    }
     bot.sendChatAction(chat, 'upload_photo');
-    setTimeout(function () {
-        let query = 'Трактор';
-        if (match.length > 0) {
-            query = match[1].trim();
-        }
-        (new ImageGenerator(Promise, GoogleSearchParser)).get(query).then(function (url) {
-            request.get(url, function (err, res, body) {
-                const photo = request(this.uri.href);
+    (new ImageGenerator(Promise, GoogleSearchParser)).get(query).then(function (url) {
+        request.get(url, function (err, res, body) {
+
+            const photo = request(this.uri.href);
+            setTimeout(function () {
                 bot.sendPhoto(chat, photo, {
                     reply_to_message_id: msg.message_id
                 });
-            });
-        }).catch(function (err) {
-            winston.error(err);
+            }, 500);
         });
-    }, 500);
+    }).catch(function (err) {
+        winston.error(err);
+    });
+
 });
 
 bot.onText(/^\/curr(?:\@.*?)? (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub|ETH|eth) (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub|ETH|eth) ([0-9]*\.?[0-9]{0,2})/, (msg, match) => {
@@ -399,7 +425,7 @@ bot.onText(/^\/curr(?:\@.*?)? (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub|ETH|eth) 
 bot.onText(/^\/pidor_top(?:\@.*?)?$/, (msg, match) => {
     const chat = msg.chat.id;
     if (chat > 0) {
-        bot.sendMessage(msg.chat.id, "Не-не. Только в чатиках топчик работает");
+        bot.sendMessage(msg.chat.id, errorsMessages.onlyForChats);
         return false;
     }
     bot.sendChatAction(chat, 'typing');
@@ -431,7 +457,7 @@ bot.onText(/^\/pidor_top(?:\@.*?)?$/, (msg, match) => {
 bot.onText(/^\/pidor/, (msg, match) => {
     const chat = msg.chat.id;
     if (chat > 0) {
-        bot.sendMessage(chat, "Не-не. Только в чатиках пидорок работает");
+        bot.sendMessage(chat, errorsMessages.onlyForChats);
         return false;
     }
     bot.sendChatAction(chat, 'typing');
@@ -441,7 +467,7 @@ bot.onText(/^\/pidor/, (msg, match) => {
 bot.onText(/^\/fuckoff/, (msg, match) => {
     const chat = msg.chat.id;
     if (chat > 0) {
-        bot.sendMessage(chat, "Не-не. Только в чатиках затыкалка работает");
+        bot.sendMessage(chat, errorsMessages.onlyForChats);
         return false;
     }
 
@@ -456,55 +482,57 @@ function getPidor(msg) {
     const chat = msg.chat.id;
     PidorGenerator.get(msg).then(function (res) {
         if (res.status === 'old' && res.user === msg.from.id) {
-            bot.sendMessage(chat, 'Страдай педрилка!', {
+            bot.sendMessage(chat, 'Страдай педрилка! Только не пидор может запустить пидор-машину! ХА-ХА-ХА-ХА', {
                 parse_mode: 'HTML'
             });
-        }
-        UserModel.getModel().findOne({where: {user: res.user}}).then(function (user) {
-            PidorRepository.pidorCount(db, user.user, chat).then((count) => {
-                let lvl = pidorLvl[0];
-                if (count > 1 && count <= 3) {
-                    console.log(count);
-                    lvl = pidorLvl[1];
-                } else if (count > 3 && count <= 7) {
-                    lvl = pidorLvl[2];
-                } else if (count > 7 && count <= 14) {
-                    lvl = pidorLvl[3];
-                } else if (count > 14 && count <= 20) {
-                    lvl = pidorLvl[4];
-                } else if (count > 20) {
-                    lvl = pidorLvl[5];
-                }
+        } else {
+            UserModel.getModel().findOne({where: {user: res.user}}).then(function (user) {
+                PidorRepository.pidorCount(db, user.user, chat).then((count) => {
+                    let lvl = pidorLvl[0];
+                    if (count > 1 && count <= 3) {
+                        console.log(count);
+                        lvl = pidorLvl[1];
+                    } else if (count > 3 && count <= 7) {
+                        lvl = pidorLvl[2];
+                    } else if (count > 7 && count <= 14) {
+                        lvl = pidorLvl[3];
+                    } else if (count > 14 && count <= 20) {
+                        lvl = pidorLvl[4];
+                    } else if (count > 20) {
+                        lvl = pidorLvl[5];
+                    }
 
-                if (res.status === 'old') {
-                    setTimeout(function () {
-                        bot.sendMessage(chat, (':lvl: дня - <b>' + user.first_name + ' ' + user.last_name + '</b>').replace(':lvl:', capitalizeFirstLetter(lvl)), {
-                            parse_mode: 'HTML'
+                    if (res.status === 'old') {
+                        setTimeout(function () {
+                            bot.sendMessage(chat, (':lvl: дня - <b>' + user.first_name + ' ' + user.last_name + '</b>').replace(':lvl:', capitalizeFirstLetter(lvl)), {
+                                parse_mode: 'HTML'
+                            });
+                        }, 2000);
+                    } else if (res.status === 'new') {
+                        MessageRepository.countUserMessages(db, user.user).then(function (messages) {
+                            const scenario = randomizer.pick(pidorScenario);
+                            let timeout = 1000;
+                            scenario.forEach((pmsg) => {
+                                setTimeout(function () {
+                                    pmsg = pmsg
+                                        .replace(/:username:/g, user.username)
+                                        .replace(/:last_name:/g, user.last_name)
+                                        .replace(/:first_name:/g, user.first_name)
+                                        .replace(/:messages:/g, messages[0].count)
+                                        .replace(/:lvl:/g, lvl)
+                                        .replace(/:draw:/g, randomizer.integer(15, 99999));
+                                    bot.sendMessage(chat, pmsg, {
+                                        parse_mode: 'HTML'
+                                    });
+                                }, timeout);
+                                timeout += randomizer.integer(1000, 1500);
+                            });
                         });
-                    }, 2000);
-                } else if (res.status === 'new') {
-                    MessageRepository.countUserMessages(db, user.user).then(function (messages) {
-                        const scenario = randomizer.pick(pidorScenario);
-                        let timeout = 1000;
-                        scenario.forEach((pmsg) => {
-                            setTimeout(function () {
-                                pmsg = pmsg
-                                    .replace(/:username:/g, user.username)
-                                    .replace(/:last_name:/g, user.last_name)
-                                    .replace(/:first_name:/g, user.first_name)
-                                    .replace(/:messages:/g, messages[0].count)
-                                    .replace(/:lvl:/g, lvl)
-                                    .replace(/:draw:/g, randomizer.integer(15, 99999));
-                                bot.sendMessage(chat, pmsg, {
-                                    parse_mode: 'HTML'
-                                });
-                            }, timeout);
-                            timeout += randomizer.integer(1000, 1500);
-                        });
-                    });
-                }
+                    }
+                });
             });
-        });
+        }
+
     }).catch(function (rej) {
         winston.error(rej);
     });
