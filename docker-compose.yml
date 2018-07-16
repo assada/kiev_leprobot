@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  mysql:
+    image: percona:latest
+    command: --sql_mode=""
+    ports:
+    - "127.0.0.1:3307:3306/tcp"
+    volumes:
+    - mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_USER: test
+      MYSQL_PASSWORD: 1234
+  app:
+    build: .
+    image: assada/leprobot:latest
+    external_links:
+    - mysql
+    volumes:
+    - .:/usr/src/app
+
+volumes:
+  mysql:
+    driver: local
