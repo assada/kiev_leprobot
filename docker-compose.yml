@@ -5,7 +5,7 @@ services:
     image: percona:latest
     command: --sql_mode=""
     ports:
-    - "127.0.0.1:3307:3306/tcp"
+    - "127.0.0.1:3308:3306/tcp"
     volumes:
     - mysql:/var/lib/mysql
     environment:
