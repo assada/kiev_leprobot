@@ -405,21 +405,18 @@ bot.onText(/^\/img(?:\@.*?)?(\s.*)?/, (msg, match) => {
         query = match[1].trim();
     }
     bot.sendChatAction(chat, 'upload_photo');
-    (new ImageGenerator(Promise, GoogleSearchParser)).get(query).then(function (url) {
-        request.get(url, function (err, res, body) {
-
-            const photo = request(this.uri.href);
-            console.log(photo);
-            setTimeout(function () {
-                console.log('TRY TO SEND IMAGE!!!!!!!!!!');
+    setTimeout(function () {
+        (new ImageGenerator(Promise, GoogleSearchParser)).get(query).then(function (url) {
+            request.get(url, function (err, res, body) {
+                const photo = request(this.uri.href);
                 bot.sendPhoto(chat, photo, {
                     reply_to_message_id: msg.message_id
                 });
-            }, 500);
+            });
+        }).catch(function (err) {
+            winston.error(err);
         });
-    }).catch(function (err) {
-        winston.error(err);
-    });
+    }, 500);
 
 });
 
