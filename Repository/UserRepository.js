@@ -32,7 +32,7 @@ module.exports = class UserRepository {
                         last_name: typeof oUser.last_name !== 'undefined' ? emojiStrip(oUser.last_name) : '',
                         username: typeof oUser.username !== 'undefined' ? emojiStrip(oUser.username) : '',
                         updatedAt: new Date()
-                    }, {where: {user: user.id}});
+                    }, {where: {user: oUser.id}});
                 }
             });
         });
