@@ -51,8 +51,10 @@ module.exports = class MessageGenerator {
                 constr.push({like: t.Sequelize.fn('LOWER', t.Sequelize.literal('\'% ' + word.toLowerCase() + ' %\''))});
             }
         });
+        let test = words.join(',');
 
-        let wordsWhere = t.Sequelize.where(t.Sequelize.fn('LOWER', t.Sequelize.col('body')), {$or: constr});
+        // let wordsWhere = t.Sequelize.where(t.Sequelize.fn('LOWER', t.Sequelize.col('body')), {$or: constr});
+        let wordsWhere = t.Sequelize.literal('MATCH(`body`) AGAINST(\'' + test + '\' IN NATURAL LANGUAGE MODE);');
         let lengthWhere = t.Sequelize.literal('CHAR_LENGTH(`body`) > 20');
 
 
@@ -62,8 +64,6 @@ module.exports = class MessageGenerator {
                     wordsWhere,
                     lengthWhere
                 }),
-                order: t.Sequelize.literal('RAND()'),
-                limit: 200,
                 attributes: ['body']
             }).then(Messages => {
                 Messages.forEach(function (item) {
