@@ -54,7 +54,7 @@ module.exports = class MessageGenerator {
         let test = words.join(',');
 
         // let wordsWhere = t.Sequelize.where(t.Sequelize.fn('LOWER', t.Sequelize.col('body')), {$or: constr});
-        let wordsWhere = t.Sequelize.literal('MATCH(`body`) AGAINST(\'' + test + '\' IN NATURAL LANGUAGE MODE);');
+        let wordsWhere = t.Sequelize.literal('MATCH(`body`) AGAINST(\'' + test + '\' IN NATURAL LANGUAGE MODE)');
         let lengthWhere = t.Sequelize.literal('CHAR_LENGTH(`body`) > 20');
 
 
