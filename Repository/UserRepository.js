@@ -13,6 +13,7 @@ module.exports = class UserRepository {
      * @returns {boolean}
      */
     store(user) {
+        let oUser = user;
         this.User.sync().then(() => {
             return this.User.findOrCreate({
                 where: {
@@ -27,9 +28,9 @@ module.exports = class UserRepository {
             }).spread((user, created) => {
                 if (!created) {
                     this.User.update({
-                        first_name: typeof user.first_name !== 'undefined' ? emojiStrip(user.first_name) : '',
-                        last_name: typeof user.last_name !== 'undefined' ? emojiStrip(user.last_name) : '',
-                        username: typeof user.username !== 'undefined' ? emojiStrip(user.username) : '',
+                        first_name: typeof oUser.first_name !== 'undefined' ? emojiStrip(oUser.first_name) : '',
+                        last_name: typeof oUser.last_name !== 'undefined' ? emojiStrip(oUser.last_name) : '',
+                        username: typeof oUser.username !== 'undefined' ? emojiStrip(oUser.username) : '',
                         updatedAt: new Date()
                     }, {where: {user: user.id}});
                 }

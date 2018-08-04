@@ -24,6 +24,7 @@ module.exports = class ImageGenerator {
         return new t.Promise(function (fulfill) {
             t.Parser.parseImageUrls(query, function (urls) {
                 let url = urls[Math.floor(Math.random() * urls.length)].url;
+                connsole.log(url);
                 fulfill(url);
             });
         });

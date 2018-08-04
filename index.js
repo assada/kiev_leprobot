@@ -398,6 +398,8 @@ bot.onText(/^\/graph_top(?:\@.*?)?$/, (msg) => {
 bot.onText(/^\/img(?:\@.*?)?(\s.*)?/, (msg, match) => {
     const chat = msg.chat.id;
 
+    console.log(match);
+
     let query = 'Трактор';
     if (match.length > 0) {
         query = match[1].trim();
