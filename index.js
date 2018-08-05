@@ -340,6 +340,7 @@ bot.onText(/^\/weather(?:\@.*?)?$/, (msg) => {
     bot.sendChatAction(chat, 'typing');
     setTimeout(() => {
         const weather = request('https://www.metaweather.com/api/location/924938/');
+        console.log(weather);
         const jsonWeather = JSON.parse(weather);
         let today = jsonWeather.consolidated_weather[0];
         const message = 'Погода в Киеве сегодня:\n' +
