@@ -346,10 +346,10 @@ bot.onText(/^\/weather(?:\@.*?)?$/, (msg) => {
             console.log(jsonWeather);
             let today = jsonWeather.consolidated_weather[0];
             const message = 'Погода в Киеве сегодня:\n' +
-                'От ' + Math.round(today.min_temp) + ' до ' + Math.round(today.max_temp) + ' градусов \n' +
+                'От ' + Math.round(today.min_temp) + '°C до ' + Math.round(today.max_temp) + '°C градусов \n' +
                 weather[today.weather_state_abbr] + '\n' +
-                'Давление около ' + Math.round(today.air_pressure) + '\n' +
-                'Влажность ' + Math.round(today.humidity);
+                'Давление около ' + Math.round(today.air_pressure) + ' миллибар\n' +
+                'Влажность ' + Math.round(today.humidity) + '%';
             bot.sendMessage(chat, message, {
                 parse_mode: 'HTML'
             });
