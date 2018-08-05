@@ -59,7 +59,7 @@ module.exports = class MessageRepository {
         const cacheKey = 'data_' + chat + '-topByDays';
         return new Promise(function (fulfill) {
             if (t.cache.get(cacheKey) === null) {
-                const sql = 'SELECT count(id) as count, DAY(createdAt) as day, MONTH(createdAt) as month, YEAR(createdAt) as year FROM messages WHERE chat = ' + chat + ' GROUP BY day, month, year ORDER BY year DESC,month DESC, day DESC LIMIT 10';
+                const sql = 'SELECT count(id) as count, DAY(createdAt) as day, MONTH(createdAt) as month, YEAR(createdAt) as year FROM messages WHERE chat = ' + chat + ' GROUP BY day, month, year ORDER BY year DESC,month DESC, day DESC LIMIT 31';
                 db.query(sql).spread((result, metadata) => {
                     t.cache.put(cacheKey, result, 60 * 60 * 1000);
                     fulfill(result);

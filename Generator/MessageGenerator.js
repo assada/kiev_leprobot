@@ -53,7 +53,6 @@ module.exports = class MessageGenerator {
         });
         let test = words.join(',');
 
-        // let wordsWhere = t.Sequelize.where(t.Sequelize.fn('LOWER', t.Sequelize.col('body')), {$or: constr});
         let wordsWhere = t.Sequelize.literal('MATCH(`body`) AGAINST(\'' + test + '\' IN NATURAL LANGUAGE MODE)');
         let lengthWhere = t.Sequelize.literal('CHAR_LENGTH(`body`) > 20');
 
@@ -79,7 +78,7 @@ module.exports = class MessageGenerator {
                         minWords: 5,
                         minScore: 25,
                         filter: result => {
-                            return result.string.endsWith('.'); // I want my tweets to end with a dot.
+                            return result.string.endsWith('.');
                         }
                     };
 
