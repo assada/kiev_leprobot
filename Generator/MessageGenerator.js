@@ -65,7 +65,7 @@ module.exports = class MessageGenerator {
                     lengthWhere
                 }),
                 order: t.Sequelize.literal('RAND()'),
-                limit: 3000,
+                limit: 6000,
                 attributes: ['body']
             }).then(Messages => {
                 Messages.forEach(function (item) {
@@ -77,7 +77,7 @@ module.exports = class MessageGenerator {
                     const options = {
                         maxLength: 140,
                         minWords: 5,
-                        minScore: 20,
+                        minScore: 25,
                         filter: result => {
                             return result.string.endsWith('.'); // I want my tweets to end with a dot.
                         }
