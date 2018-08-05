@@ -64,6 +64,8 @@ module.exports = class MessageGenerator {
                     wordsWhere,
                     lengthWhere
                 }),
+                order: t.Sequelize.literal('RAND()'),
+                limit: 3000,
                 attributes: ['body']
             }).then(Messages => {
                 Messages.forEach(function (item) {
