@@ -81,7 +81,7 @@ module.exports = class MessageGenerator {
                         }
                     };
 
-                    const markov = t.MarkovGen(m, options);
+                    const markov = new t.MarkovGen(m, options);
                     markov.buildCorpus().then(() => {
                         markov.generateSentence().then(result => {
                             debug.result = result.string;
