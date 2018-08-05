@@ -339,17 +339,20 @@ bot.onText(/^\/weather(?:\@.*?)?$/, (msg) => {
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'typing');
     setTimeout(() => {
-        const weather = request('https://www.metaweather.com/api/location/924938/');
-        console.log(weather);
-        const jsonWeather = JSON.parse(weather);
-        let today = jsonWeather.consolidated_weather[0];
-        const message = 'Погода в Киеве сегодня:\n' +
-            'От ' + Math.round(today.min_temp) + ' до ' + Math.round(today.max_temp) + ' градусов \n' +
-            weather[today.weather_state_abbr] + '\n' +
-            'Давление около ' + Math.round(today.air_pressure) + '\n' +
-            'Влажность ' + Math.round(today.humidity);
-        bot.sendMessage(chat, message, {
-            parse_mode: 'HTML'
+        request({
+            url: 'https://www.metaweather.com/api/location/924938/',
+            json: true
+        }, function (error, response, jsonWeather) {
+            console.log(jsonWeather);
+            let today = jsonWeather.consolidated_weather[0];
+            const message = 'Погода в Киеве сегодня:\n' +
+                'От ' + Math.round(today.min_temp) + ' до ' + Math.round(today.max_temp) + ' градусов \n' +
+                weather[today.weather_state_abbr] + '\n' +
+                'Давление около ' + Math.round(today.air_pressure) + '\n' +
+                'Влажность ' + Math.round(today.humidity);
+            bot.sendMessage(chat, message, {
+                parse_mode: 'HTML'
+            });
         });
     }, 500);
 });
