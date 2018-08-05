@@ -77,7 +77,7 @@ module.exports = class MessageGenerator {
                     const options = {
                         maxLength: 140,
                         minWords: 5,
-                        minScore: 10,
+                        minScore: 20,
                         filter: result => {
                             return result.string.endsWith('.'); // I want my tweets to end with a dot.
                         }
