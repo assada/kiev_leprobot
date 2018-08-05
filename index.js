@@ -17,6 +17,7 @@ const cache = require('memory-cache');
 const natural = require('natural');
 const randomPussy = require('random-vagina');
 const randomAss = require('random-butt');
+const MarkovNew = require('markov-strings');
 
 //Configuring
 dotenv.config();
@@ -204,7 +205,7 @@ bot.on('message', (msg) => {
         if ((randomizer.bool(0.02) || mention)
             && (chat === -1001126011592 || chat === -1001121487098 || chat > 0)
         ) {
-            (new MessageGenerator(MessageModel, msg, Promise, natural, Sequelize, winston, markovski)).get(names).then(function (replay) {
+            (new MessageGenerator(MessageModel, msg, Promise, natural, Sequelize, winston, MarkovNew)).get(names).then(function (replay) {
                 if (replay !== false && replay.length > 0) {
                     bot.sendChatAction(chat, 'typing');
                     let options = {};

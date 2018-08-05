@@ -72,10 +72,30 @@ module.exports = class MessageGenerator {
                 debug.messages = m.length;
 
                 if (m.length > 1) {
-                    let mark = new t.MarkovGen(3, false, m.toString());
-                    let string = mark.generate();
-                    debug.result = string;
-                    fulfill(string);
+                    const options = {
+                        maxLength: 140,
+                        minWords: 5,
+                        minScore: 25,
+                        filter: result => {
+                            return result.string.endsWith('.'); // I want my tweets to end with a dot.
+                        }
+                    };
+
+                    const markov = t.MarkovGen(m, options);
+                    markov.buildCorpus().then(() => {
+                        markov.generateSentence().then(result => {
+                            debug.result = result.string;
+                            fulfill(result.string);
+                        }).catch(() => {
+                            reject(false);
+                            debug.result = false;
+                            t.winston.warn('Мало данных');
+                        });
+                    }).catch(() => {
+                        reject(false);
+                        debug.result = false;
+                        t.winston.warn('Мало данных');
+                    });
                 } else {
                     reject(false);
                     debug.result = false;
