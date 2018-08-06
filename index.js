@@ -517,7 +517,7 @@ bot.onText(/^\/img(?:\@.*?)?(\s.*)?/, (msg, match) => {
 
 });
 
-bot.onText(/^\/curr(?:\@.*?)? (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub|ETH|eth) (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub|ETH|eth) ([0-9]*\.?[0-9]{0,2})/, (msg, match) => {
+bot.onText(/^\/convert(?:\@.*?)? (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub|ETH|eth) (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub|ETH|eth) ([0-9]*\.?[0-9]{0,2})/, (msg, match) => {
     let opts = {from: match[1].toUpperCase(), to: match[2].toUpperCase()};
     const chat = msg.chat.id;
 
