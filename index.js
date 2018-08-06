@@ -408,9 +408,9 @@ bot.onText(/^\/rate(?:\@.*?)?$/, function (msg) {
             console.log(USD);
 
             const message = 'Средние наличные курсы валют:\n' +
-                '<b>USD:</b>' + USD.ask + '/' + USD.bid + '\n' +
-                '<b>EUR:</b>' + EUR.ask + '/' + EUR.bid + '\n' +
-                '<b>RUB:</b>' + RUB.ask + '/' + RUB.bid;
+                '<b>USD:</b> ' + USD.bid + '/' + USD.ask + '\n' +
+                '<b>EUR:</b> ' + EUR.bid + '/' + EUR.ask + '\n' +
+                '<b>RUB:</b> ' + RUB.bid + '/' + RUB.ask;
             bot.sendMessage(chat, message, {
                 parse_mode: 'HTML'
             });
