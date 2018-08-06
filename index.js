@@ -346,10 +346,71 @@ bot.onText(/^\/weather(?:\@.*?)?$/, (msg) => {
             console.log(jsonWeather);
             let today = jsonWeather.consolidated_weather[0];
             const message = 'Погода в Киеве сегодня:\n' +
-                'От ' + Math.round(today.min_temp) + '°C до ' + Math.round(today.max_temp) + '°C градусов \n' +
+                'От ' + Math.round(today.min_temp) + '°C до ' + Math.round(today.max_temp) + '°C \n' +
                 weather[today.weather_state_abbr] + '\n' +
                 'Давление около ' + Math.round(today.air_pressure) + ' миллибар\n' +
                 'Влажность ' + Math.round(today.humidity) + '%';
+            bot.sendMessage(chat, message, {
+                parse_mode: 'HTML'
+            });
+        });
+    }, 500);
+});
+
+function mode(arr) {
+    return arr.reduce(function (current, item) {
+        var val = current.numMapping[item] = (current.numMapping[item] || 0) + 1;
+        if (val > current.greatestFreq) {
+            current.greatestFreq = val;
+            current.mode = item;
+        }
+        return current;
+    }, {mode: null, greatestFreq: -Infinity, numMapping: {}}, arr).mode;
+}
+
+function processRate(data, id) {
+    var exchanger = data.organizations.filter(function (obj) {
+        return obj.orgType === 2;
+    });
+    var bid = [];
+    var ask = [];
+
+    for (var key in exchanger) {
+        var e = exchanger[key];
+        if (e.currencies.hasOwnProperty(id)) {
+            bid.push(parseFloat(e.currencies.USD.bid));
+            ask.push(parseFloat(e.currencies.USD.ask));
+        }
+    }
+
+    bid = mode(bid);
+    ask = mode(ask);
+
+    return {
+        ask: ask.toFixed(2),
+        bid: bid.toFixed(2)
+    };
+}
+
+bot.onText(/^\/rate(?:\@.*?)?$/, function() {
+    const chat = msg.chat.id;
+    bot.sendChatAction(chat, 'typing');
+
+    setTimeout(() => {
+        request({
+            url: 'http://resources.finance.ua/ru/public/currency-cash.json',
+            json: true
+        }, function (error, response, body) {
+            console.log(jsonWeather);
+
+            const USD = processRate('USD');
+            const EUR = processRate('EUR');
+            const RUB = processRate('RUB');
+
+            const message = 'Средние наличные курсы валют:\n'+
+            '<b>USD:</b>' + USD.ask + '/' + USD.bid + '\n' +
+            '<b>EUR:</b>' + EUR.ask + '/' + EUR.bid + '\n' +
+            '<b>RUB:</b>' + RUB.ask + '/' + RUB.bid;
             bot.sendMessage(chat, message, {
                 parse_mode: 'HTML'
             });
