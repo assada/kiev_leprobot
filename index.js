@@ -378,8 +378,8 @@ function processRate(data, id) {
     for (var key in exchanger) {
         var e = exchanger[key];
         if (e.currencies.hasOwnProperty(id)) {
-            bid.push(parseFloat(e.currencies.USD.bid));
-            ask.push(parseFloat(e.currencies.USD.ask));
+            bid.push(parseFloat(e.currencies[id].bid));
+            ask.push(parseFloat(e.currencies[id].ask));
         }
     }
 
