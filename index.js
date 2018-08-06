@@ -392,7 +392,7 @@ function processRate(data, id) {
     };
 }
 
-bot.onText(/^\/rate(?:\@.*?)?$/, function() {
+bot.onText(/^\/rate(?:\@.*?)?$/, function () {
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'typing');
 
@@ -401,16 +401,16 @@ bot.onText(/^\/rate(?:\@.*?)?$/, function() {
             url: 'http://resources.finance.ua/ru/public/currency-cash.json',
             json: true
         }, function (error, response, body) {
-            console.log(jsonWeather);
+            console.log(body);
 
-            const USD = processRate('USD');
-            const EUR = processRate('EUR');
-            const RUB = processRate('RUB');
+            const USD = processRate(body, 'USD');
+            const EUR = processRate(body, 'EUR');
+            const RUB = processRate(body, 'RUB');
 
-            const message = 'Средние наличные курсы валют:\n'+
-            '<b>USD:</b>' + USD.ask + '/' + USD.bid + '\n' +
-            '<b>EUR:</b>' + EUR.ask + '/' + EUR.bid + '\n' +
-            '<b>RUB:</b>' + RUB.ask + '/' + RUB.bid;
+            const message = 'Средние наличные курсы валют:\n' +
+                '<b>USD:</b>' + USD.ask + '/' + USD.bid + '\n' +
+                '<b>EUR:</b>' + EUR.ask + '/' + EUR.bid + '\n' +
+                '<b>RUB:</b>' + RUB.ask + '/' + RUB.bid;
             bot.sendMessage(chat, message, {
                 parse_mode: 'HTML'
             });
