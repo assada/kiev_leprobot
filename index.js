@@ -401,11 +401,11 @@ bot.onText(/^\/rate(?:\@.*?)?$/, function (msg) {
             url: 'http://resources.finance.ua/ru/public/currency-cash.json',
             json: true
         }, function (error, response, body) {
-            console.log(body);
-
             const USD = processRate(body, 'USD');
             const EUR = processRate(body, 'EUR');
             const RUB = processRate(body, 'RUB');
+
+            console.log(USD);
 
             const message = 'Средние наличные курсы валют:\n' +
                 '<b>USD:</b>' + USD.ask + '/' + USD.bid + '\n' +
