@@ -392,7 +392,7 @@ function processRate(data, id) {
     };
 }
 
-bot.onText(/^\/rate(?:\@.*?)?$/, function () {
+bot.onText(/^\/rate(?:\@.*?)?$/, function (msg) {
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'typing');
 
