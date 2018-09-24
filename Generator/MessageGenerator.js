@@ -54,7 +54,7 @@ module.exports = class MessageGenerator {
         let test = words.join(',');
 
         let wordsWhere = t.Sequelize.literal('MATCH(`body`) AGAINST(\'' + test + '\' IN NATURAL LANGUAGE MODE)');
-        let lengthWhere = t.Sequelize.literal('CHAR_LENGTH(`body`) > 20');
+        let lengthWhere = t.Sequelize.literal('CHAR_LENGTH(`body`) > 10');
 
 
         return new t.Promise(function (fulfill, reject) {
@@ -64,7 +64,7 @@ module.exports = class MessageGenerator {
                     lengthWhere
                 }),
                 order: t.Sequelize.literal('RAND()'),
-                limit: 6000,
+                limit: 60000,
                 attributes: ['body']
             }).then(Messages => {
                 Messages.forEach(function (item) {
@@ -74,9 +74,9 @@ module.exports = class MessageGenerator {
 
                 if (m.length > 1) {
                     const options = {
-                        maxLength: 140,
-                        minWords: 5,
-                        minScore: 25,
+                        maxLength: 300,
+                        minWords: 3,
+                        minScore: 23,
                         filter: result => {
                             return result.string.endsWith('.');
                         }
