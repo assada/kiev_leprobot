@@ -64,7 +64,7 @@ module.exports = class MessageGenerator {
                     lengthWhere
                 }),
                 order: t.Sequelize.literal('RAND()'),
-                limit: 60000,
+                limit: 600000,
                 attributes: ['body']
             }).then(Messages => {
                 Messages.forEach(function (item) {
@@ -74,9 +74,10 @@ module.exports = class MessageGenerator {
 
                 if (m.length > 1) {
                     const options = {
-                        maxLength: 300,
+                        maxWords: 25,
+                        stateSize: 3,
                         minWords: 3,
-                        minScore: 23,
+                        minScore: 25,
                         filter: result => {
                             return result.string.endsWith('.');
                         }
@@ -90,17 +91,17 @@ module.exports = class MessageGenerator {
                         }).catch(() => {
                             reject(false);
                             debug.result = false;
-                            t.winston.warn('Мало данных');
+                            t.winston.warn('generateSentence: Мало данных');
                         });
                     }).catch(() => {
                         reject(false);
                         debug.result = false;
-                        t.winston.warn('Мало данных');
+                        t.winston.warn('buildCorpus: Мало данных');
                     });
                 } else {
                     reject(false);
                     debug.result = false;
-                    t.winston.warn('Мало данных');
+                    t.winston.warn('messagesCount: Мало данных');
                 }
                 t.winston.log('debug', debug);
             });
