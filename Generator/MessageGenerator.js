@@ -74,8 +74,6 @@ module.exports = class MessageGenerator {
 
                 if (m.length > 1) {
                     const options = {
-                        maxWords: 25,
-                        stateSize: 3,
                         minWords: 3,
                         minScore: 25,
                         filter: result => {
