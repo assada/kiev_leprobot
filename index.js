@@ -346,7 +346,6 @@ bot.onText(/^\/weather(?:\@.*?)?$/, (msg) => {
             url: 'https://www.metaweather.com/api/location/924938/',
             json: true
         }, function (error, response, jsonWeather) {
-            console.log(jsonWeather);
             let today = jsonWeather.consolidated_weather[0];
             const message = 'Погода в Киеве сегодня:\n' +
                 'От ' + Math.round(today.min_temp) + '°C до ' + Math.round(today.max_temp) + '°C \n' +
@@ -407,8 +406,6 @@ bot.onText(/^\/rate(?:\@.*?)?$/, function (msg) {
             const USD = processRate(body, 'USD');
             const EUR = processRate(body, 'EUR');
             const RUB = processRate(body, 'RUB');
-
-            console.log(USD);
 
             const message = 'Средние наличные курсы валют:\n' +
                 '<b>USD:</b> ' + USD.bid + '/' + USD.ask + '\n' +
@@ -498,8 +495,6 @@ bot.onText(/^\/graph_top(?:\@.*?)?$/, (msg) => {
 bot.onText(/^\/img(?:\@.*?)?(\s.*)?/, (msg, match) => {
     const chat = msg.chat.id;
 
-    console.log(match);
-
     let query = 'Трактор';
     if (match.length > 0) {
         query = match[1].trim();
@@ -586,8 +581,6 @@ bot.onText(/^\/fuckoff/, (msg, match) => {
         bot.sendMessage(chat, errorsMessages.onlyForChats);
         return false;
     }
-
-    console.log(msg);
 });
 
 /**
@@ -606,7 +599,6 @@ function getPidor(msg) {
                 PidorRepository.pidorCount(db, user.user, chat).then((count) => {
                     let lvl = pidorLvl[0];
                     if (count > 1 && count <= 3) {
-                        console.log(count);
                         lvl = pidorLvl[1];
                     } else if (count > 3 && count <= 7) {
                         lvl = pidorLvl[2];

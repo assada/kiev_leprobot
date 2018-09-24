@@ -23,11 +23,7 @@ module.exports = class ImageGenerator {
         const t = this;
         return new t.Promise(function (fulfill) {
             t.Parser.parseImageUrls(query, function (urls) {
-                console.log('------------------------');
-                console.log(query);
                 let url = urls[Math.floor(Math.random() * urls.length)].url;
-                console.log(url);
-                console.log('------------------------');
                 fulfill(url);
             });
         });
