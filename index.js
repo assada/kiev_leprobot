@@ -219,7 +219,7 @@ bot.on('message', (msg) => {
     if (typeof msg.text !== 'undefined' && emojiStrip(msg.text).length > 1 && msg.text.charAt(0) !== '/') {
         let mention = new RegExp(names.join("|")).test(msg.text);
         if ((randomizer.bool(0.02) || mention)
-            && (chat === -1001126011592 || chat === -1001121487098 || chat > 0)
+            && (chat === -1001126011592 || chat === -1001121487098 || chat === -1001048609359 || chat > 0)
         ) {
             (new MessageGenerator(MessageModel, msg, Promise, natural, Sequelize, winston, MarkovNew)).get(names).then(function (replay) {
                 if (replay !== false && replay.length > 0) {
