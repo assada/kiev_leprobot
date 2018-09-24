@@ -64,7 +64,7 @@ module.exports = class MessageGenerator {
                     lengthWhere
                 }),
                 order: t.Sequelize.literal('RAND()'),
-                limit: 600000,
+                limit: 60000,
                 attributes: ['body']
             }).then(Messages => {
                 Messages.forEach(function (item) {
