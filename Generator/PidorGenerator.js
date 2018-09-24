@@ -36,7 +36,6 @@ module.exports = class PidorGenerator {
                     ucr.getActiveUser(chat, msg.from.id).then(users => {
                         if (users.length > 0) {
                             let user = randomizer.pick(users);
-                            pr.store(chat, user.dataValues.user);
                             fulfill({status: 'new', user: user.dataValues.user});
                         } else {
                             reject('Users not found');

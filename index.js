@@ -198,13 +198,16 @@ const errorsMessages = {
 
 bot.on('left_chat_participant', (msg) => {
     const chat = msg.chat.id;
-    UserChatRepository.destroy(msg.from, msg.chat);
-    bot.sendChatAction(chat, 'typing');
-    setTimeout(function () {
-        bot.sendMessage(chat, 'Слабак!', {
-            reply_to_message_id: msg.message_id
-        });
-    }, 2000);
+    if (UserChatRepository.destroy(msg.from, msg.chat)) {
+        bot.sendChatAction(chat, 'typing');
+        setTimeout(function () {
+            bot.sendMessage(chat, 'Слабак!', {
+                reply_to_message_id: msg.message_id
+            });
+        }, 2000);
+    } else {
+        console.error('Error removing row from UserChat');
+    }
 });
 
 bot.on('message', (msg) => {
@@ -615,6 +618,10 @@ function getPidor(msg) {
                         lvl = pidorLvl[5];
                     }
 
+                    if (user.user === 173485093 || user.user === 263839313) {
+                        lvl = 'Принцесска'
+                    }
+
                     if (res.status === 'old') {
                         setTimeout(function () {
                             bot.sendMessage(chat, (':lvl: дня - <b>' + user.first_name + ' ' + user.last_name + '</b>').replace(':lvl:', capitalizeFirstLetter(lvl)), {
@@ -622,24 +629,39 @@ function getPidor(msg) {
                             });
                         }, 2000);
                     } else if (res.status === 'new') {
-                        MessageRepository.countUserMessages(db, user.user).then(function (messages) {
-                            const scenario = randomizer.pick(pidorScenario);
-                            let timeout = 1000;
-                            scenario.forEach((pmsg) => {
-                                setTimeout(function () {
-                                    pmsg = pmsg
-                                        .replace(/:username:/g, user.username)
-                                        .replace(/:last_name:/g, user.last_name)
-                                        .replace(/:first_name:/g, user.first_name)
-                                        .replace(/:messages:/g, messages[0].count)
-                                        .replace(/:lvl:/g, lvl)
-                                        .replace(/:draw:/g, randomizer.integer(15, 99999));
-                                    bot.sendMessage(chat, pmsg, {
-                                        parse_mode: 'HTML'
+                        bot.getChatMember(chat, user.user).then((ChatMember) => {
+                            if (
+                                ChatMember.status === 'creator' ||
+                                ChatMember.status === 'administrator' ||
+                                ChatMember.status === 'member'
+                            ) {
+                                PidorRepository.store(chat, user.user);
+                                MessageRepository.countUserMessages(db, user.user).then(function (messages) {
+                                    const scenario = randomizer.pick(pidorScenario);
+                                    let timeout = 1000;
+                                    scenario.forEach((pmsg) => {
+                                        setTimeout(function () {
+                                            pmsg = pmsg
+                                                .replace(/:username:/g, user.username)
+                                                .replace(/:last_name:/g, user.last_name)
+                                                .replace(/:first_name:/g, user.first_name)
+                                                .replace(/:messages:/g, messages[0].count)
+                                                .replace(/:lvl:/g, lvl)
+                                                .replace(/:draw:/g, randomizer.integer(15, 99999));
+                                            bot.sendMessage(chat, pmsg, {
+                                                parse_mode: 'HTML'
+                                            });
+                                        }, timeout);
+                                        timeout += randomizer.integer(1000, 1500);
                                     });
-                                }, timeout);
-                                timeout += randomizer.integer(1000, 1500);
-                            });
+                                });
+                            } else {
+                                console.info('Pidor retry');
+                                return getPidor(msg);
+                            }
+                        }).catch((error) => {
+                            console.error(error);
+                            getPidor(msg);
                         });
                     }
                 });
