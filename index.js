@@ -287,16 +287,23 @@ bot.on('message', (msg) => {
                             case avg.score >= 0.8:
                                 txt = "ЛОВИТЕ НАРКОМАНА!"
                         }
+
                         bot.sendMessage(chat, txt, {
                             reply_to_message_id: msg.message_id
                         });
+
+
+                        console.log(avg);
+                        console.log(txt);
                     } else {
                         console.log(avg)
                     }
                 }
             }
 
-            request(options, callback);
+            if (chat > 0) {
+                request(options, callback);
+            }
         });
     }
 });
