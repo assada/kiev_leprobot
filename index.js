@@ -241,6 +241,64 @@ bot.on('message', (msg) => {
         }
         MessageRepository.store(msg);
     }
+
+    if (typeof msg.photo !== 'undefined') {
+        var ImgID = msg.photo[msg.photo.length - 1].file_id;
+        if (!ImgID) {
+            console.log('No image ID!');
+            return;
+        }
+        bot.getFileLink(ImgID).then(function (resp) {
+            const options = {
+                method: "POST",
+                url: 'https://app.nanonets.com/api/v2/ObjectDetection/Model/' + process.env.NANONETS_MODEL + '/LabelUrls/',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'authorization': "Basic " + Buffer.from(process.env.NANONETS_KEY, 'binary').toString('base64')
+                },
+                formData: {
+                    urls: resp
+                }
+            };
+
+            function callback(error, response, body) {
+                if (!error && response.statusCode === 200) {
+                    const info = JSON.parse(body);
+                    if (info.message === "Success") {
+                        var data = info.result[0].prediction;
+                        var avg = Array.from(data.reduce(
+                            (acc, obj) => Object.keys(obj).reduce(
+                                (acc, key) => typeof obj[key] == "number"
+                                    ? acc.set(key, (acc.get(key) || []).concat(obj[key]))
+                                    : acc,
+                                acc),
+                            new Map())).reduce(
+                            (acc, [name, values]) =>
+                                Object.assign(acc, {[name]: values.reduce((a, b) => a + b) / values.length}),
+                            {}
+                        );
+                    }
+                    if (typeof avg.score !== 'undefined' && avg.score >= 0.5) {
+                        var txt = 'хмм... Похоже на наркотики. Не шути с этим..';
+                        switch (true) {
+                            case avg.score >= 0.7:
+                                txt = "Я думаю пора вызывать майора...";
+                                break;
+                            case avg.score >= 0.8:
+                                txt = "ЛОВИТЕ НАРКОМАНА!"
+                        }
+                        bot.sendMessage(chat, txt, {
+                            reply_to_message_id: msg.message_id
+                        });
+                    } else {
+                        console.log(avg)
+                    }
+                }
+            }
+
+            request(options, callback);
+        });
+    }
 });
 
 bot.onText(/^\/boobs(?:\@.*?)?$/, (msg) => {

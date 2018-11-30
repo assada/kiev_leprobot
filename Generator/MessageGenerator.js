@@ -76,6 +76,7 @@ module.exports = class MessageGenerator {
                     const options = {
                         minWords: 3,
                         minScore: 25,
+                        maxWords: 100,
                         filter: result => {
                             return result.string.endsWith('.');
                         }

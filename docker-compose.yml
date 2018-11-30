@@ -5,9 +5,9 @@ services:
     image: percona:latest
     command: --sql_mode=""
     ports:
-    - "178.128.206.11:3308:3306/tcp"
+      - "3308:3306/tcp"
     volumes:
-    - mysql:/var/lib/mysql
+      - mysql:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: 1234
       MYSQL_USER: test
@@ -16,9 +16,9 @@ services:
     build: .
     image: assada/leprobot:latest
     external_links:
-    - mysql
+      - mysql
     volumes:
-    - .:/usr/src/app
+      - .:/usr/src/app
 
 volumes:
   mysql:
