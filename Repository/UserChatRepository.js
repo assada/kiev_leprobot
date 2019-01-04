@@ -59,7 +59,7 @@ module.exports = class UserChatRepository {
      */
     getActiveUser(chat, user) {
         let end = new Date(new Date() + 2 * 3600 * 1000).toISOString().slice(0, 19).replace('T', ' ');
-        let start = new Date(new Date() + (2 * 3600 * 1000) - (24 * 60 * 60 * 1000)).toISOString().slice(0, 19).replace('T', ' ');
+        let start = new Date(new Date() - 24 * 60 * 60 * 1000 + 2 * 3600 * 1000).toISOString().slice(0, 19).replace('T', ' ');
         return this.UserChat.findAll({
             where: {
                 chat: chat,
