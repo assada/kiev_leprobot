@@ -23,8 +23,12 @@ module.exports = class ImageGenerator {
         const t = this;
         return new t.Promise(function (fulfill) {
             t.Parser.parseImageUrls(query, function (urls) {
-                let url = urls[Math.floor(Math.random() * urls.length)].url;
-                fulfill(url);
+                let randomImage = urls[Math.floor(Math.random() * urls.length)];
+                if('url' in randomImage) {
+                    fulfill(randomImage.url);
+                } else {
+                    reject('Url not found in images list for query: ' + query)
+                }
             });
         });
     }

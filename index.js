@@ -608,14 +608,14 @@ bot.onText(/^\/pidor_top(?:\@.*?)?$/, (msg, match) => {
 
     PidorRepository.top(db, chat).then(function (results) {
         if (results < 1) {
-            bot.sendMessage(chat, '_У вас все не пидоры... Пока.._', {
+            bot.sendMessage(chat, '_У вас все не пидоры... Пока..._', {
                 parse_mode: 'Markdown'
             });
 
             return false;
         }
 
-        let message = 'Наши <b>лучшие</b> пидоры: \n\n';
+        let message = 'Наши <b>мжвячни</b> пидоры: \n\n';
         let i = 1;
         results.forEach(function (pidor) {
             message += i + ') ' + pidor.username + ' <i>(' + pidor.first_name + ')' + '</i> - <b>' + pidor.c + '</b>\n';

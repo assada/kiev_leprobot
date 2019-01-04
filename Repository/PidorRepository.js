@@ -35,13 +35,13 @@ module.exports = class PidorRepository {
 
         return new Promise(function (fulfill, reject) {
             p.sync().then(() => {
-                let now = new Date(new Date().setHours(20, 59, 59, 999)).toISOString().slice(0, 19).replace('T', ' ');
-                let yesterday = new Date(new Date().setHours(0, 0, 0, 0)).toISOString().slice(0, 19).replace('T', ' ');
+                let end = new Date(new Date().setHours(23, 59, 59, 999)).toISOString().slice(0, 19).replace('T', ' ');
+                let start = new Date(new Date().setHours(0, 0, 0, 0)).toISOString().slice(0, 19).replace('T', ' ');
 
                 const res = p.findAll({
                     where: {
                         chat: chat,
-                        updatedAt: {$between: [yesterday, now]},
+                        updatedAt: {$between: [start, end]},
                     },
                     order: [
                         ['id', 'DESC']
@@ -61,7 +61,8 @@ module.exports = class PidorRepository {
      */
     top(db, chat) {
         return new Promise(function (fulfill, reject) {
-            db.query('SELECT count(p.id) c, p.user, u.first_name, u.last_name, u.username FROM pidors p LEFT JOIN users u ON p.user = u.user WHERE p.chat = ' + chat + ' AND YEAR(p.updatedAt ) = 2019 GROUP BY p.user, u.first_name, u.last_name, u.username ORDER BY c DESC LIMIT 10').spread((results, metadata) => {
+            let year = (new Date()).getFullYear();
+            db.query('SELECT count(p.id) c, p.user, u.first_name, u.last_name, u.username FROM pidors p LEFT JOIN users u ON p.user = u.user WHERE p.chat = ' + chat + ' AND YEAR(p.updatedAt ) = ' + year + ' GROUP BY p.user, u.first_name, u.last_name, u.username ORDER BY c DESC LIMIT 10').spread((results, metadata) => {
                 fulfill(results);
             })
         });

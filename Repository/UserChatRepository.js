@@ -52,18 +52,18 @@ module.exports = class UserChatRepository {
     }
 
     /**
-     *
+     * FOR PIDOR
      * @param chat
      * @param user
      * @returns {Promise.<Array.<Model>>}
      */
     getActiveUser(chat, user) {
-        let now = new Date( new Date().getTime() + 2 * 3600 * 1000).toISOString().slice(0, 19).replace('T', ' ');
-        let yesterday = new Date(new Date().getTime() + (2 * 3600 * 1000) - (24 * 60 * 60 * 1000)).toISOString().slice(0, 19).replace('T', ' ');
+        let end = new Date(new Date() + 2 * 3600 * 1000).toISOString().slice(0, 19).replace('T', ' ');
+        let start = new Date(new Date() + (2 * 3600 * 1000) - (24 * 60 * 60 * 1000)).toISOString().slice(0, 19).replace('T', ' ');
         return this.UserChat.findAll({
             where: {
                 chat: chat,
-                updatedAt: {$between: [yesterday, now]},
+                updatedAt: {$between: [start, end]},
                 user: {$ne: user}
             },
         });
