@@ -564,6 +564,7 @@ bot.onText(/^\/img(?:\@.*?)?(\s.*)?/, (msg, match) => {
     const chat = msg.chat.id;
     try {
         let query = 'Трактор';
+        console.log(match);
         if (match.length > 0) {
             query = match[1].trim();
         }
