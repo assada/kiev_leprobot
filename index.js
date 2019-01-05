@@ -562,24 +562,31 @@ bot.onText(/^\/graph_top(?:\@.*?)?$/, (msg) => {
 
 bot.onText(/^\/img(?:\@.*?)?(\s.*)?/, (msg, match) => {
     const chat = msg.chat.id;
-
-    let query = 'Трактор';
-    if (match.length > 0) {
-        query = match[1].trim();
-    }
-    bot.sendChatAction(chat, 'upload_photo');
-    setTimeout(function () {
-        (new ImageGenerator(Promise, GoogleSearchParser)).get(query).then(function (url) {
-            request.get(url, function (err, res, body) {
-                const photo = request(this.uri.href);
-                bot.sendPhoto(chat, photo, {
-                    reply_to_message_id: msg.message_id
+    try {
+        let query = 'Трактор';
+        if (match.length > 0) {
+            query = match[1].trim();
+        }
+        bot.sendChatAction(chat, 'upload_photo');
+        setTimeout(function () {
+            (new ImageGenerator(Promise, GoogleSearchParser)).get(query).then(function (url) {
+                request.get(url, function (err, res, body) {
+                    const photo = request(this.uri.href);
+                    bot.sendPhoto(chat, photo, {
+                        reply_to_message_id: msg.message_id
+                    });
                 });
+            }).catch(function (err) {
+                winston.error(err);
             });
-        }).catch(function (err) {
-            winston.error(err);
+        }, 500);
+    } catch (e) {
+        winston.error(e);
+        bot.sendMessage(chat, "Сам ищи это говно!", {
+            parse_mode: 'Markdown'
         });
-    }, 500);
+    }
+
 
 });
 
