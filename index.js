@@ -565,7 +565,7 @@ bot.onText(/^\/img(?:\@.*?)?(\s.*)?/, (msg, match) => {
     try {
         let query = 'Трактор';
         console.log(match);
-        if (match.length > 0) {
+        if (typeof match[1] !== 'undefined') {
             query = match[1].trim();
         }
         bot.sendChatAction(chat, 'upload_photo');
