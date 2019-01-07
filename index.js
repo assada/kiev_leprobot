@@ -609,6 +609,10 @@ bot.onText(/^\/convert(?:\@.*?)? (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub|ETH|et
     });
 });
 
+function htmlEntities(str) {
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
 bot.onText(/^\/pidor_top(?:\@.*?)?$/, (msg, match) => {
     const chat = msg.chat.id;
     if (chat > 0) {
@@ -627,16 +631,17 @@ bot.onText(/^\/pidor_top(?:\@.*?)?$/, (msg, match) => {
             return false;
         }
 
-        let message = 'Наши _мжвячни_ пидоры: \n\n';
+        let message = 'Наши <b>мжвячни</b> пидоры: \n\n';
         let i = 1;
         results.forEach(function (pidor) {
-            message += i + ') ' + pidor.username + ' _(' + pidor.first_name + ')' + '_ - *' + pidor.c + '*\n';
+            message += i + ') ' + (pidor.username !== '' ? pidor.username : '');
+            message += ' <i>(' + htmlEntities(pidor.first_name) + ')' + '</i> - <b>' + pidor.c + '</b>\n';
             i++;
         });
         console.log(message);
         setTimeout(function () {
             bot.sendMessage(chat, message.replace(/\n$/, ""), {
-                parse_mode: 'Markdown'
+                parse_mode: 'HTML'
             });
         }, 1500);
     })
