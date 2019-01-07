@@ -618,6 +618,7 @@ bot.onText(/^\/pidor_top(?:\@.*?)?$/, (msg, match) => {
     bot.sendChatAction(chat, 'typing');
 
     PidorRepository.top(db, chat).then(function (results) {
+        console.log(results);
         if (results < 1) {
             bot.sendMessage(chat, '_У вас все не пидоры... Пока..._', {
                 parse_mode: 'Markdown'
@@ -632,6 +633,7 @@ bot.onText(/^\/pidor_top(?:\@.*?)?$/, (msg, match) => {
             message += i + ') ' + pidor.username + ' <i>(' + pidor.first_name + ')' + '</i> - <b>' + pidor.c + '</b>\n';
             i++;
         });
+        console.log(message);
         setTimeout(function () {
             bot.sendMessage(chat, message.replace(/\n$/, ""), {
                 parse_mode: 'HTML'

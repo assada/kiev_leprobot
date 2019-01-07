@@ -25,7 +25,7 @@ module.exports = class ImageGenerator {
             try {
                 t.Parser.parseImageUrls(query, function (urls) {
                     let randomImage = urls[Math.floor(Math.random() * urls.length)];
-                    if('url' in randomImage) {
+                    if(typeof randomImage !== 'undefined' && 'url' in randomImage) {
                         fulfill(randomImage.url);
                     } else {
                         reject('Url not found in images list for query: ' + query)
