@@ -699,7 +699,7 @@ function getPidor(msg) {
 
                     if (res.status === 'old') {
                         setTimeout(function () {
-                            bot.sendMessage(chat, (':lvl: дня - <b>' + user.first_name + ' ' + user.last_name + '</b>').replace(':lvl:', capitalizeFirstLetter(lvl)), {
+                            bot.sendMessage(chat, (':lvl: дня - <b>' + htmlEntities(user.first_name) + ' ' + htmlEntities(user.last_name) + '</b>').replace(':lvl:', capitalizeFirstLetter(lvl)), {
                                 parse_mode: 'HTML'
                             });
                         }, 2000);
@@ -718,8 +718,8 @@ function getPidor(msg) {
                                         setTimeout(function () {
                                             pmsg = pmsg
                                                 .replace(/:username:/g, user.username)
-                                                .replace(/:last_name:/g, user.last_name)
-                                                .replace(/:first_name:/g, user.first_name)
+                                                .replace(/:last_name:/g, htmlEntities(user.last_name))
+                                                .replace(/:first_name:/g, htmlEntities(user.first_name))
                                                 .replace(/:messages:/g, messages[0].count)
                                                 .replace(/:lvl:/g, lvl)
                                                 .replace(/:draw:/g, randomizer.integer(15, 99999));
