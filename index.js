@@ -627,16 +627,16 @@ bot.onText(/^\/pidor_top(?:\@.*?)?$/, (msg, match) => {
             return false;
         }
 
-        let message = 'Наши <b>мжвячни</b> пидоры: \n\n';
+        let message = 'Наши _мжвячни_ пидоры: \n\n';
         let i = 1;
         results.forEach(function (pidor) {
-            message += i + ') ' + pidor.username + ' <i>(' + pidor.first_name + ')' + '</i> - <b>' + pidor.c + '</b>\n';
+            message += i + ') ' + pidor.username + ' _(' + pidor.first_name + ')' + '_ - *' + pidor.c + '*\n';
             i++;
         });
         console.log(message);
         setTimeout(function () {
             bot.sendMessage(chat, message.replace(/\n$/, ""), {
-                parse_mode: 'HTML'
+                parse_mode: 'Markdown'
             });
         }, 1500);
     })
