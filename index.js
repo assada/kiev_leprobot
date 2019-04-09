@@ -514,24 +514,32 @@ bot.onText(/^\/graph_top(?:\@.*?)?$/, (msg) => {
 
 bot.onText(/^\/img(?:\@.*?)?(\s.*)?/, (msg, match) => {
     const chat = msg.chat.id;
-
-    let query = 'Трактор';
-    if (match.length > 0) {
-        query = match[1].trim();
-    }
-    bot.sendChatAction(chat, 'upload_photo');
-    setTimeout(function () {
-        (new ImageGenerator(Promise, GoogleSearchParser)).get(query).then(function (url) {
-            request.get(url, function (err, res, body) {
-                const photo = request(this.uri.href);
-                bot.sendPhoto(chat, photo, {
-                    reply_to_message_id: msg.message_id
+    try {
+        let query = 'Трактор';
+        console.log(match);
+        if (typeof match[1] !== 'undefined') {
+            query = match[1].trim();
+        }
+        bot.sendChatAction(chat, 'upload_photo');
+        setTimeout(function () {
+            (new ImageGenerator(Promise, GoogleSearchParser)).get(query).then(function (url) {
+                request.get(url, function (err, res, body) {
+                    const photo = request(this.uri.href);
+                    bot.sendPhoto(chat, photo, {
+                        reply_to_message_id: msg.message_id
+                    });
                 });
+            }).catch(function (err) {
+                winston.error(err);
             });
-        }).catch(function (err) {
-            winston.error(err);
+        }, 500);
+    } catch (e) {
+        winston.error(e);
+        bot.sendMessage(chat, "Сам ищи это говно!", {
+            parse_mode: 'Markdown'
         });
-    }, 500);
+    }
+
 
 });
 
@@ -553,6 +561,10 @@ bot.onText(/^\/convert(?:\@.*?)? (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub|ETH|et
     });
 });
 
+function htmlEntities(str) {
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
 bot.onText(/^\/pidor_top(?:\@.*?)?$/, (msg, match) => {
     const chat = msg.chat.id;
     if (chat > 0) {
@@ -562,6 +574,7 @@ bot.onText(/^\/pidor_top(?:\@.*?)?$/, (msg, match) => {
     bot.sendChatAction(chat, 'typing');
 
     PidorRepository.top(db, chat).then(function (results) {
+        console.log(results);
         if (results < 1) {
             bot.sendMessage(chat, '_У вас все не пидоры... Пока..._', {
                 parse_mode: 'Markdown'
@@ -573,9 +586,11 @@ bot.onText(/^\/pidor_top(?:\@.*?)?$/, (msg, match) => {
         let message = 'Наши <b>мжвячни</b> пидоры: \n\n';
         let i = 1;
         results.forEach(function (pidor) {
-            message += i + ') ' + pidor.username + ' <i>(' + pidor.first_name + ')' + '</i> - <b>' + pidor.c + '</b>\n';
+            message += i + ') ' + (pidor.username !== '' ? pidor.username : '');
+            message += ' <i>(' + htmlEntities(pidor.first_name) + ')' + '</i> - <b>' + pidor.c + '</b>\n';
             i++;
         });
+        console.log(message);
         setTimeout(function () {
             bot.sendMessage(chat, message.replace(/\n$/, ""), {
                 parse_mode: 'HTML'
@@ -646,7 +661,7 @@ function getPidor(msg) {
 
                     if (res.status === 'old') {
                         setTimeout(function () {
-                            bot.sendMessage(chat, (':lvl: дня - <b>' + user.first_name + ' ' + user.last_name + '</b>').replace(':lvl:', capitalizeFirstLetter(lvl)), {
+                            bot.sendMessage(chat, (':lvl: дня - <b>' + htmlEntities(user.first_name) + ' ' + htmlEntities(user.last_name) + '</b>').replace(':lvl:', capitalizeFirstLetter(lvl)), {
                                 parse_mode: 'HTML'
                             });
                         }, 2000);
@@ -665,8 +680,8 @@ function getPidor(msg) {
                                         setTimeout(function () {
                                             pmsg = pmsg
                                                 .replace(/:username:/g, user.username)
-                                                .replace(/:last_name:/g, user.last_name)
-                                                .replace(/:first_name:/g, user.first_name)
+                                                .replace(/:last_name:/g, htmlEntities(user.last_name))
+                                                .replace(/:first_name:/g, htmlEntities(user.first_name))
                                                 .replace(/:messages:/g, messages[0].count)
                                                 .replace(/:lvl:/g, lvl)
                                                 .replace(/:draw:/g, randomizer.integer(15, 99999));

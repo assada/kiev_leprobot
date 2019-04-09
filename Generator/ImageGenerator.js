@@ -22,14 +22,19 @@ module.exports = class ImageGenerator {
     get(query) {
         const t = this;
         return new t.Promise(function (fulfill) {
-            t.Parser.parseImageUrls(query, function (urls) {
-                let randomImage = urls[Math.floor(Math.random() * urls.length)];
-                if('url' in randomImage) {
-                    fulfill(randomImage.url);
-                } else {
-                    reject('Url not found in images list for query: ' + query)
-                }
-            });
+            try {
+                t.Parser.parseImageUrls(query, function (urls) {
+                    let randomImage = urls[Math.floor(Math.random() * urls.length)];
+                    if(typeof randomImage !== 'undefined' && 'url' in randomImage) {
+                        fulfill(randomImage.url);
+                    } else {
+                        reject('Url not found in images list for query: ' + query)
+                    }
+                });
+            } catch (e) {
+                console.log('IMAGE GENERATOR ERROR!');
+            }
+
         });
     }
 };
