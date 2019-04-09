@@ -25,7 +25,7 @@ module.exports = class MessageRepository {
             return this.Message.create({
                 message: msg.message_id,
                 chat: msg.chat.id,
-                body: typeof msg.text !== 'undefined' ? emojiStrip(msg.text.replace(regex, '').trim()) : null,
+                body: typeof msg.text !== 'undefined' ? msg.text : null,
                 user: msg.from.id
             });
         });

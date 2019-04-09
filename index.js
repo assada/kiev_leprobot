@@ -12,15 +12,20 @@ const Promise = require('promise');
 const googl = require('goo.gl');
 const googleSearchParser2 = require("google-search-parser2");
 const GoogleSearchParser = new googleSearchParser2(request);
-const markovski = require('markovski');
 const cache = require('memory-cache');
 const natural = require('natural');
 const randomPussy = require('random-vagina');
 const randomAss = require('random-butt');
-const MarkovNew = require('markov-strings');
+const MarkovNew = require('markov-strings').default;
+const Sphinx = require('sphinx-promise');
+
 
 //Configuring
 dotenv.config();
+const sphinx = new Sphinx({
+    host: process.env.SPHINX_HOST, // default sphinx host
+    port: process.env.SPHINX_PORT  // default sphinx TCP port
+});
 googl.setKey(process.env.GOO_GL);
 winston.loggers.add('markov', {
     console: {
@@ -69,6 +74,7 @@ const ExchangeRatesRepository = new ERRepository(request, Promise, cache);
 
 //Generators
 const MessageGenerator = require("./Generator/MessageGenerator");
+const SphinxMessageGenerator = require("./Generator/SphinxMessageGenerator");
 const PGenerator = require("./Generator/PidorGenerator");
 const ImageGenerator = require("./Generator/ImageGenerator");
 const NewsGenerator = require("./Generator/NewsGenerator");
@@ -213,6 +219,7 @@ bot.on('left_chat_participant', (msg) => {
     }
 });
 
+
 bot.on('message', (msg) => {
     const chat = msg.chat.id;
     UserRepository.store(msg.from);
@@ -222,22 +229,24 @@ bot.on('message', (msg) => {
     if (typeof msg.text !== 'undefined' && emojiStrip(msg.text).length > 1 && msg.text.charAt(0) !== '/') {
         let mention = new RegExp(names.join("|")).test(msg.text);
         if ((randomizer.bool(0.02) || mention)
-            && (chat === -1001126011592 || chat === -1001121487098 || chat === -1001048609359 || chat > 0)
+            && (chat === -1001126011592 || chat === -1001121487098 || chat === -1001048609359 || chat === -1001482707691 || chat > 0)
         ) {
-            (new MessageGenerator(MessageModel, msg, Promise, natural, Sequelize, winston, MarkovNew)).get(names).then(function (replay) {
-                if (replay !== false && replay.length > 0) {
-                    bot.sendChatAction(chat, 'typing');
-                    let options = {};
-                    if (mention) {
-                        options = {
-                            reply_to_message_id: msg.message_id
-                        };
+            (new SphinxMessageGenerator(msg, Promise, natural, winston, MarkovNew, sphinx)).get(names).then(
+                function (replay) {
+                    if (replay !== false && replay.length > 0) {
+                        bot.sendChatAction(chat, 'typing');
+                        let options = {};
+                        if (mention) {
+                            options = {
+                                reply_to_message_id: msg.message_id
+                            };
+                        }
+                        setTimeout(function () {
+                            bot.sendMessage(chat, capitalizeFirstLetter(replay), options);
+                        }, 2000);
                     }
-                    setTimeout(function () {
-                        bot.sendMessage(chat, capitalizeFirstLetter(replay), options);
-                    }, 2000);
                 }
-            }).catch((err) => {
+            ).catch((err) => {
                 "use strict";
                 winston.error(err);
             });
@@ -251,63 +260,6 @@ bot.on('message', (msg) => {
             console.log('No image ID!');
             return;
         }
-        bot.getFileLink(ImgID).then(function (resp) {
-            const options = {
-                method: "POST",
-                url: 'https://app.nanonets.com/api/v2/ObjectDetection/Model/' + process.env.NANONETS_MODEL + '/LabelUrls/',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'authorization': "Basic " + Buffer.from(process.env.NANONETS_KEY, 'binary').toString('base64')
-                },
-                formData: {
-                    urls: resp
-                }
-            };
-
-            function callback(error, response, body) {
-                if (!error && response.statusCode === 200) {
-                    const info = JSON.parse(body);
-                    if (info.message === "Success") {
-                        var data = info.result[0].prediction;
-                        var avg = Array.from(data.reduce(
-                            (acc, obj) => Object.keys(obj).reduce(
-                                (acc, key) => typeof obj[key] == "number"
-                                    ? acc.set(key, (acc.get(key) || []).concat(obj[key]))
-                                    : acc,
-                                acc),
-                            new Map())).reduce(
-                            (acc, [name, values]) =>
-                                Object.assign(acc, {[name]: values.reduce((a, b) => a + b) / values.length}),
-                            {}
-                        );
-                    }
-                    if (typeof avg.score !== 'undefined' && avg.score >= 0.5) {
-                        var txt = 'хмм... Похоже на наркотики. Не шути с этим..';
-                        switch (true) {
-                            case avg.score >= 0.7:
-                                txt = "Я думаю пора вызывать майора...";
-                                break;
-                            case avg.score >= 0.8:
-                                txt = "ЛОВИТЕ НАРКОМАНА!"
-                        }
-
-                        bot.sendMessage(chat, txt, {
-                            reply_to_message_id: msg.message_id
-                        });
-
-
-                        console.log(avg);
-                        console.log(txt);
-                    } else {
-                        console.log(avg)
-                    }
-                }
-            }
-
-            if (chat > 0) {
-                request(options, callback);
-            }
-        });
     }
 });
 
@@ -649,6 +601,16 @@ bot.onText(/^\/fuckoff/, (msg, match) => {
         bot.sendMessage(chat, errorsMessages.onlyForChats);
         return false;
     }
+});
+
+bot.onText(/^\/test_store/, (msg, match) => {
+    const chat = msg.chat.id;
+    try {
+        MessageRepository.store(msg);
+    } catch (e) {
+        bot.sendMessage(chat, 'error!');
+    }
+
 });
 
 /**
