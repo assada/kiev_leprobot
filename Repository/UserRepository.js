@@ -21,16 +21,16 @@ module.exports = class UserRepository {
                 },
                 defaults: {
                     //TODO: Fuck this checks
-                    first_name: typeof user.first_name !== 'undefined' ? emojiStrip(user.first_name) : '',
-                    last_name: typeof user.last_name !== 'undefined' ? emojiStrip(user.last_name) : '',
-                    username: typeof user.username !== 'undefined' ? emojiStrip(user.username) : ''
+                    first_name: typeof user.first_name !== 'undefined' ? user.first_name : '',
+                    last_name: typeof user.last_name !== 'undefined' ? user.last_name : '',
+                    username: typeof user.username !== 'undefined' ? user.username : ''
                 }
             }).spread((user, created) => {
                 if (!created) {
                     this.User.update({
-                        first_name: typeof oUser.first_name !== 'undefined' ? emojiStrip(oUser.first_name) : '',
-                        last_name: typeof oUser.last_name !== 'undefined' ? emojiStrip(oUser.last_name) : '',
-                        username: typeof oUser.username !== 'undefined' ? emojiStrip(oUser.username) : '',
+                        first_name: typeof oUser.first_name !== 'undefined' ? oUser.first_name : '',
+                        last_name: typeof oUser.last_name !== 'undefined' ? oUser.last_name : '',
+                        username: typeof oUser.username !== 'undefined' ? oUser.username : '',
                         updatedAt: new Date()
                     }, {where: {user: user.user}});
                 }
@@ -42,7 +42,7 @@ module.exports = class UserRepository {
 
 
     getActiveUser() {
-        let now = new Date( new Date().getTime() + 2 * 3600 * 1000).toISOString().slice(0, 19).replace('T', ' ');
+        let now = new Date(new Date().getTime() + 2 * 3600 * 1000).toISOString().slice(0, 19).replace('T', ' ');
         let yesterday = new Date(new Date().getTime() + (2 * 3600 * 1000) - (24 * 60 * 60 * 1000)).toISOString().slice(0, 19).replace('T', ' ');
         return this.User.findAll({
             where: {
