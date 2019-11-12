@@ -600,7 +600,7 @@ bot.onText(/^\/pidor_top(?:\@.*?)?$/, (msg, match) => {
 
 });
 
-bot.onText(/^\/pidor/, (msg, match) => {
+bot.onText(/^\/pidor(@|$)/, (msg, match) => {
     const chat = msg.chat.id;
     if (chat > 0) {
         bot.sendMessage(chat, errorsMessages.onlyForChats);
