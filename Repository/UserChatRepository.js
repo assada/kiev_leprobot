@@ -64,7 +64,6 @@ module.exports = class UserChatRepository {
             where: {
                 chat: chat,
                 updatedAt: {$between: [start, end]},
-                user: {$ne: user}
             },
         });
     }
