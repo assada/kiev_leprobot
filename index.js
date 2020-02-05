@@ -10,18 +10,18 @@ const fx = require('money');
 const currencyFormatter = require('currency-formatter');
 const Promise = require('promise');
 const googl = require('goo.gl');
-const googleSearchParser2 = require("google-search-parser2");
-const GoogleSearchParser = new googleSearchParser2(request);
+const imageSearch = require('image-search-google');
 const cache = require('memory-cache');
 const natural = require('natural');
-const randomPussy = require('random-vagina');
-const randomAss = require('random-butt');
 const MarkovNew = require('markov-strings').default;
 const Sphinx = require('sphinx-promise');
 
 
 //Configuring
 dotenv.config();
+
+const imageClient = new imageSearch(process.env.CSE_ID, process.env.GOOGLE_API_KEY);
+
 const sphinx = new Sphinx({
     host: process.env.SPHINX_HOST, // default sphinx host
     port: process.env.SPHINX_PORT  // default sphinx TCP port
@@ -295,43 +295,6 @@ bot.onText(/^\/cat(?:\@.*?)?$/, (msg, match) => {
     }, 500);
 });
 
-bot.onText(/^\/pussy(?:\@.*?)?$/, (msg) => {
-    const chat = msg.chat.id;
-    bot.sendChatAction(chat, 'upload_photo');
-    setTimeout(function () {
-        randomPussy()
-            .then(url => {
-                request.get(url, function (err, res, body) {
-                    const photo = request(this.uri.href);
-                    if (this.uri.href.indexOf('.gif') !== -1) {
-                        bot.sendDocument(chat, photo)
-                    } else {
-                        bot.sendPhoto(chat, photo, {
-                            caption: randomizer.pick(catP)
-                        });
-                    }
-                });
-            })
-    }, 500);
-});
-bot.onText(/^\/butt(?:\@.*?)?$/, (msg) => {
-    const chat = msg.chat.id;
-    bot.sendChatAction(chat, 'upload_photo');
-    setTimeout(function () {
-        randomAss()
-            .then(url => {
-                request.get(url, function (err, res, body) {
-                    const photo = request(this.uri.href);
-                    if (this.uri.href.indexOf('.gif') !== -1) {
-                        bot.sendDocument(chat, photo)
-                    } else {
-                        bot.sendPhoto(chat, photo);
-                    }
-                });
-            })
-    }, 500);
-});
-
 bot.onText(/^\/news(?:\@.*?)?$/, (msg, match) => {
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'typing');
@@ -522,7 +485,7 @@ bot.onText(/^\/img(?:\@.*?)?(\s.*)?/, (msg, match) => {
         }
         bot.sendChatAction(chat, 'upload_photo');
         setTimeout(function () {
-            (new ImageGenerator(Promise, GoogleSearchParser)).get(query).then(function (url) {
+            (new ImageGenerator(Promise, imageClient)).get(query).then(function (url) {
                 request.get(url, function (err, res, body) {
                     const photo = request(this.uri.href);
                     bot.sendPhoto(chat, photo, {

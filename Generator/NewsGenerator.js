@@ -14,7 +14,7 @@ module.exports = class NewsGenerator {
         this.Promise = Promise;
         this.request = Request;
         this.winston = winston;
-        this.googl = googl;
+        // this.googl = googl;
     }
 
     /**
@@ -38,13 +38,7 @@ module.exports = class NewsGenerator {
                         t.winston.info('Try shorting url: ' + topic.Url);
                         return new t.Promise(function (resolve, fail) {
                             t.winston.info('processing...');
-                            t.googl.shorten(topic.Url)
-                                .then(function (shortUrl) {
-                                    t.winston.info('Done: ' + shortUrl);
-                                    resolve({title: topic.Title, link: shortUrl});
-                                }).catch(function (err) {
-                                fail(err);
-                            });
+                            resolve({title: topic.Title, link: topic.Url});
                         });
                     })).then(function (result) {
                         let r = result.slice(0, 10);

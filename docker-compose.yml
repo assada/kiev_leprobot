@@ -13,7 +13,6 @@ services:
       MYSQL_USER: test
       MYSQL_PASSWORD: 1234
   app:
-    restart: always
     build: .
     image: assada/leprobot:latest
     external_links:

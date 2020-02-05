@@ -4,7 +4,7 @@
  * Search image by query
  *
  * @param {Promise} Promise
- * @param {GoogleSearchParser} parser
+ * @param {imageClient} parser
  *
  * @type {ImageGenerator}
  */
@@ -21,20 +21,15 @@ module.exports = class ImageGenerator {
      */
     get(query) {
         const t = this;
-        return new t.Promise(function (fulfill) {
-            try {
-                t.Parser.parseImageUrls(query, function (urls) {
-                    let randomImage = urls[Math.floor(Math.random() * urls.length)];
-                    if(typeof randomImage !== 'undefined' && 'url' in randomImage) {
-                        fulfill(randomImage.url);
-                    } else {
-                        reject('Url not found in images list for query: ' + query)
-                    }
+        return new t.Promise(function (fulfill, reject) {
+            t.Parser.search(query, {page: 1})
+                .then(images => {
+                    let randomImage = images[Math.floor(Math.random() * images.length)];
+                    fulfill(randomImage.url);
+                })
+                .catch(function (e) {
+                    reject(e);
                 });
-            } catch (e) {
-                console.log('IMAGE GENERATOR ERROR!');
-            }
-
         });
     }
 };
