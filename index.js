@@ -9,7 +9,6 @@ const ChartjsNode = require('chartjs-node');
 const fx = require('money');
 const currencyFormatter = require('currency-formatter');
 const Promise = require('promise');
-const googl = require('goo.gl');
 const imageSearch = require('image-search-google');
 const cache = require('memory-cache');
 const natural = require('natural');
@@ -26,7 +25,7 @@ const sphinx = new Sphinx({
     host: process.env.SPHINX_HOST, // default sphinx host
     port: process.env.SPHINX_PORT  // default sphinx TCP port
 });
-googl.setKey(process.env.GOO_GL);
+
 winston.loggers.add('markov', {
     console: {
         level: 'silly',
@@ -255,10 +254,9 @@ bot.on('message', (msg) => {
     }
 
     if (typeof msg.photo !== 'undefined') {
-        var ImgID = msg.photo[msg.photo.length - 1].file_id;
+        let ImgID = msg.photo[msg.photo.length - 1].file_id;
         if (!ImgID) {
             console.log('No image ID!');
-            return;
         }
     }
 });
@@ -512,15 +510,13 @@ bot.onText(/^\/convert(?:\@.*?)? (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub|ETH|et
 
     ExchangeRatesRepository.get(process.env.OPENRATE_TOKEN).then((openRates) => {
         bot.sendChatAction(chat, 'typing');
-        setTimeout(function () {
-            fx.rates = openRates.rates;
-            fx.base = openRates.base;
-            let res = fx.convert(+match[3], opts);
-            let message = 'Из ' + currencyFormatter.format(+match[3], {code: match[1].toUpperCase()}) + ' в ' + match[2] + ': ' + currencyFormatter.format(res, {code: match[2].toUpperCase()});
-            bot.sendMessage(chat, message, {
-                parse_mode: 'Markdown'
-            });
-        }, 500);
+        fx.rates = openRates.rates;
+        fx.base = openRates.base;
+        let res = fx.convert(+match[3], opts);
+        let message = 'Из ' + currencyFormatter.format(+match[3], {code: match[1].toUpperCase()}) + ' в ' + match[2] + ': ' + currencyFormatter.format(res, {code: match[2].toUpperCase()});
+        bot.sendMessage(chat, message, {
+            parse_mode: 'Markdown'
+        });
     });
 });
 
@@ -546,7 +542,7 @@ bot.onText(/^\/pidor_top(?:\@.*?)?$/, (msg, match) => {
             return false;
         }
 
-        let message = 'Наши <b>мжвячни</b> пидоры: \n\n';
+        let message = 'Наши <b>мжвячни</b> пидорочки: \n\n';
         let i = 1;
         results.forEach(function (pidor) {
             message += i + ') ' + (pidor.username !== '' ? pidor.username : '');
