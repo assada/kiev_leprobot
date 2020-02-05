@@ -10,11 +10,10 @@
  * @type {NewsGenerator}
  */
 module.exports = class NewsGenerator {
-    constructor(Promise, Request, winston, googl) {
+    constructor(Promise, Request, winston) {
         this.Promise = Promise;
         this.request = Request;
         this.winston = winston;
-        // this.googl = googl;
     }
 
     /**

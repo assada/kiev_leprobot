@@ -297,7 +297,7 @@ bot.onText(/^\/news(?:\@.*?)?$/, (msg, match) => {
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'typing');
     setTimeout(function () {
-        (new NewsGenerator(Promise, request, winston, googl)).get().then(function (news) {
+        (new NewsGenerator(Promise, request, winston)).get().then(function (news) {
             let messages = [];
             let i = 0;
             let n = 1;
