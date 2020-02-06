@@ -15,6 +15,8 @@ const natural = require('natural');
 const MarkovNew = require('markov-strings').default;
 const Sphinx = require('sphinx-promise');
 
+const NodeCache = require( 'node-cache' );
+const newCache = new NodeCache();
 
 //Configuring
 dotenv.config();
@@ -423,7 +425,7 @@ bot.onText(/^\/graph_top(?:\@.*?)?$/, (msg) => {
     bot.sendChatAction(chat, 'upload_photo');
     MessageRepository.topByDays(db, chat).then(function (res) {
         new Promise((ok) => {
-            if (cache.get(cacheKey) === null) {
+            if (cache.get(cacheKey) == null) {
                 let x = [];
                 let y = [];
                 let data = {
@@ -483,7 +485,7 @@ bot.onText(/^\/img(?:\@.*?)?(\s.*)?/, (msg, match) => {
         }
         bot.sendChatAction(chat, 'upload_photo');
         setTimeout(function () {
-            (new ImageGenerator(Promise, imageClient)).get(query).then(function (url) {
+            (new ImageGenerator(Promise, imageClient, newCache)).get(query).then(function (url) {
                 request.get(url, function (err, res, body) {
                     const photo = request(this.uri.href);
                     bot.sendPhoto(chat, photo, {
@@ -559,7 +561,7 @@ bot.onText(/^\/pidor_top(?:\@.*?)?$/, (msg, match) => {
 
 });
 
-bot.onText(/^\/pidor/, (msg, match) => {
+bot.onText(/^\/pidor(@|$)/, (msg, match) => {
     const chat = msg.chat.id;
     if (chat > 0) {
         bot.sendMessage(chat, errorsMessages.onlyForChats);
