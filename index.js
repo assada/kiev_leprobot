@@ -15,7 +15,7 @@ const natural = require('natural');
 const MarkovNew = require('markov-strings').default;
 const Sphinx = require('sphinx-promise');
 
-const NodeCache = require( 'node-cache' );
+const NodeCache = require('node-cache');
 const newCache = new NodeCache();
 
 //Configuring
@@ -79,6 +79,7 @@ const SphinxMessageGenerator = require("./Generator/SphinxMessageGenerator");
 const PGenerator = require("./Generator/PidorGenerator");
 const ImageGenerator = require("./Generator/ImageGenerator");
 const NewsGenerator = require("./Generator/NewsGenerator");
+const CoronaGenerator = require("./Generator/CoronaGenerator");
 const PidorGenerator = new PGenerator(Promise, PidorRepository, UserChatRepository);
 
 //Strings
@@ -577,6 +578,41 @@ bot.onText(/^\/fuckoff/, (msg, match) => {
         bot.sendMessage(chat, errorsMessages.onlyForChats);
         return false;
     }
+});
+
+bot.onText(/^\/corona/, (msg, match) => {
+    const chat = msg.chat.id;
+    bot.sendChatAction(chat, 'typing');
+    (new CoronaGenerator(Promise, request, winston)).all().then(function (data) {
+        console.log(data);
+        let msg = 'В целом по больнице:\n'
+            + '<b>Заразилось:</b> ' + data.cases + '\n'
+            + '<b>Откинулось:</b> ' + data.deaths + '\n'
+            + '<b>Востало:</b> ' + data.recovered
+        ;
+        bot.sendMessage(chat, msg, {
+            parse_mode: 'HTML'
+        });
+    });
+});
+
+bot.onText(/^\/corona/, (msg, match) => {
+    const chat = msg.chat.id;
+    bot.sendChatAction(chat, 'typing');
+    (new CoronaGenerator(Promise, request, winston)).ua().then(function (data) {
+        console.log(data);
+        let msg = 'Чо там у хохлов:\n'
+            + '<b>Заразилось:</b> ' + data.cases + '\n'
+            + '<b>Сегодня заразилось:</b> ' + data.todayCases + '\n'
+            + '<b>Откинулось:</b> ' + data.deaths + '\n'
+            + '<b>Сегодня умерло:</b> ' + data.todayDeaths + '\n'
+            + '<b>Востало:</b> ' + data.recovered + '\n\n'
+            + 'ПИЗДЕЦ!!!11'
+        ;
+        bot.sendMessage(chat, msg, {
+            parse_mode: 'HTML'
+        });
+    });
 });
 
 bot.onText(/^\/test_store/, (msg, match) => {
