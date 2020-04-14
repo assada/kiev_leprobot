@@ -14,6 +14,7 @@ const cache = require('memory-cache');
 const natural = require('natural');
 const MarkovNew = require('markov-strings').default;
 const Sphinx = require('sphinx-promise');
+const Twitter = require('twitter');
 
 const NodeCache = require('node-cache');
 const newCache = new NodeCache();
@@ -22,6 +23,13 @@ const newCache = new NodeCache();
 dotenv.config();
 
 const imageClient = new imageSearch(process.env.CSE_ID, process.env.GOOGLE_API_KEY);
+
+var client = new Twitter({
+    consumer_key: process.env.TWITTER_CONSUMER_KEY,
+    consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+    access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
+    access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
+});
 
 const sphinx = new Sphinx({
     host: process.env.SPHINX_HOST, // default sphinx host
@@ -58,12 +66,17 @@ const UserModel = new User(db);
 const Pidor = require("./Model/Pidor");
 const PidorModel = new Pidor(db);
 
+const Tweet = require("./Model/Tweet");
+const TweetModel = new Tweet(db);
+
 const UserChat = require("./Model/UserChat");
 const UserChatModel = new UserChat(db);
 
 //Repository
 const MRepository = require("./Repository/MessageRepository");
 const MessageRepository = new MRepository(MessageModel, cache);
+const TRepository = require("./Repository/TweetRepository");
+const TweetRepository = new TRepository(TweetModel);
 const URepository = require("./Repository/UserRepository");
 const UserRepository = new URepository(UserModel);
 const PRepository = require("./Repository/PidorRepository");
@@ -204,7 +217,13 @@ const weather = {
 };
 
 const errorsMessages = {
-    onlyForChats: 'Не-не. Только в чатиках пидорок работает'
+    onlyForChats: 'Не-не. Только в чатиках работает',
+    tweet: {
+        exist: 'Было уже!',
+        same: 'Ты чо ебанутый?',
+        notReply: 'Ну бля и чо мне твитить то? Покажи сообщение, дурилка!',
+        onlyText: 'Да ну ебана. Я только в текст умею. Пока'
+    },
 };
 
 bot.on('left_chat_participant', (msg) => {
@@ -580,6 +599,79 @@ bot.onText(/^\/fuckoff/, (msg, match) => {
     }
 });
 
+bot.onText(/^\/tweet/, (msg, match) => {
+    const chat = msg.chat.id;
+    if (chat > 0) {
+        bot.sendMessage(chat, errorsMessages.onlyForChats);
+        return false;
+    }
+
+    if (typeof msg.reply_to_message !== 'undefined') {
+        let reply = msg.reply_to_message;
+        if (msg.from.id === reply.from.id) {
+            bot.sendMessage(chat, errorsMessages.tweet.same, {
+                reply_to_message_id: msg.message_id
+            });
+            return false;
+        }
+
+        if (!undef(reply.photo) || !undef(reply.sticker) || !undef(reply.document) || !undef(reply.animation) || !undef(reply.location) || !undef(reply.poll) || !undef(reply.audio) || undef(reply.text)) {
+            bot.sendMessage(chat, errorsMessages.tweet.onlyText, {
+                reply_to_message_id: msg.message_id
+            });
+            return false;
+        }
+
+        let tweet = {
+            message: reply.message_id,
+            chat: reply.chat.id,
+            user: msg.from.id,
+            text: reply.text
+        };
+
+        TweetRepository.exists(tweet).then(function(res) {
+            if (res.length > 0) {
+                bot.sendMessage(chat, errorsMessages.tweet.exist, {
+                    reply_to_message_id: msg.message_id
+                });
+                return false;
+            }
+
+            client.post('statuses/update', {status: tweet.text}, function(error, tweet, response) {
+                if (!error) {
+                    console.log(tweet);
+                    let stored = TweetRepository.store(tweet);
+
+                    if (stored) {
+                        bot.sendMessage(chat, 'Спасибо за ваш вклад!', {
+                            reply_to_message_id: msg.message_id
+                        });
+                    }
+                }
+
+                console.log(error);
+            });
+        });
+
+    } else {
+        bot.sendMessage(chat, errorsMessages.tweet.notReply, {
+            reply_to_message_id: msg.message_id
+        });
+        return false;
+    }
+
+});
+
+/**
+ * Check if variable is undefined
+ *
+ * @param variable
+ * @returns {boolean}
+ */
+function undef(variable) {
+    return typeof variable === 'undefined';
+}
+
 bot.onText(/^\/corona/, (msg, match) => {
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'typing');
@@ -615,20 +707,6 @@ bot.onText(/^\/corona/, (msg, match) => {
     });
 });
 
-bot.onText(/^\/test_store/, (msg, match) => {
-    const chat = msg.chat.id;
-    try {
-        MessageRepository.store(msg);
-    } catch (e) {
-        bot.sendMessage(chat, 'error!');
-    }
-
-});
-
-/**
- *
- * @param msg
- */
 function getPidor(msg) {
     const chat = msg.chat.id;
     PidorGenerator.get(msg).then(function (res) {
