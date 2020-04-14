@@ -21,6 +21,72 @@ const newCache = new NodeCache();
 //Configuring
 dotenv.config();
 
+const client = require('prom-client');
+const collectDefaultMetrics = client.collectDefaultMetrics;
+/*const Registry = client.Registry;
+const register = new Registry();*/
+collectDefaultMetrics({ prefix: 'prefix_' });
+
+const test = new client.Counter({
+    name: 'prefix_test',
+    help: 'prefix_test'
+});
+test.inc(10);
+
+let gateway = new client.Pushgateway('http://178.128.206.11/:9091');
+
+test.inc(10);
+test.inc(10);
+test.inc(10);
+
+gateway.pushAdd({ jobName: 'leprobot' }, function (err, resp, body) {});
+
+/*setInterval(function() {
+    console.log('Push');
+    gateway.pushAdd({ jobName: 'leprobot' }, function (err, resp, body) {});
+}, 1000);*/
+
+const convertCommand = new client.Counter({
+    name: 'leprobot_command_convert',
+    help: 'leprobot_command_convert',
+});
+// register.registerMetric(convertCommand);
+
+const rateCommand = new client.Counter({
+    name: 'leprobot_rate_convert',
+    help: 'leprobot_rate_convert',
+});
+
+// register.registerMetric(rateCommand);
+
+const topCommand = new client.Counter({
+    name: 'leprobot_top_convert',
+    help: 'leprobot_top_convert',
+});
+
+// register.registerMetric(topCommand);
+
+const boobsCommand = new client.Counter({
+    name: 'leprobot_boobs_convert',
+    help: 'leprobot_boobs_convert',
+});
+
+// register.registerMetric(boobsCommand);
+
+const coronaCommand = new client.Counter({
+    name: 'leprobot_corona_convert',
+    help: 'leprobot_corona_convert',
+});
+
+// register.registerMetric(rateCommand);
+
+const pidorCommand = new client.Counter({
+    name: 'leprobot_pidor_convert',
+    help: 'leprobot_pidor_convert',
+});
+
+// register.registerMetric(pidorCommand);
+
 const imageClient = new imageSearch(process.env.CSE_ID, process.env.GOOGLE_API_KEY);
 
 const sphinx = new Sphinx({
@@ -275,6 +341,7 @@ bot.onText(/^\/boobs(?:\@.*?)?$/, (msg) => {
             bot.sendPhoto(chat, photo, {
                 caption: json[0].model
             });
+            boobsCommand.inc();
         });
     }, 500);
 });
@@ -413,6 +480,7 @@ bot.onText(/^\/top(?:\@.*?)?$/, (msg, match) => {
         bot.sendMessage(chat, res, {
             parse_mode: 'HTML'
         });
+        topCommand.inc();
     });
 });
 
@@ -570,6 +638,7 @@ bot.onText(/^\/pidor(@|$)/, (msg, match) => {
     }
     bot.sendChatAction(chat, 'typing');
     getPidor(msg);
+    pidorCommand.inc();
 });
 
 bot.onText(/^\/fuckoff/, (msg, match) => {
@@ -593,6 +662,7 @@ bot.onText(/^\/corona/, (msg, match) => {
         bot.sendMessage(chat, msg, {
             parse_mode: 'HTML'
         });
+        coronaCommand.inc();
     });
 });
 
