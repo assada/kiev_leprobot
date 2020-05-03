@@ -37,6 +37,7 @@
     "request": "^2.88.0",
     "sequelize": "^4.44.3",
     "sphinx-promise": "^1.0.5",
+    "twitter": "^1.7.1",
     "unique-random-array": "^1.0.0",
     "webworker-threads": "^0.7.17",
     "winston": "^2.4.4"
