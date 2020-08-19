@@ -222,6 +222,7 @@ const errorsMessages = {
         exist: 'Было уже!',
         same: 'Ты чо ебанутый?',
         notReply: 'Ну бля и чо мне твитить то? Покажи сообщение, дурилка!',
+        tooLong: 'Ты ебанутый? Твиттер может только в 140 символов! Обоссал тебя!',
         onlyText: 'Да ну ебана. Я только в текст умею. Пока'
     },
 };
@@ -373,47 +374,20 @@ function mode(arr) {
     }, {mode: null, greatestFreq: -Infinity, numMapping: {}}, arr).mode;
 }
 
-function processRate(data, id) {
-    var exchanger = data.organizations.filter(function (obj) {
-        return obj.orgType === 2;
-    });
-    var bid = [];
-    var ask = [];
-
-    for (var key in exchanger) {
-        var e = exchanger[key];
-        if (e.currencies.hasOwnProperty(id)) {
-            bid.push(parseFloat(e.currencies[id].bid));
-            ask.push(parseFloat(e.currencies[id].ask));
-        }
-    }
-
-    bid = mode(bid);
-    ask = mode(ask);
-
-    return {
-        ask: ask.toFixed(2),
-        bid: bid.toFixed(2)
-    };
-}
-
 bot.onText(/^\/rate(?:\@.*?)?$/, function (msg) {
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'typing');
 
     setTimeout(() => {
         request({
-            url: 'http://resources.finance.ua/ru/public/currency-cash.json',
+            url: 'https://moner.guru/api/rates',
             json: true
         }, function (error, response, body) {
-            const USD = processRate(body, 'USD');
-            const EUR = processRate(body, 'EUR');
-            const RUB = processRate(body, 'RUB');
 
-            const message = 'Средние наличные курсы валют:\n' +
-                '<b>USD:</b> ' + USD.bid + '/' + USD.ask + '\n' +
-                '<b>EUR:</b> ' + EUR.bid + '/' + EUR.ask + '\n' +
-                '<b>RUB:</b> ' + RUB.bid + '/' + RUB.ask;
+            const message = 'Короче, минфин данные по барыгам:\n' +
+                '<b>USD:</b> ' + body.bid + '/' + body.ask + '\n'
+            + '\n\n Приходите через час!'
+
             bot.sendMessage(chat, message, {
                 parse_mode: 'HTML'
             });
@@ -599,7 +573,7 @@ bot.onText(/^\/fuckoff/, (msg, match) => {
     }
 });
 
-bot.onText(/^\/tweet/, (msg, match) => {
+bot.onText(/^твит$/, (msg, match) => {
     const chat = msg.chat.id;
     if (chat > 0) {
         bot.sendMessage(chat, errorsMessages.onlyForChats);
@@ -608,15 +582,23 @@ bot.onText(/^\/tweet/, (msg, match) => {
 
     if (typeof msg.reply_to_message !== 'undefined') {
         let reply = msg.reply_to_message;
-        if (msg.from.id === reply.from.id) {
-            bot.sendMessage(chat, errorsMessages.tweet.same, {
+
+        if (!undef(reply.photo) || !undef(reply.sticker) || !undef(reply.document) || !undef(reply.animation) || !undef(reply.location) || !undef(reply.poll) || !undef(reply.audio) || undef(reply.text)) {
+            bot.sendMessage(chat, errorsMessages.tweet.onlyText, {
                 reply_to_message_id: msg.message_id
             });
             return false;
         }
 
-        if (!undef(reply.photo) || !undef(reply.sticker) || !undef(reply.document) || !undef(reply.animation) || !undef(reply.location) || !undef(reply.poll) || !undef(reply.audio) || undef(reply.text)) {
-            bot.sendMessage(chat, errorsMessages.tweet.onlyText, {
+        if(reply.text.length > 140) {
+            bot.sendMessage(chat, errorsMessages.tweet.tooLong, {
+                reply_to_message_id: msg.message_id
+            });
+            return false;
+        }
+
+        if (msg.from.id === reply.from.id) {
+            bot.sendMessage(chat, errorsMessages.tweet.same, {
                 reply_to_message_id: msg.message_id
             });
             return false;
@@ -677,10 +659,10 @@ bot.onText(/^\/corona/, (msg, match) => {
     bot.sendChatAction(chat, 'typing');
     (new CoronaGenerator(Promise, request, winston)).all().then(function (data) {
         console.log(data);
-        let msg = 'В целом по больнице:\n'
+        let msg = 'В целом по долбоебам:\n'
             + '<b>Заразилось:</b> ' + data.cases + '\n'
             + '<b>Откинулось:</b> ' + data.deaths + '\n'
-            + '<b>Востало:</b> ' + data.recovered
+            + '<b>Восстало:</b> ' + data.recovered
         ;
         bot.sendMessage(chat, msg, {
             parse_mode: 'HTML'
@@ -698,7 +680,7 @@ bot.onText(/^\/corona/, (msg, match) => {
             + '<b>Сегодня заразилось:</b> ' + data.todayCases + '\n'
             + '<b>Откинулось:</b> ' + data.deaths + '\n'
             + '<b>Сегодня умерло:</b> ' + data.todayDeaths + '\n'
-            + '<b>Востало:</b> ' + data.recovered + '\n\n'
+            + '<b>Восстало:</b> ' + data.recovered + '\n\n'
             + 'ПИЗДЕЦ!!!11'
         ;
         bot.sendMessage(chat, msg, {
