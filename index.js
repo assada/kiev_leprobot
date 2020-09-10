@@ -496,8 +496,22 @@ bot.onText(/^\/img(?:\@.*?)?(\s.*)?/, (msg, match) => {
             parse_mode: 'Markdown'
         });
     }
+});
 
-
+bot.onText(/^\/pussy(?:\@.*?)?(\s.*)?/, (msg, match) => {
+    const chat = msg.chat.id;
+    try {
+        bot.sendChatAction(chat, 'upload_photo');
+        const photo = request('https://moner.guru/api/pussy/random/image');
+        bot.sendPhoto(chat, photo, {
+            reply_to_message_id: msg.message_id
+        });
+    } catch (e) {
+        winston.error(e);
+        bot.sendMessage(chat, "Что то с кисками...", {
+            parse_mode: 'Markdown'
+        });
+    }
 });
 
 bot.onText(/^\/convert(?:\@.*?)? (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub|ETH|eth) (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub|ETH|eth) ([0-9]*\.?[0-9]{0,2})/, (msg, match) => {
@@ -573,7 +587,7 @@ bot.onText(/^\/fuckoff/, (msg, match) => {
     }
 });
 
-bot.onText(/^твит$/, (msg, match) => {
+bot.onText(/^[Тт]вит$/, (msg, match) => {
     const chat = msg.chat.id;
     if (chat > 0) {
         bot.sendMessage(chat, errorsMessages.onlyForChats);
