@@ -514,6 +514,54 @@ bot.onText(/^\/pussy(?:\@.*?)?(\s.*)?/, (msg, match) => {
     }
 });
 
+bot.onText(/^\/butt(?:\@.*?)?(\s.*)?/, (msg, match) => {
+    const chat = msg.chat.id;
+    try {
+        bot.sendChatAction(chat, 'upload_photo');
+        const photo = request('https://moner.guru/api/butt/random/image');
+        bot.sendPhoto(chat, photo, {
+            reply_to_message_id: msg.message_id
+        });
+    } catch (e) {
+        winston.error(e);
+        bot.sendMessage(chat, "Что то с попками...", {
+            parse_mode: 'Markdown'
+        });
+    }
+});
+
+bot.onText(/^\/hole(?:\@.*?)?(\s.*)?/, (msg, match) => {
+    const chat = msg.chat.id;
+    try {
+        bot.sendChatAction(chat, 'upload_photo');
+        const photo = request('https://moner.guru/api/asshole/random/image');
+        bot.sendPhoto(chat, photo, {
+            reply_to_message_id: msg.message_id
+        });
+    } catch (e) {
+        winston.error(e);
+        bot.sendMessage(chat, "Что то с дырками...", {
+            parse_mode: 'Markdown'
+        });
+    }
+});
+
+bot.onText(/^\/penis(?:\@.*?)?(\s.*)?/, (msg, match) => {
+    const chat = msg.chat.id;
+    try {
+        bot.sendChatAction(chat, 'upload_photo');
+        const photo = request('https://moner.guru/api/penis/random/image');
+        bot.sendPhoto(chat, photo, {
+            reply_to_message_id: msg.message_id
+        });
+    } catch (e) {
+        winston.error(e);
+        bot.sendMessage(chat, "Змея сбежала...", {
+            parse_mode: 'Markdown'
+        });
+    }
+});
+
 bot.onText(/^\/convert(?:\@.*?)? (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub|ETH|eth) (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub|ETH|eth) ([0-9]*\.?[0-9]{0,2})/, (msg, match) => {
     let opts = {from: match[1].toUpperCase(), to: match[2].toUpperCase()};
     const chat = msg.chat.id;
