@@ -530,6 +530,22 @@ bot.onText(/^\/butt(?:\@.*?)?(\s.*)?/, (msg, match) => {
     }
 });
 
+bot.onText(/^\/trap(?:\@.*?)?(\s.*)?/, (msg, match) => {
+    const chat = msg.chat.id;
+    try {
+        bot.sendChatAction(chat, 'upload_photo');
+        const photo = request('https://moner.guru/api/trap/random/image');
+        bot.sendPhoto(chat, photo, {
+            reply_to_message_id: msg.message_id
+        });
+    } catch (e) {
+        winston.error(e);
+        bot.sendMessage(chat, "Что то с девочками...", {
+            parse_mode: 'Markdown'
+        });
+    }
+});
+
 bot.onText(/^\/hole(?:\@.*?)?(\s.*)?/, (msg, match) => {
     const chat = msg.chat.id;
     try {
