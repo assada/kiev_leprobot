@@ -37,7 +37,7 @@ module.exports = class NewsGenerator {
                         t.winston.info('Try shorting url: ' + topic.Url);
                         return new t.Promise(function (resolve, fail) {
                             t.winston.info('processing...');
-                            resolve({title: topic.Title, link: topic.Url});
+                            resolve({title: Buffer.from(topic.Title, 'utf-8'), link: topic.Url});
                         });
                     })).then(function (result) {
                         let r = result.slice(0, 10);
