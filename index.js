@@ -380,7 +380,7 @@ bot.onText(/^\/rate(?:\@.*?)?$/, function (msg) {
 
     setTimeout(() => {
         request({
-            url: 'https://moner.guru/api/rates',
+            url: 'https://dead.guru/api/rates',
             json: true
         }, function (error, response, body) {
 
@@ -502,7 +502,7 @@ bot.onText(/^\/pussy(?:\@.*?)?(\s.*)?/, (msg, match) => {
     const chat = msg.chat.id;
     try {
         bot.sendChatAction(chat, 'upload_photo');
-        const photo = request('https://moner.guru/api/pussy/random/image');
+        const photo = request('https://dead.guru/api/pussy/random/image');
         bot.sendPhoto(chat, photo, {
             reply_to_message_id: msg.message_id
         });
@@ -518,7 +518,7 @@ bot.onText(/^\/butt(?:\@.*?)?(\s.*)?/, (msg, match) => {
     const chat = msg.chat.id;
     try {
         bot.sendChatAction(chat, 'upload_photo');
-        const photo = request('https://moner.guru/api/butt/random/image');
+        const photo = request('https://dead.guru/api/butt/random/image');
         bot.sendPhoto(chat, photo, {
             reply_to_message_id: msg.message_id
         });
@@ -534,7 +534,7 @@ bot.onText(/^\/trap(?:\@.*?)?(\s.*)?/, (msg, match) => {
     const chat = msg.chat.id;
     try {
         bot.sendChatAction(chat, 'upload_photo');
-        const photo = request('https://moner.guru/api/trap/random/image');
+        const photo = request('https://dead.guru/api/trap/random/image');
         bot.sendPhoto(chat, photo, {
             reply_to_message_id: msg.message_id
         });
@@ -550,7 +550,7 @@ bot.onText(/^\/hole(?:\@.*?)?(\s.*)?/, (msg, match) => {
     const chat = msg.chat.id;
     try {
         bot.sendChatAction(chat, 'upload_photo');
-        const photo = request('https://moner.guru/api/asshole/random/image');
+        const photo = request('https://dead.guru/api/asshole/random/image');
         bot.sendPhoto(chat, photo, {
             reply_to_message_id: msg.message_id
         });
@@ -566,7 +566,7 @@ bot.onText(/^\/penis(?:\@.*?)?(\s.*)?/, (msg, match) => {
     const chat = msg.chat.id;
     try {
         bot.sendChatAction(chat, 'upload_photo');
-        const photo = request('https://moner.guru/api/penis/random/image');
+        const photo = request('https://dead.guru/api/penis/random/image');
         bot.sendPhoto(chat, photo, {
             reply_to_message_id: msg.message_id
         });
