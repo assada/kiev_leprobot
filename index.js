@@ -351,6 +351,7 @@ bot.onText(/^\/weather(?:\@.*?)?$/, (msg) => {
             json: true
         }, function (error, response, jsonWeather) {
             console.log(jsonWeather);
+            console.log(response);
             let today = jsonWeather.consolidated_weather[0];
             const message = 'Погода в Киеве сегодня:\n' +
                 'От ' + Math.round(today.min_temp) + '°C до ' + Math.round(today.max_temp) + '°C \n' +
