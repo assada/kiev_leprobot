@@ -775,10 +775,6 @@ bot.onText(/^\/corona/, (msg, match) => {
 function getPidor(msg) {
     const chat = msg.chat.id;
 
-    if(chat in pidorMutex && process.hrtime() <= pidorMutex[chat]) {
-        return false;
-    }
-
     PidorGenerator.get(msg).then(function (res) {
         if (res.status === 'old' && res.user === msg.from.id) {
             bot.sendMessage(chat, 'Страдай педрилка! Только не пидор может запустить пидор-машину! ХА-ХА-ХА-ХА', {
@@ -811,6 +807,9 @@ function getPidor(msg) {
                             });
                         }, 2000);
                     } else if (res.status === 'new') {
+                        if(chat in pidorMutex && process.hrtime() <= pidorMutex[chat]) {
+                            return false;
+                        }
                         pidorMutex[chat] = process.hrtime();
                         bot.getChatMember(chat, user.user).then((ChatMember) => {
                             if (
@@ -840,10 +839,12 @@ function getPidor(msg) {
                                     });
                                 });
                             } else {
+                                delete pidorMutex[chat];
                                 console.info('Pidor retry');
                                 return getPidor(msg);
                             }
                         }).catch((error) => {
+                            delete pidorMutex[chat];
                             console.error(error);
                             getPidor(msg);
                         });
