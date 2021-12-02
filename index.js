@@ -1,3 +1,4 @@
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 const Sequelize = require("sequelize");
 const dotenv = require('dotenv');
 const Random = require("random-js");
@@ -391,7 +392,7 @@ bot.onText(/^\/rate(?:\@.*?)?$/, function (msg) {
 
             const message = 'Короче, минфин данные по барыгам:\n' +
                 '<b>USD:</b> ' + body.bid + '/' + body.ask + '\n'
-            + '\n\n Приходите через час!'
+                + '\n\n Приходите через час!'
 
             bot.sendMessage(chat, message, {
                 parse_mode: 'HTML'
@@ -673,7 +674,7 @@ bot.onText(/^[Тт]вит$/, (msg, match) => {
             return false;
         }
 
-        if(reply.text.length > 140) {
+        if (reply.text.length > 140) {
             bot.sendMessage(chat, errorsMessages.tweet.tooLong, {
                 reply_to_message_id: msg.message_id
             });
@@ -694,7 +695,7 @@ bot.onText(/^[Тт]вит$/, (msg, match) => {
             text: reply.text
         };
 
-        TweetRepository.exists(tweet).then(function(res) {
+        TweetRepository.exists(tweet).then(function (res) {
             if (res.length > 0) {
                 bot.sendMessage(chat, errorsMessages.tweet.exist, {
                     reply_to_message_id: msg.message_id
@@ -702,7 +703,7 @@ bot.onText(/^[Тт]вит$/, (msg, match) => {
                 return false;
             }
 
-            client.post('statuses/update', {status: tweet.text}, function(error, tweet, response) {
+            client.post('statuses/update', {status: tweet.text}, function (error, tweet, response) {
                 if (!error) {
                     console.log(tweet);
                     let stored = TweetRepository.store(tweet);
@@ -807,7 +808,7 @@ function getPidor(msg) {
                             });
                         }, 2000);
                     } else if (res.status === 'new') {
-                        if(chat in pidorMutex && process.hrtime() <= pidorMutex[chat]) {
+                        if (chat in pidorMutex && process.hrtime() <= pidorMutex[chat]) {
                             return false;
                         }
                         pidorMutex[chat] = process.hrtime();
