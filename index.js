@@ -808,7 +808,7 @@ function getPidor(msg) {
                             });
                         }, 2000);
                     } else if (res.status === 'new') {
-                        if (chat in pidorMutex && process.hrtime() <= pidorMutex[chat]) {
+                        if (chat in pidorMutex && process.hrtime()-1000 <= pidorMutex[chat]) {
                             return false;
                         }
                         pidorMutex[chat] = process.hrtime();
