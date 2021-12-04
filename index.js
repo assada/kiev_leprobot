@@ -253,7 +253,7 @@ bot.on('message', (msg) => {
     }
     if (typeof msg.text !== 'undefined' && emojiStrip(msg.text).length > 1 && msg.text.charAt(0) !== '/') {
         let mention = new RegExp(names.join("|")).test(msg.text);
-        if ((randomizer.bool(0.013) || mention)
+        if ((randomizer.bool(0.013) || mention || chat > 0)
             && (chat === -1001126011592 || chat === -1001121487098 || chat === -1001048609359 || chat === -1001482707691 || chat > 0)
         ) {
             (new SphinxMessageGenerator(msg, Promise, natural, winston, MarkovNew, sphinx)).get(names).then(

@@ -38,6 +38,7 @@ module.exports = class SphinxMessageGenerator {
             }).then(result => {
                 if ('matches' in result) {
                     let messages = t._extractColumn(t._extractColumn(result.matches, 'attrs'), 'body');
+                    console.log('Total messages', result.matches.length);
                     if (result.matches.length > 1) {
                         const markov = new t.MarkovGen(messages, {stateSize: 3});
                         markov.buildCorpus();
@@ -48,9 +49,8 @@ module.exports = class SphinxMessageGenerator {
                                 {
                                     maxTries: 50, // Give up if I don't have a sentence after 20 tries (default is 10)
                                     filter: (r) => {
-                                        return r.string.split(' ').length >= 5 &&
-                                            r.string.split(' ').length < 100 &&
-                                            r.string.endsWith('.')
+                                        return r.string.split(' ').length >= 3 &&
+                                            r.string.split(' ').length < 50
                                     }
                                 }
                             ).string;
