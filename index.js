@@ -808,10 +808,11 @@ function getPidor(msg) {
                             });
                         }, 2000);
                     } else if (res.status === 'new') {
-                        if (chat in pidorMutex && process.hrtime()-1000 <= pidorMutex[chat]) {
+                        let ti = process.hrtime();
+                        if (chat in pidorMutex && ti[0]-2000 <= pidorMutex[chat]) {
                             return false;
                         }
-                        pidorMutex[chat] = process.hrtime();
+                        pidorMutex[chat] = ti[0];
                         bot.getChatMember(chat, user.user).then((ChatMember) => {
                             if (
                                 ChatMember.status === 'creator' ||
