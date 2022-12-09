@@ -98,14 +98,14 @@ const PidorGenerator = new PGenerator(Promise, PidorRepository, UserChatReposito
 
 //Strings
 const catP = [
-    'Вот тебе котя!',
-    'Держи котю',
+    'Ось тобі котя!',
+    'Тримай котю',
     'Котя - топчик',
-    'СМОТРИ КАКОЙ ЗАБАВНЫЙ!',
-    'Всем котю!',
+    'ДИВИСЬ ЯКИЙ КЛАСНИЙ!',
+    'Всім котю!',
     ':3',
-    'Ой! Какой милаш!',
-    'Котики, конечно, лучшие!'
+    'Ой! Який мілаш!',
+    'Котики, точно кращі!'
 ];
 const names = [
     'антон',
@@ -120,71 +120,71 @@ const names = [
     'Антонио',
 ];
 const pidorLvl = [
-    'пидорасик',
-    'пидорок',
-    'пидор',
-    'неудержимый пидор',
-    'пидорасище',
-    'пидор из пидоров',
+    'підорасік',
+    'підорок',
+    'підор',
+    'головний підор',
+    'підорасіще',
+    'підор із підорів',
 ];
 const pidorScenario = [
     [
-        'Погодите-ка, сначала нужно спасти остров!',
+        'Стривай-но, спочатку потрібно врятувати острів!',
         '<i>4 8 15 16 23 42</i>',
-        '108:00 <i>Успели...</i>',
-        'Остров спасли? Спасли. И пидора короновать не забудем.',
-        'Наш :lvl: это... @:username: (:first_name: :last_name:)! Ура, :lvl:!'
+        '108:00 <i>Встигли...</i>',
+        'Острів урятували? Врятували. І підора коронувати не забудемо.',
+        'Наш :lvl: це... @:username: (:first_name: :last_name:)! Ура, :lvl:!'
     ],
     [
-        'Начнем наш ежедневный розыгрыш <b>#:draw:</b>!',
-        'Крутим барабан, господа!',
-        'Достаем номер... Итак...',
-        'Наш :lvl: на следующие 24 часа теперь участник написавший :messages: сообщений...',
-        '... ... @:username: (:first_name: :last_name:)! Поздравляем :first_name: с этим СОБЫТИЕМ!'
+        'Почнемо наш щоденний розіграш <b>#:draw:</b>!',
+        'Крутимо барабан, панове!',
+        'Дістаємо номер... Отже...',
+        'Наш :lvl: на наступні 24 години тепер учасник, який написав :messages: повідомлень...',
+        '... ... @:username: (:first_name: :last_name:)! Вітаємо :first_name: з цією ПОДІЄЮ!'
     ],
     [
-        'Чо чо? Хотите подора? <i>Сейчас я вам найду</i> пидора...',
-        '<i>Ох ты...</i>',
-        'ЭТОГО НИКТО НЕ ОЖИДАЛ!',
-        'Вы готовы?',
-        'Теперь наш :lvl: - @:username: (:first_name: :last_name:)!',
-        '<i>Охуеть, да?</i>',
+        'Чо чо? Хочете підора? <i>Зараз я вам знайду</i> підора...',
+        '<i>Ох ти...</i>',
+        'ЦЬОГО НІХТО НЕ ЧЕКАВ!',
+        'Ви готові?',
+        'Тепер наш :lvl: - @:username: (:first_name: :last_name:)!',
+        '<i>Охуїти, так?</i>',
     ],
     [
-        'Открываю <b>Find My PIDOR..</b>',
-        '<i>Сканирую местность...</i>',
-        'Ах ты сука, от меня не спрячешься!',
+        'Відкриваю <b>Find My PIDOR..</b>',
+        '<i>Сканую місцевість...</i>',
+        'Ах ти сука, від мене не сховаєшся!',
         ':lvl: дня - @:username: (:first_name: :last_name:)!'
     ],
     [
-        'ТЕПЕРЬ ЭТО НЕ ОСТАНОВИТЬ!',
-        '<i>Шаманим-шаманим...</i>',
-        'Доступ получен. Анн<b>а</b>лирование протокола.',
+        'ТЕПЕР ЦЕ НЕ Зупинити!',
+        '<i>шаманним-шаманним...</i>',
+        'Доступ отримано. <b>Аннал</b>ювання протоколу.',
         'TI PIDOR, @:username: (:first_name: :last_name:)'
     ],
     [
-        'Осторожно! <b>Пидор дня</b> активирован!',
-        'Сканирую...',
+        'Обережно! <b>Підор дня</b> активовано!',
+        'Сканую...',
         'КЕК',
-        'Стоять! Не двигаться! Вы объявлены <b>пидором дня</b>, @:username: (:first_name: :last_name:)',
+        'Стояти! Не рухатись! Ви оголошені <b>підором дня</b>, @:username: (:first_name: :last_name:)',
     ],
     [
-        'Сейчас поколдуем...',
+        'Зараз почаруємо...',
         '<i>Хм...</i>',
-        'Так-так, что же тут у нас...',
-        'Ого, вы посмотрите только! А :lvl: дня то - @:username: (:first_name: :last_name:)',
+        'Так-так, що ж тут у нас...',
+        'Ого, ви подивіться тільки! А :lvl: дня то - @:username: (:first_name: :last_name:)',
     ],
     [
-        'Начинаю поиск любителя техники Apple...',
-        'Что-то слишком дохуя их здесь, кого бы выбрать...',
-        'Выберу самого жирного!',
+        'Починаю пошук любителя техніки Apple...',
+        'Щось надто дохуючи їх тут, кого б вибрати...',
+        'Виберу найжирнішого!',
         ':lvl: дня - @:username: (:first_name: :last_name:)!'
     ],
     [
-        'Пора наколдовать нового пидора!',
-        'Смешиваю немного SEO, вейпа, смузи и заливаю в чан...',
-        'Тщательно мешаю и сливаю в чат...',
-        'БА-БАХ! А @:username:-то :lvl:! Который (:first_name: :last_name:)',
+        'Настав час начарувати нового підора!',
+        'Змішую трохи SEO, вейпа, смузі та заливаю в чан...',
+        'Ретельно заважаю і зливаю в чат...',
+        'БА-БАХ! А @:username:-то :lvl:! Котрий (:first_name: :last_name:)',
     ],
     [
         '甚至不要尝试翻译文本。',
@@ -195,36 +195,36 @@ const pidorScenario = [
     [
         'Ну',
         'ладно',
-        'Сейчас',
-        'вылетит',
-        'пидор!',
-        'ВНИМАНИЕ!',
-        '*ПДЫЖЬ*',
+        'Зараз',
+        'вилетить',
+        'підор!',
+        'УВАГА!',
+        '*ПДИЖЬ*',
         '@:username: (:first_name: :last_name:) - :lvl: дня',
     ]
 ];
 
 const weather = {
     c: 'Ясно',
-    lc: 'Местами облачно',
-    hc: 'Облачно',
-    s: 'Местами дождь',
-    lr: 'Дождь',
-    hr: 'Сильный дождь',
+    lc: 'Подекуди хмарно',
+    hc: 'Хмарно',
+    s: 'Подекуди дощ',
+    lr: 'Дощ',
+    hr: 'Сильний дощ',
     t: 'Гроза',
     h: 'Град',
-    sl: 'Мокрый снег...',
-    sn: 'Снег',
+    sl: 'Мокрий сніг...',
+    sn: 'Сніг',
 };
 
 const errorsMessages = {
-    onlyForChats: 'Не-не. Только в чатиках работает',
+    onlyForChats: 'Ні ні. Тільки в чатиках працює',
     tweet: {
-        exist: 'Было уже!',
-        same: 'Ты чо ебанутый?',
-        notReply: 'Ну бля и чо мне твитить то? Покажи сообщение, дурилка!',
-        tooLong: 'Ты ебанутый? Твиттер может только в 140 символов! Обоссал тебя!',
-        onlyText: 'Да ну ебана. Я только в текст умею. Пока'
+        exist: 'Було вже!',
+        same: 'Ти чо ебанутий?',
+        notReply: 'Ну бля і чо мені твітити то? Покажи повідомлення, дурилко!',
+        tooLong: 'Ти ебанутий? Твіттер може лише 140 символів! Поссав на тебе!',
+        onlyText: 'Та ну ебана. Я лише в текст умію. Поки...'
     },
 };
 
@@ -357,11 +357,11 @@ bot.onText(/^\/weather(?:\@.*?)?$/, (msg) => {
             console.log(response);
             console.log(error);
             let today = jsonWeather.consolidated_weather[0];
-            const message = 'Погода в Киеве сегодня:\n' +
-                'От ' + Math.round(today.min_temp) + '°C до ' + Math.round(today.max_temp) + '°C \n' +
+            const message = 'Погода у Києві сьогодні:\n' +
+                'Від ' + Math.round(today.min_temp) + '°C до ' + Math.round(today.max_temp) + '°C \n' +
                 weather[today.weather_state_abbr] + '\n' +
-                'Давление около ' + Math.round(today.air_pressure) + ' миллибар\n' +
-                'Влажность ' + Math.round(today.humidity) + '%';
+                'Тиск біля ' + Math.round(today.air_pressure) + ' мілібар\n' +
+                'Вологість ' + Math.round(today.humidity) + '%';
             bot.sendMessage(chat, message, {
                 parse_mode: 'HTML'
             });
@@ -390,9 +390,9 @@ bot.onText(/^\/rate(?:\@.*?)?$/, function (msg) {
             json: true
         }, function (error, response, body) {
 
-            const message = 'Короче, минфин данные по барыгам:\n' +
+            const message = 'Коротше, мінфін дані по баригам:\n' +
                 '<b>USD:</b> ' + body.bid + '/' + body.ask + '\n'
-                + '\n\n Приходите через час!'
+                + '\n\n Приходьте за годину!'
 
             bot.sendMessage(chat, message, {
                 parse_mode: 'HTML'
@@ -494,11 +494,14 @@ bot.onText(/^\/img(?:\@.*?)?(\s.*)?/, (msg, match) => {
                 });
             }).catch(function (err) {
                 winston.error(err);
+                bot.sendMessage(chat, "Сам шукай це гівно!", {
+                    parse_mode: 'Markdown'
+                });
             });
         }, 500);
     } catch (e) {
         winston.error(e);
-        bot.sendMessage(chat, "Сам ищи это говно!", {
+        bot.sendMessage(chat, "Сам шукай це гівно!", {
             parse_mode: 'Markdown'
         });
     }
@@ -514,7 +517,7 @@ bot.onText(/^\/pussy(?:\@.*?)?(\s.*)?/, (msg, match) => {
         });
     } catch (e) {
         winston.error(e);
-        bot.sendMessage(chat, "Что то с кисками...", {
+        bot.sendMessage(chat, "Щось із кицьками...", {
             parse_mode: 'Markdown'
         });
     }
@@ -530,7 +533,7 @@ bot.onText(/^\/butt(?:\@.*?)?(\s.*)?/, (msg, match) => {
         });
     } catch (e) {
         winston.error(e);
-        bot.sendMessage(chat, "Что то с попками...", {
+        bot.sendMessage(chat, "Щось із попками...", {
             parse_mode: 'Markdown'
         });
     }
@@ -546,7 +549,7 @@ bot.onText(/^\/trap(?:\@.*?)?(\s.*)?/, (msg, match) => {
         });
     } catch (e) {
         winston.error(e);
-        bot.sendMessage(chat, "Что то с девочками...", {
+        bot.sendMessage(chat, "Щось із дівчатами...", {
             parse_mode: 'Markdown'
         });
     }
@@ -562,7 +565,7 @@ bot.onText(/^\/hole(?:\@.*?)?(\s.*)?/, (msg, match) => {
         });
     } catch (e) {
         winston.error(e);
-        bot.sendMessage(chat, "Что то с дырками...", {
+        bot.sendMessage(chat, "Щось із дирками...", {
             parse_mode: 'Markdown'
         });
     }
@@ -578,7 +581,7 @@ bot.onText(/^\/penis(?:\@.*?)?(\s.*)?/, (msg, match) => {
         });
     } catch (e) {
         winston.error(e);
-        bot.sendMessage(chat, "Змея сбежала...", {
+        bot.sendMessage(chat, "Змія покинула чат...", {
             parse_mode: 'Markdown'
         });
     }
@@ -593,7 +596,7 @@ bot.onText(/^\/convert(?:\@.*?)? (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub|ETH|et
         fx.rates = openRates.rates;
         fx.base = openRates.base;
         let res = fx.convert(+match[3], opts);
-        let message = 'Из ' + currencyFormatter.format(+match[3], {code: match[1].toUpperCase()}) + ' в ' + match[2] + ': ' + currencyFormatter.format(res, {code: match[2].toUpperCase()});
+        let message = 'Із ' + currencyFormatter.format(+match[3], {code: match[1].toUpperCase()}) + ' у ' + match[2] + ': ' + currencyFormatter.format(res, {code: match[2].toUpperCase()});
         bot.sendMessage(chat, message, {
             parse_mode: 'Markdown'
         });
@@ -615,14 +618,14 @@ bot.onText(/^\/pidor_top(?:\@.*?)?$/, (msg, match) => {
     PidorRepository.top(db, chat).then(function (results) {
         console.log(results);
         if (results < 1) {
-            bot.sendMessage(chat, '_У вас все не пидоры... Пока..._', {
+            bot.sendMessage(chat, '_У вас всі не підори... Поки що..._', {
                 parse_mode: 'Markdown'
             });
 
             return false;
         }
 
-        let message = 'Наши <b>мжвячни</b> пидорочки: \n\n';
+        let message = 'Наші <b>мжвячні</b> підорочки: \n\n';
         let i = 1;
         results.forEach(function (pidor) {
             message += i + ') ' + (pidor.username !== '' ? pidor.username : '');
@@ -709,7 +712,7 @@ bot.onText(/^[Тт]вит$/, (msg, match) => {
                     let stored = TweetRepository.store(tweet);
 
                     if (stored) {
-                        bot.sendMessage(chat, 'Спасибо за ваш вклад!', {
+                        bot.sendMessage(chat, 'Дякую за ваш внесок!', {
                             reply_to_message_id: msg.message_id
                         });
                     }
@@ -743,10 +746,10 @@ bot.onText(/^\/corona/, (msg, match) => {
     bot.sendChatAction(chat, 'typing');
     (new CoronaGenerator(Promise, request, winston)).all().then(function (data) {
         console.log(data);
-        let msg = 'В целом по долбоебам:\n'
-            + '<b>Заразилось:</b> ' + data.cases + '\n'
-            + '<b>Откинулось:</b> ' + data.deaths + '\n'
-            + '<b>Восстало:</b> ' + data.recovered
+        let msg = 'Загалом по довбойобам:\n'
+            + '<b>Заразилося:</b> ' + data.cases + '\n'
+            + '<b>Відкинулося:</b> ' + data.deaths + '\n'
+            + '<b>Повстало:</b> ' + data.recovered
         ;
         bot.sendMessage(chat, msg, {
             parse_mode: 'HTML'
@@ -760,12 +763,12 @@ bot.onText(/^\/corona/, (msg, match) => {
     (new CoronaGenerator(Promise, request, winston)).ua().then(function (data) {
         console.log(data);
         let msg = 'Чо там у хохлов:\n'
-            + '<b>Заразилось:</b> ' + data.cases + '\n'
-            + '<b>Сегодня заразилось:</b> ' + data.todayCases + '\n'
-            + '<b>Откинулось:</b> ' + data.deaths + '\n'
-            + '<b>Сегодня умерло:</b> ' + data.todayDeaths + '\n'
-            + '<b>Восстало:</b> ' + data.recovered + '\n\n'
-            + 'ПИЗДЕЦ!!!11'
+            + '<b>Заразилося:</b> ' + data.cases + '\n'
+            + '<b>Сьогодні заразилося:</b> ' + data.todayCases + '\n'
+            + '<b>Відкинулося:</b> ' + data.deaths + '\n'
+            + '<b>Сьогодні померло:</b> ' + data.todayDeaths + '\n'
+            + '<b>Повстало:</b> ' + data.recovered + '\n\n'
+            + 'ПІЗДЕЦЬ!!!11'
         ;
         bot.sendMessage(chat, msg, {
             parse_mode: 'HTML'
@@ -778,7 +781,7 @@ function getPidor(msg) {
 
     PidorGenerator.get(msg).then(function (res) {
         if (res.status === 'old' && res.user === msg.from.id) {
-            bot.sendMessage(chat, 'Страдай педрилка! Только не пидор может запустить пидор-машину! ХА-ХА-ХА-ХА', {
+            bot.sendMessage(chat, 'Страждай педрилка! Тільки не підор може запустити підор-машину! ХА-ХА-ХА-ХА', {
                 parse_mode: 'HTML'
             });
         } else {
