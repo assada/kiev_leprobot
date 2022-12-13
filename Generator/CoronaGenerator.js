@@ -27,10 +27,10 @@ module.exports = class CoronaGenerator {
                 t.request({uri: 'https://coronavirus-19-api.herokuapp.com/all', method: 'GET', encoding: 'binary'},
                     function (err, res, page) {
                         if (err) reject(err);
+                        let json = {};
                         try {
-                            let json = JSON.parse(page);
+                            json = JSON.parse(page);
                         } catch (e) {
-                            console.log(e);
                             reject(e);
                         }
 
@@ -59,8 +59,9 @@ module.exports = class CoronaGenerator {
                     },
                     function (err, res, page) {
                         if (err) reject(err);
+                        let json = {};
                         try {
-                            let json = JSON.parse(page);
+                            json = JSON.parse(page);
                         } catch (e) {
                             reject(e);
                         }
