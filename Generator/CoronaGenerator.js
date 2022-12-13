@@ -59,7 +59,12 @@ module.exports = class CoronaGenerator {
                     },
                     function (err, res, page) {
                         if (err) reject(err);
-                        let json = JSON.parse(page);
+                        try {
+                            let json = JSON.parse(page);
+                        } catch (e) {
+                            reject(e);
+                        }
+
 
                         fulfill(json);
                     });
