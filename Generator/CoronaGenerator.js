@@ -22,13 +22,19 @@ module.exports = class CoronaGenerator {
     all() {
         this.winston.info('Loading corona');
         let t = this;
-        return new this.Promise(function (fulfill) {
-            t.request({uri: 'https://coronavirus-19-api.herokuapp.com/all', method: 'GET', encoding: 'binary'},
-                function (err, res, page) {
-                    let json = JSON.parse(page);
+        return new this.Promise(function (fulfill, reject) {
+            try {
+                t.request({uri: 'https://coronavirus-19-api.herokuapp.com/all', method: 'GET', encoding: 'binary'},
+                    function (err, res, page) {
+                        if (err) reject(err);
+                        let json = JSON.parse(page);
 
-                    fulfill(json);
-                });
+                        fulfill(json);
+                    });
+            } catch (e) {
+                reject(e);
+            }
+
         });
     }
 
@@ -38,13 +44,23 @@ module.exports = class CoronaGenerator {
     ua() {
         this.winston.info('Loading corona');
         let t = this;
-        return new this.Promise(function (fulfill) {
-            t.request({uri: 'https://coronavirus-19-api.herokuapp.com/countries/Ukraine', method: 'GET', encoding: 'binary'},
-                function (err, res, page) {
-                    let json = JSON.parse(page);
+        return new this.Promise(function (fulfill, reject) {
+            try {
+                t.request({
+                        uri: 'https://coronavirus-19-api.herokuapp.com/countries/Ukraine',
+                        method: 'GET',
+                        encoding: 'binary'
+                    },
+                    function (err, res, page) {
+                        if (err) reject(err);
+                        let json = JSON.parse(page);
 
-                    fulfill(json);
-                });
+                        fulfill(json);
+                    });
+            } catch (e) {
+                reject(e);
+            }
+
         });
     }
 };

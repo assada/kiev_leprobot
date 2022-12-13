@@ -37,10 +37,15 @@ module.exports = class ImageGenerator {
                         reject(e);
                     });
             } else {
-                console.log('Using cache for image query!');
-                let images = t.Cache.get(cacheKey);
-                let randomImage = images[Math.floor(Math.random() * images.length)];
-                fulfill(randomImage.url);
+                try {
+                    console.log('Using cache for image query!');
+                    let images = t.Cache.get(cacheKey);
+                    let randomImage = images[Math.floor(Math.random() * images.length)];
+                    fulfill(randomImage.url);
+                } catch (e) {
+                    reject(e);
+                }
+
             }
         });
     }

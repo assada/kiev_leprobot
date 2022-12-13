@@ -13,15 +13,21 @@ module.exports = class ExchangeRatesRepository {
 
     get(token) { //process.env.OPENRATE_TOKEN
         const t = this;
-        return new this.Promise((result) => {
-            if (t.cache.get('ExchangeRates') === null) {
-                t.request.get("https://openexchangerates.org/api/latest.json?app_id=" + token + '&show_alternative=1', function (err, res, body) {
-                    t.cache.put('ExchangeRates', body, 43200000);
-                    result(JSON.parse(body));
-                });
-            } else {
-                result(JSON.parse(t.cache.get('ExchangeRates')));
+        return new this.Promise((result, reject) => {
+            try {
+                if (t.cache.get('ExchangeRates') === null) {
+                    t.request.get("https://openexchangerates.org/api/latest.json?app_id=" + token + '&show_alternative=1', function (err, res, body) {
+                        if (err) reject(err);
+                        t.cache.put('ExchangeRates', body, 43200000);
+                        result(JSON.parse(body));
+                    });
+                } else {
+                    result(JSON.parse(t.cache.get('ExchangeRates')));
+                }
+            } catch (e) {
+                reject(e);
             }
+
         });
     }
 };

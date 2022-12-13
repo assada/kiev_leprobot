@@ -272,8 +272,7 @@ bot.on('message', (msg) => {
                     }
                 }
             ).catch((err) => {
-                "use strict";
-                winston.error(err);
+                console.log(err);
             });
         }
         MessageRepository.store(msg);
@@ -350,12 +349,12 @@ bot.onText(/^\/weather(?:\@.*?)?$/, (msg) => {
     bot.sendChatAction(chat, 'typing');
     setTimeout(() => {
         request({
-            url: 'https://www.metaweather.com/api/location/924938/',
+            url: 'https://www.metaweather.com/api/location/924938/', //TODO: fix!
             json: true
         }, function (error, response, jsonWeather) {
-            console.log(jsonWeather);
-            console.log(response);
-            console.log(error);
+            if(error) {
+                console.log(error);
+            }
             let today = jsonWeather.consolidated_weather[0];
             const message = 'Погода у Києві сьогодні:\n' +
                 'Від ' + Math.round(today.min_temp) + '°C до ' + Math.round(today.max_temp) + '°C \n' +
@@ -423,56 +422,64 @@ bot.onText(/^\/graph_top(?:\@.*?)?$/, (msg) => {
         return false;
     }
     bot.sendChatAction(chat, 'upload_photo');
-    MessageRepository.topByDays(db, chat).then(function (res) {
-        new Promise((ok) => {
-            if (cache.get(cacheKey) == null) {
-                let x = [];
-                let y = [];
-                let data = {
-                    type: 'line',
-                    bezierCurve: false,
-                    options: {
-                        plugins: false
-                    },
-                    data: {
-                        labels: [],
-                        datasets: [
-                            {
-                                label: 'Messages',
-                                backgroundColor: "rgba(255,255,255,1)",
-                                borderColor: "rgba(75,192,192,1)",
-                                borderCapStyle: 'butt',
-                                lineTension: 0,
-                                fill: false,
-                                data: []
-                            }]
-                    }
-                };
-                res.forEach((value) => {
-                    x.push((value.day < 10 ? '0' + value.day : value.day));
-                    y.push(value.count);
-                });
-                data.data.labels = x.reverse();
-                data.data.datasets[0].data = y.reverse();
-                let chartNode = new ChartjsNode(1200, 800);
-                chartNode.drawChart(data).then(() => {
-                    chartNode.getImageBuffer('image/png').then((buffer) => {
-                        winston.info('Creating cache for graph');
-                        cache.put(cacheKey, buffer, 60 * 60 * 1000);
-                        ok(buffer);
+    try {
+        MessageRepository.topByDays(db, chat).then(function (res) {
+            new Promise((ok) => {
+                if (cache.get(cacheKey) == null) {
+                    let x = [];
+                    let y = [];
+                    let data = {
+                        type: 'line',
+                        bezierCurve: false,
+                        options: {
+                            plugins: false
+                        },
+                        data: {
+                            labels: [],
+                            datasets: [
+                                {
+                                    label: 'Messages',
+                                    backgroundColor: "rgba(255,255,255,1)",
+                                    borderColor: "rgba(75,192,192,1)",
+                                    borderCapStyle: 'butt',
+                                    lineTension: 0,
+                                    fill: false,
+                                    data: []
+                                }]
+                        }
+                    };
+                    res.forEach((value) => {
+                        x.push((value.day < 10 ? '0' + value.day : value.day));
+                        y.push(value.count);
                     });
-                });
-            } else {
-                winston.info('Using cache for graph');
-                ok(cache.get(cacheKey));
-            }
-        }).then((photo) => {
-            bot.sendPhoto(chat, photo);
+                    data.data.labels = x.reverse();
+                    data.data.datasets[0].data = y.reverse();
+                    let chartNode = new ChartjsNode(1200, 800);
+                    chartNode.drawChart(data).then(() => {
+                        chartNode.getImageBuffer('image/png').then((buffer) => {
+                            winston.info('Creating cache for graph');
+                            cache.put(cacheKey, buffer, 60 * 60 * 1000);
+                            ok(buffer);
+                        });
+                    });
+                } else {
+                    winston.info('Using cache for graph');
+                    ok(cache.get(cacheKey));
+                }
+            }).then((photo) => {
+                bot.sendPhoto(chat, photo);
+            });
+        }).catch((err) => {
+            bot.sendMessage(chat, "Схоже апі зламане... А у мене помилка: " + err.message, {
+                parse_mode: 'Markdown'
+            });
         });
-    }).catch((err) => {
-        "use strict";
-        winston.error(err);
-    });
+    } catch (e) {
+        bot.sendMessage(chat, "Схоже апі зламане... А у мене помилка: " + e.message, {
+            parse_mode: 'Markdown'
+        });
+    }
+
 });
 
 bot.onText(/^\/img(?:\@.*?)?(\s.*)?/, (msg, match) => {
@@ -485,8 +492,12 @@ bot.onText(/^\/img(?:\@.*?)?(\s.*)?/, (msg, match) => {
         }
         bot.sendChatAction(chat, 'upload_photo');
         setTimeout(function () {
-            (new ImageGenerator(Promise, imageClient, newCache)).get(query).then(function (url) {
+            (new ImageGenerator(Promise, imageClient, newCache)).get(query).then(function (url) { //TODO: fix!
                 request.get(url, function (err, res, body) {
+                    if(err) {
+                        console.log(err);
+                        return;
+                    }
                     const photo = request(this.uri.href);
                     bot.sendPhoto(chat, photo, {
                         reply_to_message_id: msg.message_id
@@ -500,8 +511,7 @@ bot.onText(/^\/img(?:\@.*?)?(\s.*)?/, (msg, match) => {
             });
         }, 500);
     } catch (e) {
-        winston.error(e);
-        bot.sendMessage(chat, "Сам шукай це гівно!", {
+        bot.sendMessage(chat, "Сам шукай це гівно! А у мене помилка: " + e.message, {
             parse_mode: 'Markdown'
         });
     }
@@ -516,7 +526,6 @@ bot.onText(/^\/pussy(?:\@.*?)?(\s.*)?/, (msg, match) => {
             reply_to_message_id: msg.message_id
         });
     } catch (e) {
-        winston.error(e);
         bot.sendMessage(chat, "Щось із кицьками...", {
             parse_mode: 'Markdown'
         });
@@ -532,7 +541,6 @@ bot.onText(/^\/butt(?:\@.*?)?(\s.*)?/, (msg, match) => {
             reply_to_message_id: msg.message_id
         });
     } catch (e) {
-        winston.error(e);
         bot.sendMessage(chat, "Щось із попками...", {
             parse_mode: 'Markdown'
         });
@@ -548,7 +556,6 @@ bot.onText(/^\/trap(?:\@.*?)?(\s.*)?/, (msg, match) => {
             reply_to_message_id: msg.message_id
         });
     } catch (e) {
-        winston.error(e);
         bot.sendMessage(chat, "Щось із дівчатами...", {
             parse_mode: 'Markdown'
         });
@@ -564,7 +571,6 @@ bot.onText(/^\/hole(?:\@.*?)?(\s.*)?/, (msg, match) => {
             reply_to_message_id: msg.message_id
         });
     } catch (e) {
-        winston.error(e);
         bot.sendMessage(chat, "Щось із дирками...", {
             parse_mode: 'Markdown'
         });
@@ -580,7 +586,6 @@ bot.onText(/^\/penis(?:\@.*?)?(\s.*)?/, (msg, match) => {
             reply_to_message_id: msg.message_id
         });
     } catch (e) {
-        winston.error(e);
         bot.sendMessage(chat, "Змія покинула чат...", {
             parse_mode: 'Markdown'
         });
@@ -600,7 +605,9 @@ bot.onText(/^\/convert(?:\@.*?)? (UAH|USD|BTC|EUR|RUB|uah|usd|btc|eur|rub|ETH|et
         bot.sendMessage(chat, message, {
             parse_mode: 'Markdown'
         });
-    });
+    }).catch((e) => {console.log(e); bot.sendMessage(chat, "Щось не так... А у мене помилка: " + e.message, {
+        parse_mode: 'Markdown'
+    });});
 });
 
 function htmlEntities(str) {
@@ -741,7 +748,7 @@ function undef(variable) {
     return typeof variable === 'undefined';
 }
 
-bot.onText(/^\/corona/, (msg, match) => {
+bot.onText(/^\/corona/, (msg, match) => { //TODO: fix!
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'typing');
     (new CoronaGenerator(Promise, request, winston)).all().then(function (data) {
@@ -754,10 +761,15 @@ bot.onText(/^\/corona/, (msg, match) => {
         bot.sendMessage(chat, msg, {
             parse_mode: 'HTML'
         });
+    }).catch((e) => {
+        bot.sendMessage(chat, "Схоже апі зламане... А у мене помилка: " + e.message, {
+            parse_mode: 'Markdown'
+        });
+        console.log(e);
     });
 });
 
-bot.onText(/^\/corona/, (msg, match) => {
+bot.onText(/^\/corona/, (msg, match) => { //TODO: fix!
     const chat = msg.chat.id;
     bot.sendChatAction(chat, 'typing');
     (new CoronaGenerator(Promise, request, winston)).ua().then(function (data) {
@@ -773,6 +785,11 @@ bot.onText(/^\/corona/, (msg, match) => {
         bot.sendMessage(chat, msg, {
             parse_mode: 'HTML'
         });
+    }).catch((e) => {
+        bot.sendMessage(chat, "Схоже апі зламане... А у мене помилка: " + e.message, {
+            parse_mode: 'Markdown'
+        });
+        console.log(e);
     });
 });
 
@@ -859,7 +876,9 @@ function getPidor(msg) {
         }
 
     }).catch(function (rej) {
-        winston.error(rej);
+        bot.sendMessage(chat, "Схоже апі зламане... А у мене помилка: " + rej, {
+            parse_mode: 'Markdown'
+        });
     });
 }
 
