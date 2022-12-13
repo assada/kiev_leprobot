@@ -40,7 +40,6 @@ build: ## Build or rebuild service image
 		--build-arg VERSION=$(VERSION) \
 		--build-arg BUILD_ID=$(BUILD_ID) \
 		-t $(IMAGE_NAME):$(IMAGE_TAG) \
-		--no-cache \
 		--force-rm .
 
 .PHONY: up

@@ -354,16 +354,24 @@ bot.onText(/^\/weather(?:\@.*?)?$/, (msg) => {
         }, function (error, response, jsonWeather) {
             if(error) {
                 console.log(error);
+                return;
             }
-            let today = jsonWeather.consolidated_weather[0];
-            const message = 'Погода у Києві сьогодні:\n' +
-                'Від ' + Math.round(today.min_temp) + '°C до ' + Math.round(today.max_temp) + '°C \n' +
-                weather[today.weather_state_abbr] + '\n' +
-                'Тиск біля ' + Math.round(today.air_pressure) + ' мілібар\n' +
-                'Вологість ' + Math.round(today.humidity) + '%';
-            bot.sendMessage(chat, message, {
-                parse_mode: 'HTML'
-            });
+            try {
+                let today = jsonWeather.consolidated_weather[0];
+                const message = 'Погода у Києві сьогодні:\n' +
+                    'Від ' + Math.round(today.min_temp) + '°C до ' + Math.round(today.max_temp) + '°C \n' +
+                    weather[today.weather_state_abbr] + '\n' +
+                    'Тиск біля ' + Math.round(today.air_pressure) + ' мілібар\n' +
+                    'Вологість ' + Math.round(today.humidity) + '%';
+                bot.sendMessage(chat, message, {
+                    parse_mode: 'HTML'
+                });
+            } catch (e) {
+                bot.sendMessage(chat, "Схоже апі зламане... А у мене помилка: " + e.message, {
+                    parse_mode: 'Markdown'
+                });
+            }
+
         });
     }, 100);
 });

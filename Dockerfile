@@ -1,5 +1,5 @@
 FROM node:8
-
+RUN update-ca-certificates
 # Create app directory
 WORKDIR /usr/src/app
 
