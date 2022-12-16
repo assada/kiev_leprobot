@@ -288,6 +288,15 @@ bot.on('message', (msg) => {
 
 bot.onText(/^\/boobs(?:\@.*?)?$/, (msg) => {
     const chat = msg.chat.id;
+
+    if(chat === -1001185310360) {
+        bot.sendMessage(chat, "Демократія забороняє 18+ контент!", {
+            reply_to_message_id: msg.message_id
+        });
+
+        return;
+    }
+
     bot.sendChatAction(chat, 'upload_photo');
     setTimeout(function () {
         request.get('http://api.oboobs.ru/boobs/0/1/random', function (err, res, body) {
@@ -527,6 +536,15 @@ bot.onText(/^\/img(?:\@.*?)?(\s.*)?/, (msg, match) => {
 
 bot.onText(/^\/pussy(?:\@.*?)?(\s.*)?/, (msg, match) => {
     const chat = msg.chat.id;
+
+    if(chat === -1001185310360) {
+        bot.sendMessage(chat, "Демократія забороняє 18+ контент!", {
+            reply_to_message_id: msg.message_id
+        });
+
+        return;
+    }
+
     try {
         bot.sendChatAction(chat, 'upload_photo');
         const photo = request('https://dead.guru/api/pussy/random/image');
@@ -542,6 +560,15 @@ bot.onText(/^\/pussy(?:\@.*?)?(\s.*)?/, (msg, match) => {
 
 bot.onText(/^\/butt(?:\@.*?)?(\s.*)?/, (msg, match) => {
     const chat = msg.chat.id;
+
+    if(chat === -1001185310360) {
+        bot.sendMessage(chat, "Демократія забороняє 18+ контент!", {
+            reply_to_message_id: msg.message_id
+        });
+
+        return;
+    }
+
     try {
         bot.sendChatAction(chat, 'upload_photo');
         const photo = request('https://dead.guru/api/butt/random/image');
@@ -557,6 +584,15 @@ bot.onText(/^\/butt(?:\@.*?)?(\s.*)?/, (msg, match) => {
 
 bot.onText(/^\/trap(?:\@.*?)?(\s.*)?/, (msg, match) => {
     const chat = msg.chat.id;
+
+    if(chat === -1001185310360) {
+        bot.sendMessage(chat, "Демократія забороняє 18+ контент!", {
+            reply_to_message_id: msg.message_id
+        });
+
+        return;
+    }
+
     try {
         bot.sendChatAction(chat, 'upload_photo');
         const photo = request('https://dead.guru/api/trap/random/image');
@@ -572,6 +608,15 @@ bot.onText(/^\/trap(?:\@.*?)?(\s.*)?/, (msg, match) => {
 
 bot.onText(/^\/hole(?:\@.*?)?(\s.*)?/, (msg, match) => {
     const chat = msg.chat.id;
+
+    if(chat === -1001185310360) {
+        bot.sendMessage(chat, "Демократія забороняє 18+ контент!", {
+            reply_to_message_id: msg.message_id
+        });
+
+        return;
+    }
+
     try {
         bot.sendChatAction(chat, 'upload_photo');
         const photo = request('https://dead.guru/api/asshole/random/image');
@@ -587,6 +632,15 @@ bot.onText(/^\/hole(?:\@.*?)?(\s.*)?/, (msg, match) => {
 
 bot.onText(/^\/penis(?:\@.*?)?(\s.*)?/, (msg, match) => {
     const chat = msg.chat.id;
+
+    if(chat === -1001185310360) {
+        bot.sendMessage(chat, "Демократія забороняє 18+ контент!", {
+            reply_to_message_id: msg.message_id
+        });
+
+        return;
+    }
+
     try {
         bot.sendChatAction(chat, 'upload_photo');
         const photo = request('https://dead.guru/api/penis/random/image');
