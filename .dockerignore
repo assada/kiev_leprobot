@@ -3,7 +3,6 @@ npm-debug.log
 .git
 .gitignore
 README.md
-.env
 .env.local
 .env.production
 .env.staging
