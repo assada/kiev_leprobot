@@ -1,8 +1,7 @@
-version: "3"
-
 services:
   mysql:
-    image: percona:latest
+    image: mysql:5.7
+    platform: linux/amd64
     command: --sql_mode=""
     ports:
       - "3308:3306/tcp"
@@ -12,14 +11,33 @@ services:
       MYSQL_ROOT_PASSWORD: 1234
       MYSQL_USER: test
       MYSQL_PASSWORD: 1234
+      MYSQL_DATABASE: leprobot
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
   app:
     build: .
-    image: assada/leprobot:latest
-    external_links:
-      - mysql
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USER=test
+      - DB_PASSWORD=1234
+      - DB_NAME=leprobot
     volumes:
-      - .:/usr/src/app
+      - .:/app
+      - node_modules:/app/node_modules
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
 
 volumes:
   mysql:
     driver: local
+  node_modules: 
