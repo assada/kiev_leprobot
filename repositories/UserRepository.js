@@ -11,16 +11,26 @@ class UserRepository extends BaseRepository {
         try {
             await this.model.sync();
             
+            const userData = {
+                user: user.id,
+                first_name: user.first_name || '',
+                last_name: user.last_name || '',
+                username: user.username || '',
+                language_code: user.language_code || null
+            };
+
+            logger.info('UserRepository: Storing user:', {
+                userId: user.id,
+                username: user.username,
+                firstName: user.first_name,
+                lastName: user.last_name
+            });
+            
             const [userRecord, created] = await this.model.findOrCreate({
                 where: {
                     user: user.id,
                 },
-                defaults: {
-                    first_name: user.first_name || '',
-                    last_name: user.last_name || '',
-                    username: user.username || '',
-                    language_code: user.language_code || null
-                }
+                defaults: userData
             });
 
             if (!created) {
@@ -34,14 +44,21 @@ class UserRepository extends BaseRepository {
                     where: { user: user.id }
                 });
                 
-                logger.info(`User ${user.id} updated`);
+                logger.info(`UserRepository: User ${user.id} (@${user.username}) updated`);
             } else {
-                logger.info(`User ${user.id} created`);
+                logger.info(`UserRepository: User ${user.id} (@${user.username}) created`);
             }
 
             return userRecord;
         } catch (error) {
-            logger.error('Error storing user:', error);
+            logger.error('UserRepository: Error storing user:', {
+                error: error.message,
+                stack: error.stack,
+                userId: user.id,
+                username: user.username,
+                firstName: user.first_name,
+                lastName: user.last_name
+            });
             throw error;
         }
     }

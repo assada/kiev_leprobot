@@ -11,6 +11,13 @@ class UserChatRepository extends BaseRepository {
         try {
             await this.model.sync();
             
+            logger.info('UserChatRepository: Storing user-chat relation:', {
+                userId: user.id,
+                username: user.username,
+                chatId: chat.id,
+                chatTitle: chat.title
+            });
+            
             const [userChat, created] = await this.model.findOrCreate({
                 where: {
                     user: user.id,
@@ -23,11 +30,21 @@ class UserChatRepository extends BaseRepository {
                     { updatedAt: new Date() },
                     { where: { user: user.id, chat: chat.id } }
                 );
+                logger.info(`UserChatRepository: User ${user.id} (@${user.username}) in chat ${chat.id} updated`);
+            } else {
+                logger.info(`UserChatRepository: User ${user.id} (@${user.username}) in chat ${chat.id} created`);
             }
 
             return userChat;
         } catch (error) {
-            logger.error('Error storing user chat:', error);
+            logger.error('UserChatRepository: Error storing user chat:', {
+                error: error.message,
+                stack: error.stack,
+                userId: user.id,
+                username: user.username,
+                chatId: chat.id,
+                chatTitle: chat.title
+            });
             throw error;
         }
     }

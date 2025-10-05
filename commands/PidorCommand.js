@@ -44,8 +44,28 @@ class PidorCommand extends BaseCommand {
             const user = await repositories.UserRepository.findByUserId(pidorResult.user);
             
             if (!user) {
-                logger.error('PidorCommand: User not found in database:', pidorResult.user);
-                await bot.sendMessage(chatId, 'Сталася помилка: користувач не знайдений в базі даних');
+                let telegramUserInfo = null;
+                try {
+                    const chatMember = await bot.getChatMember(chatId, pidorResult.user);
+                    telegramUserInfo = chatMember ? chatMember.user : null;
+                } catch (e) {
+                    logger.error('PidorCommand: Could not fetch user from Telegram for logging:', e.message);
+                }
+
+                logger.error('PidorCommand: User not found in database!', {
+                    userId: pidorResult.user,
+                    username: telegramUserInfo?.username || 'UNKNOWN',
+                    firstName: telegramUserInfo?.first_name || 'UNKNOWN',
+                    lastName: telegramUserInfo?.last_name || 'UNKNOWN',
+                    isBot: telegramUserInfo?.is_bot || 'UNKNOWN',
+                    chatId: chatId,
+                    pidorStatus: pidorResult.status
+                });
+
+                await bot.sendMessage(chatId, 
+                    `Сталася помилка: користувач ${telegramUserInfo?.first_name || ''} (@${telegramUserInfo?.username || pidorResult.user}) не знайдений в базі даних.\n` +
+                    `ID: ${pidorResult.user}`
+                );
                 delete this.pidorMutex[chatId];
                 return;
             }
@@ -59,7 +79,15 @@ class PidorCommand extends BaseCommand {
                 await this.processNewPidor(bot, chatId, user, userLevel);
             }
         } catch (error) {
-            logger.error('PidorCommand: Error in execute:', error);
+            logger.error('PidorCommand: Error in execute:', {
+                error: error.message,
+                stack: error.stack,
+                chatId: chatId,
+                userId: msg.from.id,
+                username: msg.from.username,
+                firstName: msg.from.first_name,
+                lastName: msg.from.last_name
+            });
             delete this.pidorMutex[chatId];
         }
     }
