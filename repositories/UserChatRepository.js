@@ -11,28 +11,20 @@ class UserChatRepository extends BaseRepository {
         try {
             await this.model.sync();
             
-            logger.info('UserChatRepository: Storing user-chat relation:', {
-                userId: user.id,
-                username: user.username,
-                chatId: chat.id,
-                chatTitle: chat.title
-            });
-            
             const [userChat, created] = await this.model.findOrCreate({
                 where: {
+                    user: user.id,
+                    chat: chat.id
+                },
+                defaults: {
                     user: user.id,
                     chat: chat.id
                 }
             });
 
             if (!created) {
-                await this.model.update(
-                    { updatedAt: new Date() },
-                    { where: { user: user.id, chat: chat.id } }
-                );
-                logger.info(`UserChatRepository: User ${user.id} (@${user.username}) in chat ${chat.id} updated`);
-            } else {
-                logger.info(`UserChatRepository: User ${user.id} (@${user.username}) in chat ${chat.id} created`);
+                userChat.changed('updatedAt', true);
+                await userChat.save();
             }
 
             return userChat;

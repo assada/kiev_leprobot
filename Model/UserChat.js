@@ -16,6 +16,8 @@ module.exports = class UserChat {
             chat: {
                 type: s.BIGINT(100)
             }
+        }, {
+            timestamps: true
         });
     }
 

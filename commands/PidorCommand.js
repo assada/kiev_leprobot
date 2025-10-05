@@ -43,7 +43,7 @@ class PidorCommand extends BaseCommand {
 
             const user = await repositories.UserRepository.findByUserId(pidorResult.user);
             
-            if (!user) {
+            if (!user) {y
                 let telegramUserInfo = null;
                 try {
                     const chatMember = await bot.getChatMember(chatId, pidorResult.user);
