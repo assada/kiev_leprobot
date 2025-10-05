@@ -42,6 +42,14 @@ class PidorCommand extends BaseCommand {
             }
 
             const user = await repositories.UserRepository.findByUserId(pidorResult.user);
+            
+            if (!user) {
+                logger.error('PidorCommand: User not found in database:', pidorResult.user);
+                await bot.sendMessage(chatId, 'Сталася помилка: користувач не знайдений в базі даних');
+                delete this.pidorMutex[chatId];
+                return;
+            }
+            
             const pidorCount = await repositories.PidorRepository.pidorCount(sequelize, pidorResult.user, chatId);
             const userLevel = this.getUserLevel(pidorCount, user.user);
 
